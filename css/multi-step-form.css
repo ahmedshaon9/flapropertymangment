@@ -1,0 +1,1023 @@
+/* ═══════════════════════════════════════════════════════════════════
+   FLA PROPERTY MAINTENANCE LLC — 4-STEP QUOTE FORM (multi-step-form.css)
+   Under-Hero Split 2-Column Section (5 Cols Info + 7 Cols Form)
+   Neo-Grotesque Typography: Plus Jakarta Sans (Headings) + Inter (Body/Inputs)
+   Generous Rounded Corners: rounded-[28px] card, rounded-2xl inputs, rounded-full pills & buttons
+   Brand Color Matching: Turf Green (#007f5f), Deep Forest (#0B1F17), Emerald Accents
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────
+   1. SECTION WRAPPER & SPLIT 2-COLUMN LAYOUT
+   ───────────────────────────────────────────────────────────────── */
+.multi-quote-section {
+    position: relative;
+    padding: 30px 0 95px 0;
+    z-index: 20;
+    background-color: #F8FAFC;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.multi-quote-container {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.quote-split-grid {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 48px;
+    align-items: start;
+}
+
+@media (max-width: 1024px) {
+    .quote-split-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   2. LEFT COLUMN: SECTION CONTENT & GUIDANCE (5 COLUMNS)
+   ───────────────────────────────────────────────────────────────── */
+.quote-info-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.quote-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    align-self: flex-start;
+    padding: 6px 16px;
+    border-radius: 9999px;
+    background: rgba(0, 127, 95, 0.1);
+    color: #007f5f;
+    border: 1px solid rgba(0, 127, 95, 0.25);
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.quote-main-heading {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(28px, 3.1vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+    color: #0F172A;
+    margin: 0 0 16px 0;
+}
+
+.quote-intro-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.6;
+    color: #475569;
+    margin: 0 0 28px 0;
+}
+
+/* 3-Step Vertical Rounded Info Cards */
+.quote-steps-guide {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 26px;
+}
+
+.quote-guide-card {
+    display: flex;
+    gap: 16px;
+    padding: 16px 20px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quote-guide-card:hover {
+    transform: translateX(4px);
+    border-color: #CBD5E1;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+.quote-guide-num {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: #007f5f;
+    background: #e6f5f0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.quote-guide-content {
+    flex: 1;
+}
+
+.quote-guide-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 14.5px;
+    letter-spacing: -0.02em;
+    color: #0F172A;
+    margin: 0 0 4px 0;
+}
+
+.quote-guide-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #64748B;
+    margin: 0;
+}
+
+/* Direct Help & Trust Box (Rounded Dark Slate Card) */
+.quote-direct-card {
+    background: #0B1F17;
+    color: #FFFFFF;
+    border-radius: 20px;
+    padding: 22px 24px;
+    box-shadow: 0 16px 36px rgba(11, 31, 23, 0.18);
+    position: relative;
+    overflow: hidden;
+}
+
+.quote-direct-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(128, 185, 24, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.quote-direct-card__header {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.quote-direct-card__icon {
+    color: #80b918;
+    font-size: 22px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.quote-direct-card__title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 15.5px;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+    margin: 0 0 3px 0;
+}
+
+.quote-direct-card__sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    color: #94A3B8;
+    line-height: 1.45;
+    margin: 0;
+}
+
+.quote-direct-card__actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.quote-direct-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: 9999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.quote-direct-btn--call {
+    background: #007f5f;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: 0 4px 14px rgba(0, 127, 95, 0.35);
+}
+
+.quote-direct-btn--call:hover {
+    background: #00664c;
+    transform: translateY(-1px);
+}
+
+.quote-direct-btn--sms {
+    background: rgba(255, 255, 255, 0.12);
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(4px);
+}
+
+.quote-direct-btn--sms:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+.quote-direct-card__footer {
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    color: #86EFAC;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   3. RIGHT SIDE: ROUNDED 4-STEP QUOTE CARD CONTAINER (7 COLUMNS)
+   ───────────────────────────────────────────────────────────────── */
+.multi-quote-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 28px;
+    box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.08), 0 8px 24px -4px rgba(15, 23, 42, 0.04);
+    position: relative;
+    padding: 34px 34px 30px 34px;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 640px) {
+    .multi-quote-card {
+        padding: 24px 20px;
+        border-radius: 24px;
+    }
+}
+
+/* Form Card Header */
+.quote-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    gap: 16px;
+}
+
+.quote-card-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: #0F172A;
+    letter-spacing: -0.025em;
+    margin: 0 0 3px 0;
+}
+
+.quote-card-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #64748B;
+    margin: 0;
+}
+
+.quote-step-counter-badge {
+    background: #e6f5f0;
+    color: #00664c;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 11.5px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    white-space: nowrap;
+    border: 1px solid #BBF7D0;
+}
+
+/* Live Animated Progress Bar */
+.quote-progress-track {
+    height: 6px;
+    background: #F1F5F9;
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 22px;
+}
+
+.quote-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #007f5f 0%, #80b918 100%);
+    border-radius: 9999px;
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Connected 4-Circle Stepper Tracker */
+.wireframe-stepper {
+    position: relative;
+    margin-bottom: 30px;
+    padding: 0 10px;
+}
+
+.wireframe-stepper__line {
+    position: absolute;
+    top: 50%;
+    left: 45px;
+    right: 45px;
+    height: 1.5px;
+    background: #E2E8F0;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.wireframe-stepper__steps {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.wireframe-stepper__item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wireframe-stepper__circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748B;
+    transition: all 0.25s ease;
+}
+
+/* Active / Current Step Circle */
+.wireframe-stepper__item.is-active .wireframe-stepper__circle {
+    background: #007f5f;
+    color: #FFFFFF;
+    border-color: #007f5f;
+    box-shadow: 0 0 0 4px rgba(0, 127, 95, 0.15);
+}
+
+/* Completed Step Circle */
+.wireframe-stepper__item.is-completed .wireframe-stepper__circle {
+    background: #0F172A;
+    color: #FFFFFF;
+    border-color: #0F172A;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   4. FORM STEP PANELS & HEADINGS
+   ───────────────────────────────────────────────────────────────── */
+.form-step {
+    display: none;
+}
+
+.form-step.is-active {
+    display: block;
+}
+
+.step-heading-wrap {
+    margin-bottom: 24px;
+}
+
+.step-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.2;
+    color: #0F172A;
+    margin: 0 0 6px 0;
+}
+
+.step-intro {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #64748B;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Form Field Labels */
+.wireframe-field-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.4;
+    color: #1E293B;
+    margin-bottom: 10px;
+    margin-top: 18px;
+}
+
+.wireframe-field-label:first-of-type {
+    margin-top: 0;
+}
+
+.field-helper-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: #64748B;
+    margin-top: 4px;
+    display: block;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   5. STEP 1: PROPERTY CARDS & SERVICE PILLS
+   ───────────────────────────────────────────────────────────────── */
+.prop-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .prop-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.select-card {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.select-card:hover {
+    border-color: #94A3B8;
+    background: #F8FAFC;
+}
+
+.select-card.is-selected {
+    background: #f0f9f6;
+    border-color: #007f5f;
+    box-shadow: 0 4px 14px rgba(0, 127, 95, 0.1);
+}
+
+.option-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.select-card.is-selected .option-letter {
+    background: #007f5f;
+    color: #FFFFFF;
+    border-color: #007f5f;
+}
+
+.select-card__title {
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0F172A;
+}
+
+/* Multi-Select Service Pills */
+.service-pills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+}
+
+.select-pill {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 9px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+}
+
+.select-pill:hover {
+    border-color: #94A3B8;
+    background: #F8FAFC;
+}
+
+.select-pill.is-selected {
+    background: #007f5f;
+    color: #FFFFFF;
+    border-color: #007f5f;
+    box-shadow: 0 4px 12px rgba(0, 127, 95, 0.25);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   6. STEP 2: YARD DETAILS, SCHEDULE & GATE
+   ───────────────────────────────────────────────────────────────── */
+.frequency-pills-wrap,
+.gate-pills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.condition-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+@media (max-width: 640px) {
+    .condition-cards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.condition-card {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.condition-card:hover {
+    border-color: #94A3B8;
+    background: #F8FAFC;
+}
+
+.condition-card.is-selected {
+    background: #f0f9f6;
+    border-color: #007f5f;
+    box-shadow: 0 4px 14px rgba(0, 127, 95, 0.1);
+}
+
+.condition-card__title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 4px 0;
+}
+
+.condition-card__desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    color: #64748B;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   7. STEP 3: PROPERTY LOCATION & OPTIONAL PHOTOS
+   ───────────────────────────────────────────────────────────────── */
+.address-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.3fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+@media (max-width: 600px) {
+    .address-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.multi-input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.multi-input,
+.multi-select,
+.multi-textarea {
+    width: 100%;
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 11px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    color: #0F172A;
+    outline: none;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.multi-input:focus,
+.multi-select:focus,
+.multi-textarea:focus {
+    border-color: #007f5f;
+    box-shadow: 0 0 0 3px rgba(0, 127, 95, 0.15);
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-left-icon {
+    position: absolute;
+    left: 14px;
+    color: #94A3B8;
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.multi-input--icon {
+    padding-left: 36px;
+}
+
+/* Photo Upload Zone */
+.photo-upload-zone {
+    border: 2px dashed #CBD5E1;
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+    background: #F8FAFC;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 16px;
+}
+
+.photo-upload-zone:hover {
+    border-color: #007f5f;
+    background: #f0f9f6;
+}
+
+.photo-upload-zone__icon {
+    font-size: 20px;
+    color: #007f5f;
+    margin-bottom: 6px;
+}
+
+.photo-upload-zone__text {
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #0F172A;
+    margin: 0 0 3px 0;
+}
+
+.photo-upload-zone__sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: #64748B;
+    margin: 0;
+}
+
+.photo-previews-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.photo-thumb-wrap {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #CBD5E1;
+}
+
+.photo-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   8. STEP 4: CONTACT & RECAP SUMMARY
+   ───────────────────────────────────────────────────────────────── */
+.summary-recap-strip {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.summary-recap-strip__left {
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #007f5f;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.summary-pills-list {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.summary-pill {
+    background: #e6f5f0;
+    color: #00664c;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.contact-inputs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+/* Preferred Quote Delivery Toggle */
+.pref-toggle-wrap {
+    margin-bottom: 22px;
+}
+
+.pref-options-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pref-option-pill {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 8px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.18s ease;
+    user-select: none;
+}
+
+.pref-option-pill:hover {
+    border-color: #94A3B8;
+}
+
+.pref-option-pill.is-selected {
+    background: #0F172A;
+    color: #FFFFFF;
+    border-color: #0F172A;
+}
+
+.pref-option-pill input[type="radio"] {
+    display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   9. NAVIGATION ACTION BUTTONS (ROUNDED-FULL)
+   ───────────────────────────────────────────────────────────────── */
+.form-actions-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid #F1F5F9;
+}
+
+.btn-form-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 9999px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-nav-next {
+    background: #007f5f;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: 0 4px 14px rgba(0, 127, 95, 0.25);
+}
+
+.btn-nav-next:hover {
+    background: #00664c;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 127, 95, 0.35);
+}
+
+.btn-nav-back {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    color: #475569;
+}
+
+.btn-nav-back:hover {
+    border-color: #94A3B8;
+    color: #0F172A;
+    background: #F8FAFC;
+}
+
+.btn-nav-submit {
+    background: #007f5f;
+    color: #FFFFFF;
+    border: none;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(0, 127, 95, 0.3);
+}
+
+.btn-nav-submit:hover {
+    background: #00664c;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 127, 95, 0.4);
+}
+
+/* Trust Guarantee Bottom Strip */
+.multi-quote-trust-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid #F1F5F9;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: #64748B;
+}
+
+.trust-check-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.trust-check-item i {
+    color: #007f5f;
+}
+
+.trust-text-link {
+    color: #00664c;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.trust-text-link:hover {
+    text-decoration: underline;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   10. CELEBRATORY CONFIRMATION SCREEN
+   ───────────────────────────────────────────────────────────────── */
+.form-confirmation-screen {
+    display: none;
+    text-align: center;
+    padding: 30px 10px;
+}
+
+.form-confirmation-screen.is-active {
+    display: block;
+}
+
+.conf-check-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #e6f5f0;
+    color: #007f5f;
+    border: 2px solid #007f5f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin: 0 auto 18px auto;
+}
+
+.conf-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 8px 0;
+}
+
+.conf-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.5;
+    max-width: 480px;
+    margin: 0 auto 20px auto;
+}
+
+.conf-summary-box {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 16px 20px;
+    max-width: 480px;
+    margin: 0 auto 24px auto;
+    text-align: left;
+}
+
+.conf-summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    padding: 6px 0;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.conf-summary-row:last-child {
+    border-bottom: none;
+}
+
+.conf-summary-label {
+    color: #64748B;
+    font-weight: 500;
+}
+
+.conf-summary-val {
+    color: #0F172A;
+    font-weight: 600;
+    text-align: right;
+}
+
+.conf-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}

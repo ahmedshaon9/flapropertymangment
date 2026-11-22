@@ -1,0 +1,22 @@
+# Dependencies & Build
+node_modules/
+dist/
+build/
+*.zip
+*.tar.gz
+
+# System & OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs & Scripts
+*.log
+scratch/
+upload-site.js
