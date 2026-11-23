@@ -279,6 +279,15 @@
         runSync();
         initQuoteFormSync();
         initReviewFormSync();
+
+        // Automatically load realtime analytics tracker across all website pages
+        if (typeof window !== 'undefined' && !window.FLA_Analytics && !window.location.pathname.includes('/admin')) {
+            const s = document.createElement('script');
+            const isSub = window.location.pathname.includes('/services/');
+            s.src = isSub ? '../js/analytics.js' : 'js/analytics.js';
+            s.defer = true;
+            document.head.appendChild(s);
+        }
     });
 
     // Cross-tab sync
