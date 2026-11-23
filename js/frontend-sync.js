@@ -36,9 +36,11 @@
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // 1. APPLY DYNAMIC BRAND COLORS
+    // 1. APPLY DYNAMIC BRAND COLORS (DEFERS TO fla_theme_colors)
     // ─────────────────────────────────────────────────────────────────
     function applyBrandColors(colors) {
+        // If master dynamic theme is active, let theme.js manage colors
+        if (localStorage.getItem('fla_theme_colors')) return;
         if (!colors) return;
         const root = document.documentElement;
 

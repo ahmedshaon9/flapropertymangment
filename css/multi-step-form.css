@@ -3,7 +3,7 @@
    Under-Hero Split 2-Column Section (5 Cols Info + 7 Cols Form)
    Neo-Grotesque Typography: Plus Jakarta Sans (Headings) + Inter (Body/Inputs)
    Generous Rounded Corners: rounded-[28px] card, rounded-2xl inputs, rounded-full pills & buttons
-   Brand Color Matching: Turf Green (#007f5f), Deep Forest (#0B1F17), Emerald Accents
+   Brand Color Matching: Turf Green (var(--primary, #007f5f)), Deep Forest (#0B1F17), Emerald Accents
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ─────────────────────────────────────────────────────────────────
@@ -53,9 +53,9 @@
     align-self: flex-start;
     padding: 6px 16px;
     border-radius: 9999px;
-    background: rgba(0, 127, 95, 0.1);
-    color: #007f5f;
-    border: 1px solid rgba(0, 127, 95, 0.25);
+    background: color-mix(in srgb, var(--primary, #007f5f) 10%, transparent);
+    color: var(--primary, #007f5f);
+    border: 1px solid color-mix(in srgb, var(--primary, #007f5f) 25%, transparent);
     font-family: 'Inter', sans-serif;
     font-size: 11.5px;
     font-weight: 700;
@@ -113,7 +113,7 @@
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 800;
     font-size: 14px;
-    color: #007f5f;
+    color: var(--primary, #007f5f);
     background: #e6f5f0;
     width: 36px;
     height: 36px;
@@ -224,10 +224,10 @@
 }
 
 .quote-direct-btn--call {
-    background: #007f5f;
+    background: var(--primary, #007f5f);
     color: #FFFFFF;
     border: none;
-    box-shadow: 0 4px 14px rgba(0, 127, 95, 0.35);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--primary, #007f5f) 35%, transparent);
 }
 
 .quote-direct-btn--call:hover {
@@ -329,7 +329,7 @@
 
 .quote-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #007f5f 0%, #80b918 100%);
+    background: linear-gradient(90deg, var(--primary, #007f5f) 0%, #80b918 100%);
     border-radius: 9999px;
     transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -384,10 +384,10 @@
 
 /* Active / Current Step Circle */
 .wireframe-stepper__item.is-active .wireframe-stepper__circle {
-    background: #007f5f;
+    background: var(--primary, #007f5f);
     color: #FFFFFF;
-    border-color: #007f5f;
-    box-shadow: 0 0 0 4px rgba(0, 127, 95, 0.15);
+    border-color: var(--primary, #007f5f);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary, #007f5f) 15%, transparent);
 }
 
 /* Completed Step Circle */
@@ -491,8 +491,8 @@
 
 .select-card.is-selected {
     background: #f0f9f6;
-    border-color: #007f5f;
-    box-shadow: 0 4px 14px rgba(0, 127, 95, 0.1);
+    border-color: var(--primary, #007f5f);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--primary, #007f5f) 10%, transparent);
 }
 
 .option-letter {
@@ -512,9 +512,9 @@
 }
 
 .select-card.is-selected .option-letter {
-    background: #007f5f;
+    background: var(--primary, #007f5f);
     color: #FFFFFF;
-    border-color: #007f5f;
+    border-color: var(--primary, #007f5f);
 }
 
 .select-card__title {
@@ -552,10 +552,10 @@
 }
 
 .select-pill.is-selected {
-    background: #007f5f;
+    background: var(--primary, #007f5f);
     color: #FFFFFF;
-    border-color: #007f5f;
-    box-shadow: 0 4px 12px rgba(0, 127, 95, 0.25);
+    border-color: var(--primary, #007f5f);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--primary, #007f5f) 25%, transparent);
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -599,8 +599,8 @@
 
 .condition-card.is-selected {
     background: #f0f9f6;
-    border-color: #007f5f;
-    box-shadow: 0 4px 14px rgba(0, 127, 95, 0.1);
+    border-color: var(--primary, #007f5f);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--primary, #007f5f) 10%, transparent);
 }
 
 .condition-card__title {
@@ -659,8 +659,8 @@
 .multi-input:focus,
 .multi-select:focus,
 .multi-textarea:focus {
-    border-color: #007f5f;
-    box-shadow: 0 0 0 3px rgba(0, 127, 95, 0.15);
+    border-color: var(--primary, #007f5f);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary, #007f5f) 15%, transparent);
 }
 
 .input-with-icon {
@@ -694,13 +694,13 @@
 }
 
 .photo-upload-zone:hover {
-    border-color: #007f5f;
+    border-color: var(--primary, #007f5f);
     background: #f0f9f6;
 }
 
 .photo-upload-zone__icon {
     font-size: 20px;
-    color: #007f5f;
+    color: var(--primary, #007f5f);
     margin-bottom: 6px;
 }
 
@@ -761,7 +761,7 @@
     font-family: 'Inter', sans-serif;
     font-size: 11.5px;
     font-weight: 700;
-    color: #007f5f;
+    color: var(--primary, #007f5f);
     display: flex;
     align-items: center;
     gap: 5px;
@@ -864,16 +864,16 @@
 }
 
 .btn-nav-next {
-    background: #007f5f;
+    background: var(--primary, #007f5f);
     color: #FFFFFF;
     border: none;
-    box-shadow: 0 4px 14px rgba(0, 127, 95, 0.25);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--primary, #007f5f) 25%, transparent);
 }
 
 .btn-nav-next:hover {
     background: #00664c;
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(0, 127, 95, 0.35);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--primary, #007f5f) 35%, transparent);
 }
 
 .btn-nav-back {
@@ -889,17 +889,17 @@
 }
 
 .btn-nav-submit {
-    background: #007f5f;
+    background: var(--primary, #007f5f);
     color: #FFFFFF;
     border: none;
     font-weight: 700;
-    box-shadow: 0 4px 16px rgba(0, 127, 95, 0.3);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--primary, #007f5f) 30%, transparent);
 }
 
 .btn-nav-submit:hover {
     background: #00664c;
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(0, 127, 95, 0.4);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--primary, #007f5f) 40%, transparent);
 }
 
 /* Trust Guarantee Bottom Strip */
@@ -924,7 +924,7 @@
 }
 
 .trust-check-item i {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
 }
 
 .trust-text-link {
@@ -955,8 +955,8 @@
     height: 60px;
     border-radius: 50%;
     background: #e6f5f0;
-    color: #007f5f;
-    border: 2px solid #007f5f;
+    color: var(--primary, #007f5f);
+    border: 2px solid var(--primary, #007f5f);
     display: flex;
     align-items: center;
     justify-content: center;

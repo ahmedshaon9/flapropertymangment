@@ -13,14 +13,14 @@
     --jungle-teal: #007f5f;
     --lime-moss: #80b918;
 
-    /* Primary Tokens (Jungle Teal #007f5f) */
+    /* Primary Tokens (Jungle Teal var(--primary, #007f5f)) */
     --primary: var(--jungle-teal);
     --primary-hover: #00664c;
     --primary-dark: #004d39;
     --primary-darker: #003326;
     --primary-light: #e6f5f0;
     --primary-pale: #f0f9f6;
-    --primary-border: rgba(0, 127, 95, 0.25);
+    --primary-border: color-mix(in srgb, var(--primary, #007f5f) 25%, transparent);
 
     /* Secondary Tokens (Lime Moss #80b918) */
     --secondary: var(--lime-moss);
@@ -64,7 +64,7 @@
     --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.04);
     --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.05);
     --shadow-floating: 0 20px 45px rgba(28, 55, 16, 0.12);
-    --shadow-hover: 0 15px 35px rgba(0, 127, 95, 0.18);
+    --shadow-hover: 0 15px 35px color-mix(in srgb, var(--primary, #007f5f) 18%, transparent);
 
     /* Radii */
     --radius-pill: 9999px;
@@ -298,13 +298,13 @@ textarea {
 .btn--primary {
     background-color: var(--brand-green);
     color: var(--white);
-    box-shadow: 0 4px 14px rgba(0, 127, 95, 0.35);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--primary, #007f5f) 35%, transparent);
 }
 
 .btn--primary:hover {
     background-color: var(--brand-green-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 127, 95, 0.45);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--primary, #007f5f) 45%, transparent);
 }
 
 .btn--white {
@@ -566,12 +566,12 @@ textarea {
 }
 
 .nav-link:hover {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
     background-color: #f9fafb;
 }
 
 .nav-link.active {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
     font-weight: 600;
 }
 
@@ -714,8 +714,8 @@ textarea {
 }
 
 .nav-btn--solid:hover {
-    background-color: #007f5f;
-    border-color: #007f5f;
+    background-color: var(--primary, #007f5f);
+    border-color: var(--primary, #007f5f);
     color: #ffffff;
 }
 
@@ -821,7 +821,7 @@ textarea {
 }
 
 .mobile-drawer__close:hover {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
 }
 
 .mobile-drawer__body {
@@ -852,7 +852,7 @@ textarea {
 }
 
 .mobile-drawer__link:hover {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
     background-color: #f9fafb;
 }
 
@@ -881,7 +881,7 @@ textarea {
 }
 
 .mobile-drawer__accordion-btn:hover {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
     background-color: #f9fafb;
 }
 
@@ -930,11 +930,11 @@ textarea {
 }
 
 .mobile-drawer__sublink:hover i {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
 }
 
 .mobile-drawer__sublink:hover {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
     background-color: #f3f4f6;
 }
 
@@ -982,8 +982,8 @@ textarea {
 }
 
 .mobile-btn--solid:hover {
-    background-color: #007f5f;
-    border-color: #007f5f;
+    background-color: var(--primary, #007f5f);
+    border-color: var(--primary, #007f5f);
     color: #ffffff;
 }
 
@@ -1108,9 +1108,9 @@ textarea {
 .badge-dot {
     width: 7px;
     height: 7px;
-    background-color: #007f5f;
+    background-color: var(--primary, #007f5f);
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(0, 127, 95, 0.8);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--primary, #007f5f) 80%, transparent);
     display: inline-block;
 }
 
@@ -1126,7 +1126,7 @@ textarea {
 }
 
 .hero-split__heading .highlight-text {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
 }
 
 .hero-split__subtext {
@@ -1169,11 +1169,11 @@ textarea {
 }
 
 .hero-btn--solid:hover {
-    background-color: #007f5f;
-    border-color: #007f5f;
+    background-color: var(--primary, #007f5f);
+    border-color: var(--primary, #007f5f);
     color: #ffffff;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 127, 95, 0.3);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--primary, #007f5f) 30%, transparent);
 }
 
 .hero-btn--outline {
@@ -1207,7 +1207,7 @@ textarea {
 }
 
 .hero-trust-item i {
-    color: #007f5f;
+    color: var(--primary, #007f5f);
     font-size: 14px;
 }
 
@@ -1549,7 +1549,7 @@ textarea {
 .form-control:focus {
     border-color: var(--brand-green);
     background-color: var(--white);
-    box-shadow: 0 0 0 3px rgba(0, 127, 95, 0.15);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary, #007f5f) 15%, transparent);
 }
 
 .form-control:user-invalid {
@@ -1839,7 +1839,7 @@ textarea {
     width: 32px;
     border-radius: var(--radius-pill);
     background-color: var(--brand-green);
-    box-shadow: 0 2px 8px rgba(0, 127, 95, 0.4);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--primary, #007f5f) 40%, transparent);
 }
 
 .services-counter {
@@ -1965,7 +1965,7 @@ textarea {
 .step-card--active {
     background-color: var(--brand-green-pale);
     border: 1.5px solid var(--brand-green);
-    box-shadow: 0 8px 25px rgba(0, 127, 95, 0.12);
+    box-shadow: 0 8px 25px color-mix(in srgb, var(--primary, #007f5f) 12%, transparent);
 }
 
 .step-card__top {
@@ -2252,7 +2252,7 @@ textarea {
     color: var(--white);
     border-color: var(--brand-green);
     font-weight: 700;
-    box-shadow: 0 4px 12px rgba(0, 127, 95, 0.3);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--primary, #007f5f) 30%, transparent);
 }
 
 .city-pill--highlight:hover {
@@ -2410,7 +2410,7 @@ textarea {
     width: 32px;
     border-radius: var(--radius-pill);
     background-color: var(--brand-green);
-    box-shadow: 0 2px 8px rgba(0, 127, 95, 0.4);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--primary, #007f5f) 40%, transparent);
 }
 
 .testimonials-counter {
@@ -2501,7 +2501,7 @@ textarea {
     background-color: var(--brand-green);
     border-color: var(--brand-green);
     color: var(--white);
-    box-shadow: 0 8px 25px rgba(0, 127, 95, 0.25);
+    box-shadow: 0 8px 25px color-mix(in srgb, var(--primary, #007f5f) 25%, transparent);
 }
 
 .faq-item--active-green .faq-trigger {
@@ -2717,7 +2717,7 @@ textarea {
     align-items: center;
     justify-content: center;
     font-size: 14px;
-    box-shadow: 0 4px 15px rgba(0, 127, 95, 0.4);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--primary, #007f5f) 40%, transparent);
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
@@ -2756,7 +2756,7 @@ textarea {
     justify-content: center;
     gap: 14px;
     padding: 12px 24px;
-    background: linear-gradient(135deg, #007f5f 0%, #203e12 100%);
+    background: linear-gradient(135deg, var(--primary, #007f5f) 0%, #203e12 100%);
     color: #ffffff;
     border-radius: var(--radius-pill);
     box-shadow: 0 10px 30px rgba(28, 55, 16, 0.45), 0 0 0 3px rgba(255, 255, 255, 0.25);
@@ -3022,7 +3022,7 @@ textarea {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #007f5f, #80b918);
+    background: linear-gradient(90deg, var(--primary, #007f5f), #80b918);
     opacity: 0;
     transform: scaleX(0);
     transform-origin: left;
@@ -3041,7 +3041,7 @@ textarea {
     right: -12px;
     bottom: -15px;
     font-size: 110px;
-    color: rgba(0, 127, 95, 0.04);
+    color: color-mix(in srgb, var(--primary, #007f5f) 4%, transparent);
     pointer-events: none;
     z-index: 0;
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s ease;
@@ -3049,7 +3049,7 @@ textarea {
 
 .property-card:hover .property-card__watermark {
     transform: scale(1.15) rotate(-6deg);
-    color: rgba(0, 127, 95, 0.09);
+    color: color-mix(in srgb, var(--primary, #007f5f) 9%, transparent);
 }
 
 .property-card__header {
@@ -3065,19 +3065,19 @@ textarea {
     width: 58px;
     height: 58px;
     border-radius: 16px;
-    background: linear-gradient(135deg, #007f5f 0%, #203e12 100%);
+    background: linear-gradient(135deg, var(--primary, #007f5f) 0%, #203e12 100%);
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    box-shadow: 0 8px 20px rgba(0, 127, 95, 0.25);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--primary, #007f5f) 25%, transparent);
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
 .property-card:hover .property-card__icon-wrap {
     transform: scale(1.1) rotate(6deg);
-    box-shadow: 0 12px 28px rgba(0, 127, 95, 0.4);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--primary, #007f5f) 40%, transparent);
 }
 
 .property-card__tag {
@@ -3180,7 +3180,7 @@ textarea {
 
 .property-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 22px 50px rgba(0, 127, 95, 0.16);
+    box-shadow: 0 22px 50px color-mix(in srgb, var(--primary, #007f5f) 16%, transparent);
     border-color: var(--brand-green-border);
 }
 
@@ -3214,7 +3214,7 @@ textarea {
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #007f5f, #80b918);
+    background: linear-gradient(90deg, var(--primary, #007f5f), #80b918);
     opacity: 0;
     transition: opacity 0.35s ease;
 }
@@ -3233,13 +3233,13 @@ textarea {
     font-weight: 900;
     line-height: 1;
     color: transparent;
-    -webkit-text-stroke: 1.5px rgba(0, 127, 95, 0.18);
+    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--primary, #007f5f) 18%, transparent);
     pointer-events: none;
     transition: transform 0.35s ease, -webkit-text-stroke 0.35s ease;
 }
 
 .value-card:hover .value-card__number {
-    -webkit-text-stroke: 1.5px rgba(0, 127, 95, 0.55);
+    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--primary, #007f5f) 55%, transparent);
     transform: translateY(-3px) scale(1.08);
 }
 
@@ -3248,21 +3248,21 @@ textarea {
     width: 58px;
     height: 58px;
     border-radius: 16px;
-    background: linear-gradient(135deg, #007f5f 0%, #203e12 100%);
+    background: linear-gradient(135deg, var(--primary, #007f5f) 0%, #203e12 100%);
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 22px;
     margin-bottom: 22px;
-    box-shadow: 0 8px 20px rgba(0, 127, 95, 0.25);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--primary, #007f5f) 25%, transparent);
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
 .value-card:hover .value-card__icon-wrap,
 .value-card:hover .value-card__icon {
     transform: scale(1.1) rotate(-6deg);
-    box-shadow: 0 12px 28px rgba(0, 127, 95, 0.4);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--primary, #007f5f) 40%, transparent);
 }
 
 .value-card__title {
@@ -3305,7 +3305,7 @@ textarea {
 
 .value-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 22px 50px rgba(0, 127, 95, 0.16);
+    box-shadow: 0 22px 50px color-mix(in srgb, var(--primary, #007f5f) 16%, transparent);
     border-color: var(--brand-green-border);
 }
 

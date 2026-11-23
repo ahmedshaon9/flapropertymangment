@@ -151,6 +151,14 @@
                 }
                 return;
             }
+
+            // 2I. Submit Button Click (Delegated for 100% reliability both inline and in modal)
+            const submitBtn = e.target.closest('.btn-nav-submit, #btnFinalSubmit');
+            if (submitBtn && root.contains(submitBtn)) {
+                e.preventDefault();
+                processQuoteSubmit();
+                return;
+            }
         });
 
         // ─────────────────────────────────────────────────────────────
@@ -424,62 +432,87 @@
         // ─────────────────────────────────────────────────────────────
         // 5. FINAL SUBMIT & CONFIRMATION MORPH
         // ─────────────────────────────────────────────────────────────
+        let isSubmitting = false;
+
+        function processQuoteSubmit() {
+            if (isSubmitting) return;
+            if (!validateStep(4)) return;
+
+            isSubmitting = true;
+
+            // Generate clean payload
+            const leadPayload = {
+                id: 'quote_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                propertyType: state.propertyType || 'Residential Home',
+                services: Array.from(state.services),
+                frequency: state.frequency || 'Bi-Weekly Maintenance',
+                condition: state.condition || 'Maintained / Normal Height',
+                gateAccess: state.gateAccess || 'Wide Gate (Fits Scag)',
+                address: state.address || '',
+                city: state.city || 'Lakeland',
+                notes: state.notes || '',
+                name: state.name,
+                email: state.email,
+                phone: state.phone,
+                contactPref: state.contactPref || 'Text Message',
+                photosCount: state.photos.length,
+                status: 'new',
+                createdAt: new Date().toISOString()
+            };
+
+            // 1. Save to primary localStorage key
+            try {
+                const existing = JSON.parse(localStorage.getItem('fla_quote_leads') || '[]');
+                existing.unshift(leadPayload);
+                localStorage.setItem('fla_quote_leads', JSON.stringify(existing));
+            } catch (err) {
+                console.warn('LocalStorage save error:', err);
+            }
+
+            // 2. Also save to site_data for compatibility
+            try {
+                const rawSite = localStorage.getItem('fla_site_data');
+                if (rawSite) {
+                    const parsedSite = JSON.parse(rawSite);
+                    if (parsedSite && parsedSite.leads) {
+                        parsedSite.leads.unshift(leadPayload);
+                        localStorage.setItem('fla_site_data', JSON.stringify(parsedSite));
+                    }
+                }
+            } catch (err) {}
+
+            // 3. Send to backend REST API (persists to data/quotes.json)
+            try {
+                fetch('/api/quotes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(leadPayload)
+                }).catch(() => {});
+            } catch (e) {}
+
+            // 4. Real-time broadcast to admin panel
+            try {
+                if (typeof BroadcastChannel !== 'undefined') {
+                    const bc = new BroadcastChannel('fla_realtime_channel');
+                    bc.postMessage({ type: 'quotes', payload: leadPayload });
+                }
+            } catch (e) {}
+
+            // 5. Custom window event
+            try {
+                window.dispatchEvent(new CustomEvent('fla_new_quote', { detail: leadPayload }));
+            } catch (e) {}
+
+            // Show confirmation screen
+            showConfirmation(leadPayload);
+            isSubmitting = false;
+        }
+
         const quoteFormEl = document.getElementById('multiStepQuoteForm');
         if (quoteFormEl) {
             quoteFormEl.addEventListener('submit', (e) => {
                 e.preventDefault();
-
-                if (!validateStep(4)) return;
-
-                // Save submission payload locally
-                const leadPayload = {
-                    id: 'lead_' + Date.now(),
-                    propertyType: state.propertyType,
-                    services: Array.from(state.services),
-                    frequency: state.frequency,
-                    condition: state.condition,
-                    gateAccess: state.gateAccess,
-                    address: state.address,
-                    city: state.city,
-                    notes: state.notes,
-                    name: state.name,
-                    email: state.email,
-                    phone: state.phone,
-                    contactPref: state.contactPref,
-                    photosCount: state.photos.length,
-                    status: 'new',
-                    id: 'quote_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
-                    createdAt: new Date().toISOString()
-                };
-
-                // Save to localStorage
-                try {
-                    const existing = JSON.parse(localStorage.getItem('fla_quote_leads') || '[]');
-                    existing.unshift(leadPayload);
-                    localStorage.setItem('fla_quote_leads', JSON.stringify(existing));
-                } catch (err) {
-                    console.warn('LocalStorage save error:', err);
-                }
-
-                // Send to backend REST API if available
-                try {
-                    fetch('/api/quotes', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(leadPayload)
-                    }).catch(() => {});
-                } catch (e) {}
-
-                // Broadcast to admin panel tabs in real time
-                try {
-                    if (typeof BroadcastChannel !== 'undefined') {
-                        const bc = new BroadcastChannel('fla_realtime_channel');
-                        bc.postMessage({ type: 'quotes', payload: leadPayload });
-                    }
-                } catch (e) {}
-
-                // Show confirmation screen
-                showConfirmation(leadPayload);
+                processQuoteSubmit();
             });
         }
 

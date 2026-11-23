@@ -382,7 +382,7 @@
     font-size: 15px;
     font-weight: 800;
     border-radius: var(--radius-pill);
-    box-shadow: 0 4px 15px rgba(0, 127, 95, 0.35);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--primary, #007f5f) 35%, transparent);
     margin-top: 18px;
 }
 
@@ -478,7 +478,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #007f5f, #80b918);
+    background: linear-gradient(90deg, var(--primary, #007f5f), #80b918);
     opacity: 0;
     transform: scaleX(0);
     transform-origin: left;
@@ -497,7 +497,7 @@
     right: -12px;
     bottom: -15px;
     font-size: 110px;
-    color: rgba(0, 127, 95, 0.04);
+    color: color-mix(in srgb, var(--primary, #007f5f) 4%, transparent);
     pointer-events: none;
     z-index: 0;
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s ease;
@@ -505,7 +505,7 @@
 
 .property-card:hover .property-card__watermark {
     transform: scale(1.15) rotate(-6deg);
-    color: rgba(0, 127, 95, 0.09);
+    color: color-mix(in srgb, var(--primary, #007f5f) 9%, transparent);
 }
 
 .property-card__header {
@@ -521,19 +521,19 @@
     width: 58px;
     height: 58px;
     border-radius: 16px;
-    background: linear-gradient(135deg, #007f5f 0%, #203e12 100%);
+    background: linear-gradient(135deg, var(--primary, #007f5f) 0%, #203e12 100%);
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    box-shadow: 0 8px 20px rgba(0, 127, 95, 0.25);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--primary, #007f5f) 25%, transparent);
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
 .property-card:hover .property-card__icon-wrap {
     transform: scale(1.1) rotate(6deg);
-    box-shadow: 0 12px 28px rgba(0, 127, 95, 0.4);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--primary, #007f5f) 40%, transparent);
 }
 
 .property-card__tag {
@@ -636,7 +636,7 @@
 
 .property-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 22px 50px rgba(0, 127, 95, 0.16);
+    box-shadow: 0 22px 50px color-mix(in srgb, var(--primary, #007f5f) 16%, transparent);
     border-color: var(--brand-green-border);
 }
 
@@ -670,7 +670,7 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #007f5f, #80b918);
+    background: linear-gradient(90deg, var(--primary, #007f5f), #80b918);
     opacity: 0;
     transition: opacity 0.35s ease;
 }
@@ -689,13 +689,13 @@
     font-weight: 900;
     line-height: 1;
     color: transparent;
-    -webkit-text-stroke: 1.5px rgba(0, 127, 95, 0.18);
+    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--primary, #007f5f) 18%, transparent);
     pointer-events: none;
     transition: transform 0.35s ease, -webkit-text-stroke 0.35s ease;
 }
 
 .value-card:hover .value-card__number {
-    -webkit-text-stroke: 1.5px rgba(0, 127, 95, 0.55);
+    -webkit-text-stroke: 1.5px color-mix(in srgb, var(--primary, #007f5f) 55%, transparent);
     transform: translateY(-3px) scale(1.08);
 }
 
@@ -704,21 +704,21 @@
     width: 58px;
     height: 58px;
     border-radius: 16px;
-    background: linear-gradient(135deg, #007f5f 0%, #203e12 100%);
+    background: linear-gradient(135deg, var(--primary, #007f5f) 0%, #203e12 100%);
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 22px;
     margin-bottom: 22px;
-    box-shadow: 0 8px 20px rgba(0, 127, 95, 0.25);
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--primary, #007f5f) 25%, transparent);
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
 .value-card:hover .value-card__icon-wrap,
 .value-card:hover .value-card__icon {
     transform: scale(1.1) rotate(-6deg);
-    box-shadow: 0 12px 28px rgba(0, 127, 95, 0.4);
+    box-shadow: 0 12px 28px color-mix(in srgb, var(--primary, #007f5f) 40%, transparent);
 }
 
 .value-card__title {
@@ -761,7 +761,7 @@
 
 .value-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 22px 50px rgba(0, 127, 95, 0.16);
+    box-shadow: 0 22px 50px color-mix(in srgb, var(--primary, #007f5f) 16%, transparent);
     border-color: var(--brand-green-border);
 }
 

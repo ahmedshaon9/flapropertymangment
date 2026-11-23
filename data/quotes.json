@@ -1,5 +1,33 @@
 [
   {
+    "name": "Robert Miller",
+    "email": "rmiller@flahomes.com",
+    "phone": "(863) 555-8822",
+    "city": "Davenport",
+    "services": [
+      "Lawn Mowing & Edging",
+      "Mulch & Rock Installation"
+    ],
+    "frequency": "Bi-Weekly Maintenance",
+    "status": "new",
+    "id": "quote_1795427314803_10icy",
+    "createdAt": "2026-11-23T09:48:34.803Z"
+  },
+  {
+    "name": "Sarah Connor",
+    "email": "sarah@skynet.com",
+    "phone": "(863) 555-9988",
+    "services": [
+      "Lawn Mowing & Edging"
+    ],
+    "city": "Davenport",
+    "address": "100 Cyberdyne Way",
+    "propertyType": "Residential Home",
+    "status": "new",
+    "id": "quote_1795426116804_38qvu",
+    "createdAt": "2026-11-23T09:28:36.804Z"
+  },
+  {
     "id": "quote_17001",
     "name": "Marcus Vance",
     "email": "m.vance88@gmail.com",

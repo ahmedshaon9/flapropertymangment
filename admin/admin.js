@@ -242,17 +242,27 @@
     },
 
     async getQuotes() {
+      let apiList = [];
       if (apiAvailable) {
         try {
           const res = await fetch('/api/quotes');
-          if (res.ok) {
-            const data = await res.json();
-            storage(KEY.QUOTES, data);
-            return data;
-          }
+          if (res.ok) apiList = await res.json();
         } catch (e) {}
       }
-      return storage(KEY.QUOTES) || [];
+      const localList = storage(KEY.QUOTES) || [];
+
+      // Merge by ID or timestamp so no lead is EVER lost
+      const map = new Map();
+      localList.forEach(q => {
+        if (q && (q.id || q.name)) map.set(String(q.id || (q.name + (q.createdAt || ''))), q);
+      });
+      apiList.forEach(q => {
+        if (q && (q.id || q.name)) map.set(String(q.id || (q.name + (q.createdAt || ''))), q);
+      });
+
+      const merged = Array.from(map.values()).sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+      storage(KEY.QUOTES, merged);
+      return merged;
     },
 
     async saveQuote(quote) {
@@ -2044,6 +2054,22 @@
 
     // Apply language preference
     setLanguage(currentLang);
+
+    // 10. Live Poller (every 2.5s) to guarantee instant quote and review sync
+    let lastSeenQuotesCount = 0;
+    setInterval(async () => {
+      if (!Auth.isLoggedIn()) return;
+      try {
+        const quotes = await Quotes.getAll();
+        if (lastSeenQuotesCount > 0 && quotes.length > lastSeenQuotesCount) {
+          const newest = quotes[0];
+          toast(currentLang === 'es' ? `🔔 ¡Nueva cotización de ${newest.name || 'Cliente'}!` : `🔔 New quote request from ${newest.name || 'Client'}!`, 'success');
+          if (Nav.current === 'quotes') await Quotes.render($id('quotes-search')?.value || '');
+          Dashboard.refresh();
+        }
+        lastSeenQuotesCount = quotes.length;
+      } catch (err) {}
+    }, 2500);
   });
 
   // Expose API
