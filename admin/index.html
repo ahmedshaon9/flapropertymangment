@@ -1,1145 +1,703 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Control Center | FLA Property Maintenance LLC</title>
-    <meta name="robots" content="noindex, nofollow">
-
-    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome 6 Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#F0FDF4',
-                            100: '#DCFCE7',
-                            500: '#80b918',
-                            600: '#007f5f',
-                            700: '#00664c',
-                            800: '#166534',
-                            900: '#14532D',
-                        },
-                        slate: {
-                            850: '#151F32',
-                            950: '#0B1120',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Plus Jakarta Sans', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-
-    <!-- Admin SaaS Stylesheet -->
-    <link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal — FLA Property Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen antialiased flex flex-col">
+<body>
 
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 1. AUTHENTICATION & LOGIN GATE SCREEN (/admin Gate) -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <div id="authGate" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-50 overflow-y-auto">
-        <div id="loginCard" class="w-full max-w-[420px] bg-white border border-slate-200/80 rounded-2xl shadow-xl shadow-slate-200/50 p-8 sm:p-9 transition-all">
-            
-            <!-- Brand & Heading -->
-            <div class="text-center mb-7">
-                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-50 border border-brand-100 mb-4 shadow-sm">
-                    <img src="../assets/images/logo.webp" alt="FLA Property Maintenance LLC" class="w-9 h-9 object-contain">
-                </div>
-                <h1 class="text-xl font-bold text-slate-900 font-heading tracking-tight">FLA PROPERTY</h1>
-                <p class="text-xs uppercase tracking-widest text-brand-700 font-bold mt-0.5">MAINTENANCE LLC</p>
-                <div class="inline-block mt-3 px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-xs font-semibold">
-                    <i class="fas fa-lock mr-1.5 text-slate-400"></i> Admin Control Center
-                </div>
+<!-- ══════════════════════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-bg-pattern"></div>
+  <div class="login-card">
+    <div class="login-logo-wrap">
+      <img src="../assets/images/logo.webp" alt="FLA Property Management" class="login-logo">
+    </div>
+    <div class="login-title-block">
+      <h1>Admin Portal</h1>
+      <p>FLA Property Maintenance LLC</p>
+    </div>
+    <form id="login-form" autocomplete="on" novalidate>
+      <div class="field-group">
+        <label for="login-username">Username</label>
+        <div class="field-wrap">
+          <i class="fa-regular fa-user field-icon"></i>
+          <input type="text" id="login-username" name="username" placeholder="Enter username" autocomplete="username" required>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="login-password">Password</label>
+        <div class="field-wrap">
+          <i class="fa-regular fa-lock field-icon"></i>
+          <input type="password" id="login-password" name="password" placeholder="Enter password" autocomplete="current-password" required>
+          <button type="button" class="field-btn-toggle" id="toggle-password" title="Show/hide password">
+            <i class="fa-regular fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      <p id="login-error" class="login-error" hidden></p>
+      <button type="submit" class="btn-login" id="login-submit-btn">
+        <span>Sign In</span>
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      </button>
+    </form>
+    <p class="login-hint">Default: <code>admin</code> / <code>FLA@admin2024</code></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ADMIN APPLICATION
+══════════════════════════════════════════════════════ -->
+<div id="admin-app" hidden>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <img src="../assets/images/logo-small.webp" alt="FLA" class="sidebar-brand-img" onerror="this.style.display='none'">
+      <div class="sidebar-brand-text">
+        <span class="sidebar-brand-name">FLA Property</span>
+        <span class="sidebar-brand-sub">Admin Portal</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <div class="nav-group">
+        <span class="nav-group-label">Main</span>
+        <a href="#" class="nav-link active" data-section="dashboard">
+          <span class="nav-link-icon"><i class="fa-solid fa-gauge-high"></i></span>
+          <span class="nav-link-text">Dashboard</span>
+        </a>
+        <a href="#" class="nav-link" data-section="quotes">
+          <span class="nav-link-icon"><i class="fa-solid fa-clipboard-list"></i></span>
+          <span class="nav-link-text">Quote Requests</span>
+          <span class="nav-badge" id="badge-quotes" hidden>0</span>
+        </a>
+        <a href="#" class="nav-link" data-section="reviews">
+          <span class="nav-link-icon"><i class="fa-solid fa-star"></i></span>
+          <span class="nav-link-text">Reviews</span>
+          <span class="nav-badge nav-badge--alert" id="badge-reviews" hidden>0</span>
+        </a>
+        <a href="#" class="nav-link" data-section="portfolio">
+          <span class="nav-link-icon"><i class="fa-solid fa-images"></i></span>
+          <span class="nav-link-text">Portfolio</span>
+        </a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-label">Configuration</span>
+        <a href="#" class="nav-link" data-section="settings">
+          <span class="nav-link-icon"><i class="fa-solid fa-sliders"></i></span>
+          <span class="nav-link-text">Site Settings</span>
+        </a>
+        <a href="#" class="nav-link" data-section="colors">
+          <span class="nav-link-icon"><i class="fa-solid fa-palette"></i></span>
+          <span class="nav-link-text">Theme & Colors</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="../" target="_blank" class="sidebar-footer-link">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        <span>View Website</span>
+      </a>
+      <button id="logout-btn" class="sidebar-footer-btn" title="Logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span>Log Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT AREA -->
+  <div id="main-wrap">
+
+    <!-- TOP HEADER -->
+    <header id="top-header">
+      <div class="header-left">
+        <button id="sidebar-toggle" class="btn-icon-round" title="Toggle sidebar">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="header-breadcrumb">
+          <span id="page-title" class="header-page-title">Dashboard</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-clock" id="header-clock"></div>
+        <div class="header-user">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Admin</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT SECTIONS -->
+    <main id="content-area">
+
+      <!-- ── DASHBOARD ───────────────────────────────── -->
+      <section id="section-dashboard" class="admin-section active">
+        <div class="section-header">
+          <h2>Welcome back, Admin 👋</h2>
+          <p>Here's what's happening with your FLA Property website today.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card stat-card--green">
+            <div class="stat-card-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+            <div class="stat-card-body">
+              <h3 id="stat-total-quotes">0</h3>
+              <p>Total Quote Requests</p>
             </div>
-
-            <!-- Error Notification Alert (GSAP Animated) -->
-            <div id="authErrorAlert" class="hidden mb-5 p-3.5 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3 text-xs text-red-700">
-                <i class="fas fa-exclamation-triangle text-red-500 mt-0.5"></i>
-                <div id="authErrorText" class="flex-1 font-medium">Incorrect password. Please try again.</div>
+            <a href="#" class="stat-card-link" data-section="quotes">View →</a>
+          </div>
+          <div class="stat-card stat-card--blue">
+            <div class="stat-card-icon"><i class="fa-solid fa-calendar-week"></i></div>
+            <div class="stat-card-body">
+              <h3 id="stat-week-quotes">0</h3>
+              <p>New This Week</p>
             </div>
+          </div>
+          <div class="stat-card stat-card--amber">
+            <div class="stat-card-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+            <div class="stat-card-body">
+              <h3 id="stat-pending-reviews">0</h3>
+              <p>Pending Reviews</p>
+            </div>
+            <a href="#" class="stat-card-link" data-section="reviews">Review →</a>
+          </div>
+          <div class="stat-card stat-card--purple">
+            <div class="stat-card-icon"><i class="fa-solid fa-images"></i></div>
+            <div class="stat-card-body">
+              <h3 id="stat-portfolio-count">0</h3>
+              <p>Portfolio Items</p>
+            </div>
+            <a href="#" class="stat-card-link" data-section="portfolio">Manage →</a>
+          </div>
+        </div>
 
-            <!-- Login Form -->
-            <form id="loginForm" class="space-y-4" novalidate>
-                <div>
-                    <label for="adminEmail" class="block text-xs font-semibold text-slate-700 mb-1.5">
-                        Admin Email / Username
+        <div class="dash-grid">
+          <div class="card">
+            <div class="card-head">
+              <h3><i class="fa-solid fa-clipboard-list"></i> Recent Quote Requests</h3>
+              <a href="#" class="btn-text-link" data-section="quotes">View all</a>
+            </div>
+            <div class="card-body" id="dash-recent-quotes">
+              <div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>No quote requests yet</p></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3><i class="fa-solid fa-star"></i> Pending Reviews</h3>
+              <a href="#" class="btn-text-link" data-section="reviews">View all</a>
+            </div>
+            <div class="card-body" id="dash-pending-reviews">
+              <div class="empty-state"><i class="fa-regular fa-star"></i><p>No pending reviews</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── QUOTE REQUESTS ──────────────────────────── -->
+      <section id="section-quotes" class="admin-section" hidden>
+        <div class="section-header">
+          <h2>Quote Requests</h2>
+          <p>All submitted free estimate requests from your website form.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-head-left">
+              <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="quotes-search" placeholder="Search by name, city, service…">
+              </div>
+              <select id="quotes-status-filter" class="select-sm">
+                <option value="all">All Status</option>
+                <option value="new">New</option>
+                <option value="contacted">Contacted</option>
+                <option value="quoted">Quoted</option>
+                <option value="won">Won</option>
+                <option value="lost">Lost</option>
+              </select>
+            </div>
+            <div class="card-head-right">
+              <button class="btn-secondary btn-sm" id="export-quotes-btn">
+                <i class="fa-solid fa-file-csv"></i> Export CSV
+              </button>
+            </div>
+          </div>
+          <div class="card-body card-body--flush">
+            <div class="table-scroll">
+              <table class="admin-table" id="quotes-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Service(s)</th>
+                    <th>City / Location</th>
+                    <th>Property Type</th>
+                    <th>Frequency</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="quotes-tbody">
+                  <tr><td colspan="11"><div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>No quote requests yet</p></div></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote Detail Modal -->
+        <div id="modal-quote" class="modal" hidden>
+          <div class="modal-backdrop"></div>
+          <div class="modal-box modal-box--lg">
+            <div class="modal-head">
+              <h3>Quote Details</h3>
+              <button class="btn-icon-round modal-close" data-modal="modal-quote"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="modal-quote-body"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── REVIEWS ─────────────────────────────────── -->
+      <section id="section-reviews" class="admin-section" hidden>
+        <div class="section-header">
+          <h2>Reviews Management</h2>
+          <p>Approve, edit, or add customer reviews shown on your website.</p>
+        </div>
+
+        <div class="tabs-nav">
+          <button class="tab-btn active" data-tab="tab-reviews-pending">
+            Pending <span class="tab-pill" id="count-pending">0</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-reviews-approved">
+            Approved <span class="tab-pill tab-pill--green" id="count-approved">0</span>
+          </button>
+          <button class="tab-btn" data-tab="tab-reviews-add">
+            <i class="fa-solid fa-plus"></i> Add Review
+          </button>
+        </div>
+
+        <!-- Pending Reviews Tab -->
+        <div id="tab-reviews-pending" class="tab-panel active">
+          <div class="card">
+            <div class="card-body" id="pending-reviews-list">
+              <div class="empty-state"><i class="fa-regular fa-clock"></i><p>No pending reviews</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Approved Reviews Tab -->
+        <div id="tab-reviews-approved" class="tab-panel" hidden>
+          <div class="card">
+            <div class="card-body" id="approved-reviews-list">
+              <div class="empty-state"><i class="fa-solid fa-check-circle" style="color:var(--a-success)"></i><p>No approved reviews yet</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Review Tab -->
+        <div id="tab-reviews-add" class="tab-panel" hidden>
+          <div class="card card--form">
+            <div class="card-head"><h3>Add New Review</h3></div>
+            <div class="card-body">
+              <form id="form-add-review" novalidate>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label>Reviewer Name <span class="req">*</span></label>
+                    <input type="text" name="name" required placeholder="e.g. Sarah Johnson">
+                  </div>
+                  <div class="field-group">
+                    <label>Location</label>
+                    <input type="text" name="city" placeholder="e.g. Davenport, FL">
+                  </div>
+                </div>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label>Role / Title</label>
+                    <input type="text" name="role" placeholder="e.g. Homeowner">
+                  </div>
+                  <div class="field-group">
+                    <label>Service</label>
+                    <select name="service">
+                      <option value="Lawn Mowing & Edging">Lawn Mowing & Edging</option>
+                      <option value="Landscape Design">Landscape Design</option>
+                      <option value="Mulch & Rock Installation">Mulch & Rock Installation</option>
+                      <option value="Bush, Hedge & Tree Care">Bush, Hedge & Tree Care</option>
+                      <option value="Irrigation & Turf Care">Irrigation & Turf Care</option>
+                      <option value="Seasonal Yard Cleanups">Seasonal Yard Cleanups</option>
+                      <option value="One-Time Mow & Go">One-Time Mow & Go</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label>Rating <span class="req">*</span></label>
+                  <div class="star-rating-pick" id="add-star-picker">
+                    <button type="button" class="star-pick star-pick--on" data-v="1"><i class="fa-solid fa-star"></i></button>
+                    <button type="button" class="star-pick star-pick--on" data-v="2"><i class="fa-solid fa-star"></i></button>
+                    <button type="button" class="star-pick star-pick--on" data-v="3"><i class="fa-solid fa-star"></i></button>
+                    <button type="button" class="star-pick star-pick--on" data-v="4"><i class="fa-solid fa-star"></i></button>
+                    <button type="button" class="star-pick star-pick--on" data-v="5"><i class="fa-solid fa-star"></i></button>
+                  </div>
+                  <input type="hidden" name="rating" value="5">
+                </div>
+                <div class="field-group">
+                  <label>Review Text <span class="req">*</span></label>
+                  <textarea name="message" required rows="4" placeholder="Write the review content here…"></textarea>
+                </div>
+                <div class="field-group">
+                  <label class="toggle-row">
+                    <span>Auto-approve (show on website immediately)</span>
+                    <label class="toggle-switch">
+                      <input type="checkbox" name="approved" checked>
+                      <span class="toggle-track"></span>
                     </label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
-                            <i class="fas fa-user-shield"></i>
-                        </span>
-                        <input 
-                            type="text" 
-                            id="adminEmail" 
-                            value="admin@flapropertymaintenance.com" 
-                            class="w-full pl-9 pr-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 transition-all font-mono"
-                            placeholder="admin@flapropertymaintenance.com">
-                    </div>
+                  </label>
                 </div>
-
-                <div>
-                    <div class="flex items-center justify-between mb-1.5">
-                        <label for="adminPassword" class="block text-xs font-semibold text-slate-700">
-                            Master Password <span class="text-red-500">*</span>
-                        </label>
-                        <button type="button" id="quickFillPasswordBtn" class="text-[11px] text-brand-700 hover:text-brand-800 font-medium">
-                            Auto-Fill Default
-                        </button>
-                    </div>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
-                            <i class="fas fa-key"></i>
-                        </span>
-                        <input 
-                            type="password" 
-                            id="adminPassword" 
-                            required 
-                            autofocus 
-                            class="w-full pl-9 pr-10 py-2.5 text-xs bg-white border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 transition-all"
-                            placeholder="Enter admin password">
-                        <button 
-                            type="button" 
-                            id="togglePasswordBtn" 
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none" 
-                            aria-label="Toggle password visibility">
-                            <i class="fas fa-eye text-xs"></i>
-                        </button>
-                    </div>
-                    <p class="text-[11px] text-slate-400 mt-1.5 flex items-center gap-1">
-                        <i class="fas fa-info-circle text-slate-400"></i> Default access: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-700 font-bold">FLA2026!</code>
-                    </p>
+                <div class="form-actions">
+                  <button type="submit" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Review</button>
                 </div>
-
-                <button 
-                    type="submit" 
-                    id="submitLoginBtn" 
-                    class="w-full mt-2 py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-sm hover:shadow transition-all flex items-center justify-center gap-2">
-                    <span>Sign In to Dashboard</span>
-                    <i class="fas fa-arrow-right text-[11px]"></i>
-                </button>
-            </form>
-
-            <div class="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-                <a href="../index.html" class="hover:text-slate-700 transition-colors flex items-center gap-1">
-                    <i class="fas fa-arrow-left text-[10px]"></i> Back to Public Site
-                </a>
-                <span>Polk County, FL</span>
+              </form>
             </div>
+          </div>
         </div>
-    </div>
 
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 2. MAIN DASHBOARD APPLICATION SHELL -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <div id="adminApp" class="hidden min-h-screen flex flex-col md:flex-row">
-
-        <!-- Fixed Left Sidebar (Desktop) / Slide-Out Drawer (Mobile) -->
-        <aside id="adminSidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white flex flex-col justify-between transition-transform duration-300 transform -translate-x-full md:translate-x-0 border-r border-slate-800">
-            
-            <!-- Sidebar Top: Brand & Nav Links -->
-            <div class="p-5 overflow-y-auto">
-                <div class="flex items-center justify-between pb-5 mb-5 border-b border-slate-800">
-                    <a href="index.html" class="flex items-center gap-3">
-                        <img src="../assets/images/logo.webp" alt="FLA Property" class="w-8 h-8 object-contain">
-                        <div>
-                            <div class="font-heading font-black text-sm tracking-wide leading-none text-white">FLA PROPERTY</div>
-                            <div class="text-[10px] font-bold tracking-widest text-brand-400 mt-0.5">ADMIN v2.4</div>
-                        </div>
-                    </a>
-                    <button id="closeSidebarBtn" class="md:hidden text-slate-400 hover:text-white p-1" aria-label="Close menu">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-
-                <!-- Navigation List -->
-                <nav class="space-y-1.5" aria-label="Admin Navigation">
-                    <button type="button" data-tab-target="overview" class="nav-item-btn is-active">
-                        <i class="fas fa-th-large nav-icon text-slate-400 text-sm w-4"></i>
-                        <span class="flex-1">Dashboard</span>
-                    </button>
-
-                    <button type="button" data-tab-target="leads" class="nav-item-btn">
-                        <i class="fas fa-inbox nav-icon text-slate-400 text-sm w-4"></i>
-                        <span class="flex-1">Quote Leads</span>
-                        <span id="sidebarLeadsBadge" class="hidden">0</span>
-                    </button>
-
-                    <button type="button" data-tab-target="reviews" class="nav-item-btn">
-                        <i class="fas fa-star nav-icon text-slate-400 text-sm w-4"></i>
-                        <span class="flex-1">Reviews Queue</span>
-                        <span id="sidebarReviewsBadge" class="hidden">0</span>
-                    </button>
-
-                    <button type="button" data-tab-target="portfolio" class="nav-item-btn">
-                        <i class="fas fa-images nav-icon text-slate-400 text-sm w-4"></i>
-                        <span class="flex-1">Portfolio &amp; Work</span>
-                        <span id="sidebarPortfolioBadge" class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-semibold">6</span>
-                    </button>
-
-                    <button type="button" data-tab-target="cms" class="nav-item-btn">
-                        <i class="fas fa-file-alt nav-icon text-slate-400 text-sm w-4"></i>
-                        <span class="flex-1">Edit Page Texts</span>
-                    </button>
-
-                    <button type="button" data-tab-target="branding" class="nav-item-btn">
-                        <i class="fas fa-palette nav-icon text-slate-400 text-sm w-4"></i>
-                        <span class="flex-1">Brand &amp; Colors</span>
-                    </button>
-
-                    <button type="button" data-tab-target="settings" class="nav-item-btn">
-                        <i class="fas fa-cog nav-icon text-slate-400 text-sm w-4"></i>
-                        <span class="flex-1">Settings &amp; Backup</span>
-                    </button>
-                </nav>
+        <!-- Edit Review Modal -->
+        <div id="modal-review-edit" class="modal" hidden>
+          <div class="modal-backdrop"></div>
+          <div class="modal-box">
+            <div class="modal-head">
+              <h3>Edit Review</h3>
+              <button class="btn-icon-round modal-close" data-modal="modal-review-edit"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
-            <!-- Sidebar Bottom: Admin Profile & Actions -->
-            <div class="p-4 border-t border-slate-800 bg-slate-950/60">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-9 h-9 rounded-full bg-brand-600/30 text-brand-400 font-bold flex items-center justify-center text-xs border border-brand-500/30">
-                        OP
-                    </div>
-                    <div class="flex-1 overflow-hidden">
-                        <div class="text-xs font-bold text-white truncate">Admin Operations</div>
-                        <div class="text-[11px] text-slate-400 truncate">Polk County Dispatch</div>
-                    </div>
+            <div class="modal-body">
+              <form id="form-edit-review" novalidate>
+                <input type="hidden" name="id">
+                <div class="field-row">
+                  <div class="field-group">
+                    <label>Name <span class="req">*</span></label>
+                    <input type="text" name="name" required>
+                  </div>
+                  <div class="field-group">
+                    <label>Location</label>
+                    <input type="text" name="city">
+                  </div>
                 </div>
-
-                <div class="flex items-center gap-2">
-                    <a href="../index.html" target="_blank" class="flex-1 py-1.5 px-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded text-center transition-colors flex items-center justify-center gap-1.5">
-                        <i class="fas fa-external-link-alt text-[10px]"></i> View Site
-                    </a>
-                    <button type="button" id="logoutBtn" class="py-1.5 px-3 bg-red-950/60 hover:bg-red-900/60 text-red-300 border border-red-800/40 text-xs font-semibold rounded transition-colors" title="Log Out">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label>Role</label>
+                    <input type="text" name="role">
+                  </div>
+                  <div class="field-group">
+                    <label>Rating</label>
+                    <div class="star-rating-pick" id="edit-star-picker">
+                      <button type="button" class="star-pick star-pick--on" data-v="1"><i class="fa-solid fa-star"></i></button>
+                      <button type="button" class="star-pick star-pick--on" data-v="2"><i class="fa-solid fa-star"></i></button>
+                      <button type="button" class="star-pick star-pick--on" data-v="3"><i class="fa-solid fa-star"></i></button>
+                      <button type="button" class="star-pick star-pick--on" data-v="4"><i class="fa-solid fa-star"></i></button>
+                      <button type="button" class="star-pick star-pick--on" data-v="5"><i class="fa-solid fa-star"></i></button>
+                    </div>
+                    <input type="hidden" name="rating" value="5">
+                  </div>
                 </div>
+                <div class="field-group">
+                  <label>Review Text <span class="req">*</span></label>
+                  <textarea name="message" required rows="4"></textarea>
+                </div>
+                <div class="form-actions">
+                  <button type="button" class="btn-secondary modal-close" data-modal="modal-review-edit">Cancel</button>
+                  <button type="submit" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+                </div>
+              </form>
             </div>
-        </aside>
-
-        <!-- Main Workspace Area -->
-        <div class="flex-1 md:pl-64 flex flex-col min-h-screen">
-
-            <!-- Top Header Bar -->
-            <header class="h-16 bg-white border-b border-slate-200 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
-                <div class="flex items-center gap-3">
-                    <button id="mobileMenuToggle" class="md:hidden p-2 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100" aria-label="Open menu">
-                        <i class="fas fa-bars text-lg"></i>
-                    </button>
-                    <div>
-                        <h2 id="activeSectionTitle" class="text-base sm:text-lg font-bold text-slate-900 font-heading">
-                            Dashboard Overview
-                        </h2>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span>7-Day Crews Active</span>
-                    </div>
-
-                    <a href="../index.html" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors">
-                        <span>View Live Website</span>
-                        <i class="fas fa-arrow-up-right-from-square text-[10px] text-slate-400"></i>
-                    </a>
-
-                    <button type="button" id="topLogoutBtn" class="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Log Out">
-                        <i class="fas fa-sign-out-alt text-sm"></i>
-                    </button>
-                </div>
-            </header>
-
-            <!-- Main Content Container -->
-            <main class="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
-
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <!-- TAB 1: DASHBOARD OVERVIEW -->
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <div id="overviewPanel" class="tab-panel space-y-6">
-
-                    <!-- 4 Minimal KPI Cards -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-                        
-                        <!-- KPI 1: Quote Leads -->
-                        <div class="saas-card kpi-card p-5 cursor-pointer" onclick="document.querySelector('[data-tab-target=\'leads\']').click()">
-                            <div class="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                                <span>Quote Leads</span>
-                                <i class="fas fa-inbox text-slate-400 text-sm"></i>
-                            </div>
-                            <div class="flex items-baseline justify-between">
-                                <div id="kpiTotalLeads" class="text-3xl font-extrabold text-slate-900 font-heading">0</div>
-                                <span id="kpiNewLeadsPill" class="badge-status badge-status--new">+0 New</span>
-                            </div>
-                            <div class="text-xs text-slate-500 mt-2 flex items-center gap-1">
-                                <i class="fas fa-map-marker-alt text-emerald-600 text-[10px]"></i> 16 Polk County Cities
-                            </div>
-                        </div>
-
-                        <!-- KPI 2: Pending Reviews -->
-                        <div class="saas-card kpi-card p-5 cursor-pointer" onclick="document.querySelector('[data-tab-target=\'reviews\']').click()">
-                            <div class="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                                <span>Pending Reviews</span>
-                                <i class="fas fa-clock text-amber-500 text-sm"></i>
-                            </div>
-                            <div class="flex items-baseline justify-between">
-                                <div id="kpiPendingReviews" class="text-3xl font-extrabold text-slate-900 font-heading">0</div>
-                                <span id="kpiPendingReviewsPill" class="badge-status badge-status--pending">0 Awaiting</span>
-                            </div>
-                            <div class="text-xs text-slate-500 mt-2">
-                                Moderation queue before publishing
-                            </div>
-                        </div>
-
-                        <!-- KPI 3: Published Projects -->
-                        <div class="saas-card kpi-card p-5 cursor-pointer" onclick="document.querySelector('[data-tab-target=\'portfolio\']').click()">
-                            <div class="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                                <span>Portfolio Items</span>
-                                <i class="fas fa-images text-slate-400 text-sm"></i>
-                            </div>
-                            <div class="flex items-baseline justify-between">
-                                <div id="kpiTotalPortfolio" class="text-3xl font-extrabold text-slate-900 font-heading">6</div>
-                                <span class="badge-status badge-status--completed">Live Gallery</span>
-                            </div>
-                            <div class="text-xs text-slate-500 mt-2">
-                                Front yard to backyard makeovers
-                            </div>
-                        </div>
-
-                        <!-- KPI 4: 5-Star Average Rating -->
-                        <div class="saas-card kpi-card p-5">
-                            <div class="flex items-center justify-between text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-                                <span>Customer Rating</span>
-                                <i class="fas fa-star text-amber-400 text-sm"></i>
-                            </div>
-                            <div class="flex items-baseline justify-between">
-                                <div id="kpiAvgRating" class="text-3xl font-extrabold text-slate-900 font-heading">5.0 ★</div>
-                                <span class="badge-status badge-status--approved">100% Guaranteed</span>
-                            </div>
-                            <div id="kpiApprovedReviewsCount" class="text-xs text-slate-500 mt-2">
-                                Based on verified customer reviews
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Overview Two-Column Section -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                        <!-- Left Column (2 Cols): Recent Quote Leads -->
-                        <div class="lg:col-span-2 saas-card p-6">
-                            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                                <div>
-                                    <h3 class="font-bold text-slate-900 text-base">Recent Quote Inquiries</h3>
-                                    <p class="text-xs text-slate-500">Live submissions from your 4-Step Quote Form</p>
-                                </div>
-                                <button type="button" onclick="document.querySelector('[data-tab-target=\'leads\']').click()" class="text-xs font-bold text-brand-700 hover:text-brand-800 flex items-center gap-1">
-                                    <span>View All Leads</span>
-                                    <i class="fas fa-arrow-right text-[10px]"></i>
-                                </button>
-                            </div>
-
-                            <div class="overflow-x-auto">
-                                <table class="admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Client Name</th>
-                                            <th>City</th>
-                                            <th>Services</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="recentLeadsTableBody">
-                                        <!-- Rendered by JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Right Column (1 Col): Pending Reviews Quick Action -->
-                        <div class="saas-card p-6 flex flex-col justify-between">
-                            <div>
-                                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                                    <div>
-                                        <h3 class="font-bold text-slate-900 text-base">Review Moderation</h3>
-                                        <p class="text-xs text-slate-500">Approve before they show publicly</p>
-                                    </div>
-                                    <button type="button" onclick="document.querySelector('[data-tab-target=\'reviews\']').click()" class="text-xs font-bold text-brand-700 hover:text-brand-800">
-                                        Open Queue &rarr;
-                                    </button>
-                                </div>
-
-                                <div id="overviewPendingReviewsList" class="space-y-3">
-                                    <!-- Rendered by JS -->
-                                </div>
-                            </div>
-
-                            <div class="mt-5 pt-4 border-t border-slate-100">
-                                <button type="button" id="openAddReviewBtnOverview" onclick="window.adminApp.openEditReviewModal(null)" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-2">
-                                    <i class="fas fa-plus text-[10px]"></i> Add Customer Review Manually
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <!-- TAB 2: QUOTE LEADS MANAGER & DATA EXPORT -->
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <div id="leadsPanel" class="tab-panel hidden space-y-6">
-
-                    <!-- Header & Action Row -->
-                    <div class="saas-card p-5">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                            <div>
-                                <h3 class="font-bold text-slate-900 text-lg">Estimate Requests &amp; Quote Pipeline</h3>
-                                <p id="leadsTotalCountLabel" class="text-xs text-slate-500">Search, filter, and respond to incoming yard requests across Central Florida</p>
-                            </div>
-                            <div class="flex items-center gap-2 flex-wrap">
-                                <button type="button" id="exportCsvBtn" class="px-3.5 py-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2">
-                                    <i class="fas fa-file-csv text-emerald-600 text-sm"></i> Export CSV
-                                </button>
-                                <button type="button" id="exportExcelBtn" class="px-3.5 py-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2">
-                                    <i class="fas fa-file-excel text-emerald-700 text-sm"></i> Export Excel
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Search & Filter Controls -->
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-100">
-                            <!-- Search -->
-                            <div class="relative sm:col-span-1">
-                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
-                                    <i class="fas fa-search"></i>
-                                </span>
-                                <input 
-                                    type="text" 
-                                    id="leadsSearchInput" 
-                                    placeholder="Search name, phone, address, notes..." 
-                                    class="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 transition-all">
-                            </div>
-
-                            <!-- City Filter (16 Cities) -->
-                            <div class="sm:col-span-1">
-                                <select id="leadsCityFilter" class="w-full py-2 px-3 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 transition-all font-medium text-slate-700 cursor-pointer">
-                                    <!-- Rendered dynamically -->
-                                </select>
-                            </div>
-
-                            <!-- Status Filter Pills -->
-                            <div class="sm:col-span-1 flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-                                <button type="button" data-lead-status-tab="all" class="filter-tab-pill is-active">All</button>
-                                <button type="button" data-lead-status-tab="New" class="filter-tab-pill">New</button>
-                                <button type="button" data-lead-status-tab="Quoted" class="filter-tab-pill">Quoted</button>
-                                <button type="button" data-lead-status-tab="Scheduled" class="filter-tab-pill">Scheduled</button>
-                                <button type="button" data-lead-status-tab="Completed" class="filter-tab-pill">Done</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Full Leads Table -->
-                    <div class="saas-card overflow-hidden">
-                        <div class="overflow-x-auto">
-                            <table class="admin-table">
-                                <thead>
-                                    <tr>
-                                        <th>Client &amp; Phone</th>
-                                        <th>Address &amp; City</th>
-                                        <th>Property &amp; Services</th>
-                                        <th>Yard Condition</th>
-                                        <th>Date Submitted</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="leadsTableBody">
-                                    <!-- Rendered by JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <!-- TAB 3: CUSTOMER REVIEW MODERATION QUEUE -->
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <div id="reviewsPanel" class="tab-panel hidden space-y-6">
-
-                    <!-- Header & Sub-Tabs -->
-                    <div class="saas-card p-5">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                            <div>
-                                <h3 class="font-bold text-slate-900 text-lg">Customer Review Moderation</h3>
-                                <p id="reviewsCountLabel" class="text-xs text-slate-500">Verify customer feedback before it goes live on the Reviews &amp; Homepage sections</p>
-                            </div>
-                            <button type="button" id="openAddReviewBtn" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2">
-                                <i class="fas fa-plus text-[11px]"></i> Add Review Manually
-                            </button>
-                        </div>
-
-                        <!-- Review Queue Sub-Tabs -->
-                        <div class="flex items-center gap-2 pt-4 border-t border-slate-100">
-                            <button type="button" data-review-tab="pending" class="filter-tab-pill is-active flex items-center gap-1.5">
-                                <span>Pending Approval</span>
-                                <span id="reviewTabPendingBadge" class="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-200 text-amber-900 font-bold">0</span>
-                            </button>
-                            <button type="button" data-review-tab="approved" class="filter-tab-pill flex items-center gap-1.5">
-                                <span>Approved (Live)</span>
-                                <span id="reviewTabApprovedBadge" class="px-1.5 py-0.2 rounded-full text-[10px] bg-emerald-100 text-emerald-800 font-bold">0</span>
-                            </button>
-                            <button type="button" data-review-tab="all" class="filter-tab-pill flex items-center gap-1.5">
-                                <span>All Reviews</span>
-                                <span id="reviewTabAllBadge" class="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-200 text-slate-700 font-bold">0</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Reviews Grid -->
-                    <div id="reviewsListWrap" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                        <!-- Rendered by JS -->
-                    </div>
-                </div>
-
-
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <!-- TAB 4: PORTFOLIO & CAPTION MANAGER -->
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <div id="portfolioPanel" class="tab-panel hidden space-y-6">
-
-                    <!-- Header & Filter -->
-                    <div class="saas-card p-5">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-                            <div>
-                                <h3 class="font-bold text-slate-900 text-lg">Portfolio &amp; Project Transformations</h3>
-                                <p id="portfolioCountLabel" class="text-xs text-slate-500">Manage photos, captions, and SEO alt texts across the Our Work page and Homepage</p>
-                            </div>
-                            <button type="button" id="openAddPortfolioBtn" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2">
-                                <i class="fas fa-plus text-[11px]"></i> Add New Portfolio Item
-                            </button>
-                        </div>
-
-                        <!-- Category Filter Dropdown -->
-                        <div class="pt-4 border-t border-slate-100 flex items-center gap-3">
-                            <span class="text-xs font-semibold text-slate-500">Filter Category:</span>
-                            <select id="portfolioCategoryFilter" class="py-1.5 px-3 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-700 font-medium focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 cursor-pointer">
-                                <option value="all">All Service Categories</option>
-                                <option value="Lawn Mowing & Edging">Lawn Mowing &amp; Edging</option>
-                                <option value="One-Time Mow & Go">One-Time Mow &amp; Go</option>
-                                <option value="Landscape Bed Makeover">Landscape Bed Makeovers</option>
-                                <option value="Mulch & Rock Installation">Mulch &amp; Rock Installation</option>
-                                <option value="Bush, Hedge & Tree Care">Bush, Hedge &amp; Tree Care</option>
-                                <option value="Overgrown Yard Cleanup">Seasonal Yard Cleanups</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Portfolio Cards Grid -->
-                    <div id="portfolioGridWrap" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- Rendered by JS -->
-                    </div>
-                </div>
-
-
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <!-- TAB 5: LIVE PAGE TEXT CMS (NO-CODE EDITOR) -->
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <div id="cmsPanel" class="tab-panel hidden space-y-6">
-
-                    <div class="saas-card p-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-5 border-b border-slate-100">
-                            <div>
-                                <h3 class="font-bold text-slate-900 text-lg">No-Code Page Text CMS</h3>
-                                <p class="text-xs text-slate-500">Update headlines, subheadlines, hours, and phone numbers without editing HTML files</p>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <label for="cmsPageSelector" class="text-xs font-bold text-slate-600">Active Page:</label>
-                                <select id="cmsPageSelector" class="py-2 px-3 text-xs bg-slate-50 border border-slate-300 rounded-lg text-slate-900 font-bold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer">
-                                    <option value="home">Homepage (index.html)</option>
-                                    <option value="about">About Us (about.html)</option>
-                                    <option value="services">Services Overview (services.html)</option>
-                                    <option value="how_it_works">How It Works (how-it-works.html)</option>
-                                    <option value="portfolio">Portfolio (portfolio.html)</option>
-                                    <option value="service_areas">Service Areas (service-areas.html)</option>
-                                    <option value="reviews">Customer Reviews (reviews.html)</option>
-                                    <option value="faq">FAQ Page (faq.html)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- CMS Form Fields -->
-                        <div class="space-y-5">
-                            <div>
-                                <label for="cmsH1Input" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                                    Main Page Headline (H1)
-                                </label>
-                                <input type="text" id="cmsH1Input" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-medium">
-                            </div>
-
-                            <div>
-                                <label for="cmsSubheadlineInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                                    Hero Subheadline &amp; Intro Description
-                                </label>
-                                <textarea id="cmsSubheadlineInput" rows="3" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-normal leading-relaxed"></textarea>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="cmsPhoneInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                                        Company Phone Number
-                                    </label>
-                                    <input type="text" id="cmsPhoneInput" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600 font-mono">
-                                </div>
-                                <div>
-                                    <label for="cmsHoursInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                                        Operating Dispatch Hours
-                                    </label>
-                                    <input type="text" id="cmsHoursInput" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="cmsPaymentsInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                                        Accepted Payment Methods
-                                    </label>
-                                    <input type="text" id="cmsPaymentsInput" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600">
-                                </div>
-                                <div>
-                                    <label for="cmsCtaInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                                        Primary Button Label
-                                    </label>
-                                    <input type="text" id="cmsCtaInput" class="w-full px-3.5 py-2.5 text-xs bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-600">
-                                </div>
-                            </div>
-
-                            <div class="pt-4 flex justify-end">
-                                <button type="button" id="saveCmsBtn" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2">
-                                    <i class="fas fa-save text-[11px]"></i> Save &amp; Publish Page Texts
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <!-- TAB 6: BRAND & COLOR CUSTOMIZER -->
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <div id="brandingPanel" class="tab-panel hidden space-y-6">
-
-                    <div class="saas-card p-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-5 border-b border-slate-100">
-                            <div>
-                                <h3 class="font-bold text-slate-900 text-lg">Global Brand Colors &amp; Theme Customizer</h3>
-                                <p class="text-xs text-slate-500">Customize the site's primary palette and preview changes live</p>
-                            </div>
-                            <button type="button" id="resetBrandingBtn" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors">
-                                <i class="fas fa-undo mr-1 text-[10px]"></i> Reset Defaults
-                            </button>
-                        </div>
-
-                        <!-- Color Pickers Grid -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-                            
-                            <!-- Primary -->
-                            <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50">
-                                <label class="block text-xs font-bold text-slate-800 mb-2">Primary Brand (Turf Green)</label>
-                                <div class="flex items-center gap-3">
-                                    <input type="color" id="colorPickerPrimary" value="#007f5f" class="w-10 h-10 rounded cursor-pointer border border-slate-300">
-                                    <input type="text" id="colorHexPrimary" value="#007f5f" class="w-24 text-xs font-mono font-bold px-2 py-1.5 border border-slate-300 rounded uppercase">
-                                </div>
-                                <p class="text-[11px] text-slate-500 mt-2">Buttons, badges, active states</p>
-                            </div>
-
-                            <!-- Accent Gold -->
-                            <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50">
-                                <label class="block text-xs font-bold text-slate-800 mb-2">Accent Gold (Sunburst)</label>
-                                <div class="flex items-center gap-3">
-                                    <input type="color" id="colorPickerAccent" value="#FACC15" class="w-10 h-10 rounded cursor-pointer border border-slate-300">
-                                    <input type="text" id="colorHexAccent" value="#FACC15" class="w-24 text-xs font-mono font-bold px-2 py-1.5 border border-slate-300 rounded uppercase">
-                                </div>
-                                <p class="text-[11px] text-slate-500 mt-2">Stars, highlights, awards</p>
-                            </div>
-
-                            <!-- Dark Background -->
-                            <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50">
-                                <label class="block text-xs font-bold text-slate-800 mb-2">Dark Section (Deep Forest)</label>
-                                <div class="flex items-center gap-3">
-                                    <input type="color" id="colorPickerDark" value="#0B1F17" class="w-10 h-10 rounded cursor-pointer border border-slate-300">
-                                    <input type="text" id="colorHexDark" value="#0B1F17" class="w-24 text-xs font-mono font-bold px-2 py-1.5 border border-slate-300 rounded uppercase">
-                                </div>
-                                <p class="text-[11px] text-slate-500 mt-2">Hero banner &amp; top-bar background</p>
-                            </div>
-
-                            <!-- Light Page Background -->
-                            <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50">
-                                <label class="block text-xs font-bold text-slate-800 mb-2">Page Background</label>
-                                <div class="flex items-center gap-3">
-                                    <input type="color" id="colorPickerLight" value="#F8FAFC" class="w-10 h-10 rounded cursor-pointer border border-slate-300">
-                                    <input type="text" id="colorHexLight" value="#F8FAFC" class="w-24 text-xs font-mono font-bold px-2 py-1.5 border border-slate-300 rounded uppercase">
-                                </div>
-                                <p class="text-[11px] text-slate-500 mt-2">Soft cool gray surface</p>
-                            </div>
-                        </div>
-
-                        <!-- Live Preview Box -->
-                        <div class="p-5 border border-slate-200 rounded-xl mb-6">
-                            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Live Component Preview</h4>
-                            <div id="previewDarkBox" class="p-6 rounded-lg text-white mb-3 flex flex-col sm:flex-row items-center justify-between gap-4 transition-colors" style="background-color: #0B1F17;">
-                                <div>
-                                    <h5 class="font-heading font-black text-lg">FLA PROPERTY MAINTENANCE LLC</h5>
-                                    <p class="text-xs text-slate-300">Commercial Scag Equipment &bull; 7 Days a Week</p>
-                                </div>
-                                <button type="button" id="previewBrandBtn" class="px-5 py-2.5 rounded-full text-xs font-bold text-white shadow transition-all" style="background-color: #007f5f;">
-                                    Get Free Estimate &rarr;
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-end">
-                            <button type="button" id="saveBrandingBtn" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2">
-                                <i class="fas fa-check text-[11px]"></i> Save &amp; Apply Theme Colors
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <!-- TAB 7: SETTINGS, SECURITY & BACKUPS -->
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <div id="settingsPanel" class="tab-panel hidden space-y-6">
-
-                    <!-- Security & Credentials -->
-                    <div class="saas-card p-6">
-                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                            <div>
-                                <h3 class="font-bold text-slate-900 text-base">Admin Credentials &amp; Access</h3>
-                                <p class="text-xs text-slate-500">Manage master password protecting the /admin route</p>
-                            </div>
-                            <button type="button" id="openChangePasswordBtn" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition-colors flex items-center gap-1.5">
-                                <i class="fas fa-key text-[10px]"></i> Change Master Password
-                            </button>
-                        </div>
-                        <div class="text-xs text-slate-600 space-y-1">
-                            <p><strong>Authentication Session:</strong> Protected via client-side <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-800 font-mono">sessionStorage</code> gate.</p>
-                            <p><strong>Configured Master Key:</strong> Stored securely in your browser's persistent keyvault.</p>
-                        </div>
-                    </div>
-
-                    <!-- Database & Cloud Sync Engine -->
-                    <div class="saas-card p-6">
-                        <div class="pb-4 mb-4 border-b border-slate-100">
-                            <h3 class="font-bold text-slate-900 text-base">Database Sync Engine &amp; Cloud Connectors</h3>
-                            <p class="text-xs text-slate-500">Live storage architecture powering quotes, reviews, and portfolio</p>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                            <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                                <div class="text-xs text-slate-500 mb-1">Stored Quote Leads</div>
-                                <div id="dbStatsLeads" class="text-2xl font-black text-slate-900 font-heading">0</div>
-                            </div>
-                            <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                                <div class="text-xs text-slate-500 mb-1">Customer Reviews</div>
-                                <div id="dbStatsReviews" class="text-2xl font-black text-slate-900 font-heading">0</div>
-                            </div>
-                            <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
-                                <div class="text-xs text-slate-500 mb-1">Portfolio Projects</div>
-                                <div id="dbStatsProjects" class="text-2xl font-black text-slate-900 font-heading">0</div>
-                            </div>
-                        </div>
-
-                        <!-- Architecture Documentation Box -->
-                        <div class="p-4 bg-slate-900 text-slate-300 rounded-lg font-mono text-xs mb-6">
-                            <div class="text-brand-400 font-bold mb-1">// Cloud Database Connector Architecture</div>
-                            <div class="text-slate-400">// Ready to connect with Cloudflare D1 + R2, Supabase, or Firebase REST API:</div>
-                            <div class="text-slate-200 mt-2">const DB_ENDPOINT = "https://your-api.supabase.co/rest/v1";</div>
-                            <div class="text-slate-200">const STORAGE_BUCKET = "https://r2.flapropertymaintenance.com";</div>
-                        </div>
-
-                        <!-- Backup & Restore Actions -->
-                        <div class="flex flex-wrap items-center gap-3">
-                            <button type="button" id="downloadBackupBtn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-2">
-                                <i class="fas fa-download text-[11px]"></i> Download JSON Backup
-                            </button>
-
-                            <label class="px-4 py-2 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-lg cursor-pointer transition-colors flex items-center gap-2">
-                                <i class="fas fa-upload text-[11px] text-slate-500"></i> Restore from JSON
-                                <input type="file" id="restoreBackupInput" accept=".json" class="hidden">
-                            </label>
-
-                            <button type="button" id="resetDemoDataBtn" class="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold rounded-lg transition-colors ml-auto">
-                                <i class="fas fa-rotate-left mr-1"></i> Reset to Demo Data
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </main>
+          </div>
         </div>
-    </div>
+      </section>
 
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 3. SLIDE-OVER DETAIL DRAWER: FULL QUOTE LEAD INSPECTOR -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <div id="leadDrawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
-    <div id="leadDrawer" class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawerLeadName">
-        
-        <!-- Drawer Header -->
-        <div class="p-6 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-            <div>
-                <div class="flex items-center gap-2">
-                    <h3 id="drawerLeadName" class="font-bold text-slate-900 text-lg">Lead Details</h3>
-                    <div id="drawerLeadStatusBadge"></div>
-                </div>
-                <div id="drawerLeadDate" class="text-xs text-slate-500 mt-0.5">Submitted Nov 18, 2026</div>
-            </div>
-            <button type="button" id="closeDrawerBtn" class="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-200 transition-colors" aria-label="Close details">
-                <i class="fas fa-times text-base"></i>
+      <!-- ── PORTFOLIO ───────────────────────────────── -->
+      <section id="section-portfolio" class="admin-section" hidden>
+        <div class="section-header">
+          <h2>Portfolio</h2>
+          <p>Manage your before/after project showcase and photo gallery.</p>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3><i class="fa-solid fa-images"></i> Portfolio Items</h3>
+            <button class="btn-primary" id="add-portfolio-btn">
+              <i class="fa-solid fa-plus"></i> Add Item
             </button>
+          </div>
+          <div class="card-body">
+            <div id="portfolio-grid" class="portfolio-admin-grid">
+              <div class="empty-state"><i class="fa-solid fa-images"></i><p>No portfolio items yet. Click "Add Item" to get started.</p></div>
+            </div>
+          </div>
         </div>
 
-        <!-- Drawer Content Body -->
-        <div class="flex-1 p-6 overflow-y-auto space-y-6">
-
-            <!-- Communication Quick Actions -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                <a id="drawerPhoneLink" href="tel:8637128783" class="py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center">
-                    <i class="fas fa-phone-alt mr-2"></i> Call Client
-                </a>
-                <a id="drawerSmsLink" href="sms:8637128783" class="py-2.5 px-3 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center">
-                    <i class="fas fa-comment-dots mr-2"></i> Text Quote
-                </a>
-                <a id="drawerEmailLink" href="mailto:" class="py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center justify-center">
-                    <i class="fas fa-envelope mr-2"></i> Email Quote
-                </a>
+        <!-- Portfolio Add/Edit Modal -->
+        <div id="modal-portfolio" class="modal" hidden>
+          <div class="modal-backdrop"></div>
+          <div class="modal-box modal-box--lg">
+            <div class="modal-head">
+              <h3 id="portfolio-modal-title">Add Portfolio Item</h3>
+              <button class="btn-icon-round modal-close" data-modal="modal-portfolio"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
-            <!-- Satellite Yard Check Card (Google Maps) -->
-            <div class="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl flex items-center justify-between gap-3">
-                <div>
-                    <div class="font-bold text-emerald-900 text-xs">Satellite Yard Check</div>
-                    <div class="text-[11px] text-emerald-700">Open address in Google Maps satellite view to measure lot square footage</div>
+            <div class="modal-body">
+              <form id="form-portfolio" novalidate>
+                <input type="hidden" name="id">
+                <div class="field-row">
+                  <div class="field-group field-grow">
+                    <label>Title <span class="req">*</span></label>
+                    <input type="text" name="title" required placeholder="e.g. Riverside Lawn Transformation">
+                  </div>
+                  <div class="field-group">
+                    <label>Category</label>
+                    <select name="category">
+                      <option value="Lawn Mowing">Lawn Mowing</option>
+                      <option value="Landscape Design">Landscape Design</option>
+                      <option value="Mulch & Rock">Mulch & Rock</option>
+                      <option value="Bush & Hedge">Bush & Hedge</option>
+                      <option value="Irrigation">Irrigation</option>
+                      <option value="Yard Cleanup">Yard Cleanup</option>
+                      <option value="One-Time Mow">One-Time Mow</option>
+                    </select>
+                  </div>
                 </div>
-                <a id="drawerGoogleMapsLink" href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-md shadow-sm shrink-0 flex items-center gap-1.5 transition-colors">
-                    <i class="fas fa-satellite"></i> Measure Lot
-                </a>
-            </div>
-
-            <!-- Property & Service Scope -->
-            <div class="saas-card p-4 space-y-3">
-                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Property &amp; Scope</h4>
-                <div class="grid grid-cols-2 gap-3 text-xs">
-                    <div>
-                        <span class="text-slate-500 block">Property Type</span>
-                        <span id="drawerPropertyType" class="font-bold text-slate-900">Residential</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 block">Service Frequency</span>
-                        <span id="drawerFrequency" class="font-bold text-slate-900">Bi-Weekly</span>
-                    </div>
+                <div class="field-row">
+                  <div class="field-group field-grow">
+                    <label>Short Description <span class="req">*</span></label>
+                    <textarea name="description" required rows="3" placeholder="Briefly describe the project, services, and outcome…"></textarea>
+                  </div>
                 </div>
-                <div>
-                    <span class="text-slate-500 block text-xs mb-1">Requested Services</span>
-                    <div id="drawerServices" class="flex flex-wrap gap-1"></div>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label>Location</label>
+                    <input type="text" name="location" placeholder="e.g. Davenport, FL">
+                  </div>
+                  <div class="field-group">
+                    <label>Project Date</label>
+                    <input type="month" name="date">
+                  </div>
                 </div>
-            </div>
 
-            <!-- Pricing & Yard Modifiers -->
-            <div class="saas-card p-4 space-y-3">
-                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Operational Pricing Modifiers</h4>
-                <div class="grid grid-cols-2 gap-3 text-xs">
-                    <div>
-                        <span class="text-slate-500 block">Current Grass Condition</span>
-                        <span id="drawerYardCondition" class="font-bold text-slate-900">Normal</span>
-                    </div>
-                    <div>
-                        <span class="text-slate-500 block">Backyard Gate Clearance</span>
-                        <span id="drawerGateAccess" class="font-bold text-slate-900">Wide Scag Gate</span>
-                    </div>
+                <div class="field-group">
+                  <label>Images <span class="label-note">Up to 3 images · max 3 MB each · JPG, PNG, WebP</span></label>
+                  <div class="upload-drop-zone" id="img-drop-zone" data-type="images">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Drag & drop images here, or <span class="upload-click-cta">click to browse</span></p>
+                    <span class="upload-note">JPG / PNG / WebP · max 3 MB each · up to 3 images</span>
+                    <input type="file" id="input-portfolio-images" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+                  </div>
+                  <div id="preview-images" class="preview-images-wrap"></div>
                 </div>
-            </div>
 
-            <!-- Street Address & Location -->
-            <div class="saas-card p-4 space-y-2">
-                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Contact &amp; Location</h4>
-                <p id="drawerFullAddress" class="text-xs font-bold text-slate-900"></p>
-                <div class="text-[11px] text-slate-500">Email: <span id="drawerClientEmail" class="font-semibold text-slate-800"></span></div>
-                <div class="text-[11px] text-slate-500">Contact preference: <span id="drawerReplyPref" class="font-semibold text-slate-700"></span></div>
-            </div>
+                <div class="field-group">
+                  <label>Video <span class="label-note">Optional · max 10 MB · MP4 / WebM</span></label>
+                  <div class="upload-drop-zone upload-drop-zone--video" id="vid-drop-zone" data-type="video">
+                    <i class="fa-solid fa-film"></i>
+                    <p>Drag & drop video here, or <span class="upload-click-cta">click to browse</span></p>
+                    <span class="upload-note">MP4 / WebM · max 10 MB</span>
+                    <input type="file" id="input-portfolio-video" accept="video/mp4,video/webm" hidden>
+                  </div>
+                  <div id="preview-video" class="preview-video-wrap"></div>
+                </div>
 
-            <!-- Special Client Notes -->
-            <div class="saas-card p-4 space-y-2">
-                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Client Notes &amp; Special Requests</h4>
-                <p id="drawerNotes" class="text-xs text-slate-700 leading-relaxed italic bg-slate-50 p-3 rounded-lg border border-slate-100"></p>
+                <div class="form-actions">
+                  <button type="button" class="btn-secondary modal-close" data-modal="modal-portfolio">Cancel</button>
+                  <button type="submit" class="btn-primary" id="portfolio-submit-btn">
+                    <i class="fa-solid fa-plus"></i> Add Portfolio Item
+                  </button>
+                </div>
+              </form>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <!-- Attached Yard Photos -->
-            <div class="saas-card p-4 space-y-2">
-                <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Attached Yard Photos</h4>
-                <div id="drawerPhotosWrap" class="grid grid-cols-2 gap-2"></div>
-            </div>
+      <!-- ── SITE SETTINGS ───────────────────────────── -->
+      <section id="section-settings" class="admin-section" hidden>
+        <div class="section-header">
+          <h2>Site Settings</h2>
+          <p>Manage SEO meta tags, branding assets, and admin credentials.</p>
         </div>
 
-        <!-- Drawer Footer Controls -->
-        <div class="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <span class="text-xs text-slate-500 font-semibold">Change Status:</span>
-                <select id="drawerStatusSelect" onchange="window.adminApp.changeLeadStatus(window.adminApp.activeLeadId, this.value)" class="text-xs font-semibold py-1.5 px-3 rounded-lg border border-slate-300 bg-white shadow-sm focus:ring-1 focus:ring-emerald-500 focus:outline-none cursor-pointer">
-                    <option value="New">🔵 New Lead</option>
-                    <option value="Quoted">🟣 Quoted</option>
-                    <option value="Scheduled">🟡 Scheduled</option>
-                    <option value="Completed">🟢 Completed</option>
-                </select>
+        <div class="settings-two-col">
+          <!-- SEO -->
+          <div class="card">
+            <div class="card-head">
+              <h3><i class="fa-solid fa-code"></i> SEO & Meta Tags</h3>
             </div>
-            <button type="button" onclick="window.adminApp.deleteLead(window.adminApp.activeLeadId)" class="px-3 py-1.5 text-red-600 hover:bg-red-50 text-xs font-bold rounded transition-colors">
-                Delete Lead
-            </button>
+            <div class="card-body">
+              <form id="form-meta" novalidate>
+                <div class="field-group">
+                  <label>Page Title <span class="label-note">shown in browser tab & Google</span></label>
+                  <input type="text" name="siteTitle" placeholder="FLA Property Maintenance LLC — Lawn Care Davenport FL">
+                </div>
+                <div class="field-group">
+                  <label>Meta Description <span class="label-note">150–160 characters ideal</span></label>
+                  <textarea name="metaDesc" rows="3" placeholder="Professional lawn care, landscaping, and property maintenance services in Central Florida…"></textarea>
+                  <div class="char-count-wrap">
+                    <span id="meta-desc-chars">0</span>/160 characters
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label>Meta Keywords <span class="label-note">comma-separated</span></label>
+                  <textarea name="metaKeywords" rows="2" placeholder="lawn care, landscaping, Davenport FL, Kissimmee lawn mowing…"></textarea>
+                </div>
+                <div class="field-group">
+                  <label>Social Share Image URL <span class="label-note">OG image for Facebook / WhatsApp</span></label>
+                  <input type="url" name="ogImage" placeholder="https://flapropertymaintenance.com/assets/images/hero-bg.webp">
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Meta</button>
+                  <span class="save-feedback" id="meta-save-msg" hidden>✓ Saved!</span>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Branding -->
+          <div class="card">
+            <div class="card-head">
+              <h3><i class="fa-solid fa-trademark"></i> Branding & Contact</h3>
+            </div>
+            <div class="card-body">
+              <div class="field-group">
+                <label>Current Logo</label>
+                <div class="asset-preview">
+                  <img src="../assets/images/logo.webp" alt="Logo" style="max-height:52px; max-width:160px;">
+                  <span>logo.webp</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <label>Upload New Logo <span class="label-note">WebP/PNG · max 500 KB</span></label>
+                <div class="upload-drop-zone upload-drop-zone--sm" id="logo-drop-zone">
+                  <i class="fa-solid fa-image"></i>
+                  <p>Click to upload logo</p>
+                  <input type="file" id="input-logo" accept="image/*" hidden>
+                </div>
+                <div id="logo-new-preview"></div>
+              </div>
+              <div class="field-group">
+                <label>Upload Favicon <span class="label-note">32×32 PNG or .ico</span></label>
+                <div class="upload-drop-zone upload-drop-zone--sm" id="favicon-drop-zone">
+                  <i class="fa-solid fa-star"></i>
+                  <p>Click to upload favicon</p>
+                  <input type="file" id="input-favicon" accept="image/*,.ico" hidden>
+                </div>
+                <div id="favicon-preview"></div>
+              </div>
+              <div class="field-row">
+                <div class="field-group">
+                  <label>Company Phone</label>
+                  <input type="tel" id="branding-phone" placeholder="(863) 712-8783">
+                </div>
+                <div class="field-group">
+                  <label>Company Email</label>
+                  <input type="email" id="branding-email" placeholder="info@flapropertymaintenance.com">
+                </div>
+              </div>
+              <div class="form-actions">
+                <button class="btn-primary" id="save-branding-btn"><i class="fa-solid fa-floppy-disk"></i> Save Branding</button>
+                <span class="save-feedback" id="branding-save-msg" hidden>✓ Saved!</span>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
 
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 4. MODALS -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-
-    <!-- Modal 1: Edit / Add Customer Review -->
-    <div id="reviewModal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="p-6 border-b border-slate-200 flex items-center justify-between">
-                <h3 id="reviewModalTitle" class="font-bold text-slate-900 text-base">Edit Customer Review</h3>
-                <button type="button" id="closeReviewModalBtn" class="text-slate-400 hover:text-slate-700 p-1">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <form id="reviewForm" class="p-6 space-y-4">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label for="modalRevName" class="block text-xs font-bold text-slate-700 mb-1">Reviewer Name *</label>
-                        <input type="text" id="modalRevName" required class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium">
-                    </div>
-                    <div>
-                        <label for="modalRevCity" class="block text-xs font-bold text-slate-700 mb-1">City Tag (Polk County)</label>
-                        <select id="modalRevCity" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium cursor-pointer">
-                            <!-- Populated dynamically -->
-                        </select>
-                    </div>
+        <!-- Change Password -->
+        <div class="card card--form" style="margin-top:24px;">
+          <div class="card-head"><h3><i class="fa-solid fa-lock"></i> Change Admin Password</h3></div>
+          <div class="card-body">
+            <form id="form-change-pass" novalidate>
+              <div class="field-row">
+                <div class="field-group">
+                  <label>Current Password</label>
+                  <input type="password" name="currentPass" required autocomplete="current-password">
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                        <label for="modalRevPropType" class="block text-xs font-bold text-slate-700 mb-1">Property Type</label>
-                        <select id="modalRevPropType" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium">
-                            <option value="Residential Homeowner">Residential Homeowner</option>
-                            <option value="Commercial Property">Commercial Storefront</option>
-                            <option value="HOA Community">HOA Community</option>
-                            <option value="Rental Property Owner">Rental Turnover</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="modalRevService" class="block text-xs font-bold text-slate-700 mb-1">Service Tag</label>
-                        <select id="modalRevService" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium">
-                            <option value="Lawn Mowing & Edging">Lawn Mowing &amp; Edging</option>
-                            <option value="One-Time Mow & Go">One-Time Mow &amp; Go</option>
-                            <option value="Landscape Bed Makeovers">Landscape Bed Makeovers</option>
-                            <option value="Mulch & Rock Installation">Mulch &amp; Rock Installation</option>
-                            <option value="Bush, Hedge & Tree Care">Bush &amp; Tree Trimming</option>
-                            <option value="Seasonal Yard Cleanups">Seasonal Cleanups</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="modalRevRating" class="block text-xs font-bold text-slate-700 mb-1">Star Rating</label>
-                        <select id="modalRevRating" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-bold text-amber-600">
-                            <option value="5">★★★★★ (5 Stars)</option>
-                            <option value="4">★★★★☆ (4 Stars)</option>
-                            <option value="3">★★★☆☆ (3 Stars)</option>
-                        </select>
-                    </div>
+                <div class="field-group">
+                  <label>New Password <span class="label-note">min 6 chars</span></label>
+                  <input type="password" name="newPass" required minlength="6" autocomplete="new-password">
                 </div>
-
-                <div>
-                    <label for="modalRevText" class="block text-xs font-bold text-slate-700 mb-1">Review Comments *</label>
-                    <textarea id="modalRevText" rows="4" required class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-normal leading-relaxed"></textarea>
+                <div class="field-group">
+                  <label>Confirm New Password</label>
+                  <input type="password" name="confirmPass" required autocomplete="new-password">
                 </div>
-
-                <div class="flex items-center gap-2 pt-2">
-                    <input type="checkbox" id="modalRevPublishNow" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-                    <label for="modalRevPublishNow" class="text-xs font-bold text-slate-800 cursor-pointer">
-                        Publish live onto public website immediately (Status: Approved)
-                    </label>
-                </div>
-
-                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2">
-                    <button type="button" id="cancelReviewModalBtn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors">
-                        Save Review
-                    </button>
-                </div>
+              </div>
+              <p id="pass-change-feedback" class="form-feedback" hidden></p>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">Update Password</button>
+              </div>
             </form>
+          </div>
         </div>
-    </div>
+      </section>
 
+      <!-- ── THEME & COLORS ──────────────────────────── -->
+      <section id="section-colors" class="admin-section" hidden>
+        <div class="section-header">
+          <h2>Theme & Colors</h2>
+          <p>Choose a preset color theme or customize individual colors across your entire website.</p>
+        </div>
 
-    <!-- Modal 2: Edit / Add Portfolio Item -->
-    <div id="portfolioModal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="p-6 border-b border-slate-200 flex items-center justify-between">
-                <h3 id="portfolioModalTitle" class="font-bold text-slate-900 text-base">Add New Portfolio Item</h3>
-                <button type="button" id="closePortfolioModalBtn" class="text-slate-400 hover:text-slate-700 p-1">
-                    <i class="fas fa-times"></i>
-                </button>
+        <!-- Preset Swatches -->
+        <div class="card">
+          <div class="card-head">
+            <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Color Presets</h3>
+            <p class="card-subtitle">Click any preset to apply it instantly</p>
+          </div>
+          <div class="card-body">
+            <div class="preset-swatches" id="preset-swatches"></div>
+          </div>
+        </div>
+
+        <!-- Custom Pickers -->
+        <div class="card" style="margin-top:24px;">
+          <div class="card-head">
+            <h3><i class="fa-solid fa-sliders"></i> Custom Colors</h3>
+            <button class="btn-secondary" id="reset-theme-btn"><i class="fa-solid fa-rotate-left"></i> Reset to Default</button>
+          </div>
+          <div class="card-body">
+            <div class="color-pickers-grid" id="color-pickers-grid"></div>
+
+            <!-- Live Preview -->
+            <div class="color-preview-panel" id="color-preview-panel">
+              <span class="color-preview-label">Live Preview</span>
+              <div class="color-preview-content">
+                <h3 id="preview-heading" style="margin:0 0 8px;">Professional Lawn Care Services</h3>
+                <p id="preview-body" style="margin:0 0 16px; font-size:14px;">We provide top-tier residential and commercial property maintenance across Central Florida.</p>
+                <button id="preview-button" class="preview-btn-demo">Get Your Free Quote →</button>
+              </div>
             </div>
-            <form id="portfolioForm" class="p-6 space-y-4">
-                
-                <!-- Image Dropzone -->
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Project Photo (FileReader Preview)</label>
-                    <div id="portfolioDropzone" class="img-preview-dropzone">
-                        <div id="portfolioImagePlaceholder">
-                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2"></i>
-                            <div class="text-xs font-bold text-slate-700">Click to upload project photo</div>
-                            <div class="text-[11px] text-slate-400">JPG, PNG, WebP up to 5MB</div>
-                        </div>
-                        <img id="portfolioImagePreview" class="hidden w-full h-44 object-cover rounded-lg mx-auto">
-                        <input type="file" id="portfolioFileInput" accept="image/*" class="hidden">
-                    </div>
-                </div>
 
-                <div>
-                    <label for="modalPortTitle" class="block text-xs font-bold text-slate-700 mb-1">Project Title *</label>
-                    <input type="text" id="modalPortTitle" required class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium" placeholder="e.g. Front Yard Bed Transformation & River Rock Install">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label for="modalPortCategory" class="block text-xs font-bold text-slate-700 mb-1">Service Category</label>
-                        <select id="modalPortCategory" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium cursor-pointer">
-                            <option value="Lawn Mowing & Edging">Lawn Mowing &amp; Edging</option>
-                            <option value="One-Time Mow & Go">One-Time Mow &amp; Go</option>
-                            <option value="Landscape Bed Makeover">Landscape Bed Makeovers</option>
-                            <option value="Mulch & Rock Installation">Mulch &amp; Rock Installation</option>
-                            <option value="Bush, Hedge & Tree Care">Bush &amp; Tree Trimming</option>
-                            <option value="Overgrown Yard Cleanup">Seasonal Cleanups</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="modalPortCity" class="block text-xs font-bold text-slate-700 mb-1">City Location</label>
-                        <select id="modalPortCity" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium cursor-pointer">
-                            <!-- Populated dynamically -->
-                        </select>
-                    </div>
-                </div>
-
-                <div>
-                    <label for="modalPortAlt" class="block text-xs font-bold text-slate-700 mb-1">SEO Image Alt Text</label>
-                    <input type="text" id="modalPortAlt" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-medium" placeholder="Descriptive SEO alt text with local keywords">
-                </div>
-
-                <div>
-                    <label for="modalPortCaption" class="block text-xs font-bold text-slate-700 mb-1">Project Description / Caption</label>
-                    <textarea id="modalPortCaption" rows="3" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 font-normal leading-relaxed" placeholder="Describe equipment used, lawn dimensions, or edging detail..."></textarea>
-                </div>
-
-                <div class="flex items-center gap-2 pt-2">
-                    <input type="checkbox" id="modalPortFeatured" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-                    <label for="modalPortFeatured" class="text-xs font-bold text-slate-800 cursor-pointer">
-                        Feature this project on the Homepage 6-card showcase grid
-                    </label>
-                </div>
-
-                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2">
-                    <button type="button" id="cancelPortfolioModalBtn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors">
-                        Save Project
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-    <!-- Modal 3: Change Admin Password -->
-    <div id="passwordModal" class="modal-overlay">
-        <div class="modal-box max-w-md">
-            <div class="p-6 border-b border-slate-200 flex items-center justify-between">
-                <h3 class="font-bold text-slate-900 text-base">Change Admin Password</h3>
-                <button type="button" id="closePasswordModalBtn" class="text-slate-400 hover:text-slate-700 p-1">
-                    <i class="fas fa-times"></i>
-                </button>
+            <div class="form-actions" style="margin-top:24px; align-items:center; gap:16px;">
+              <button class="btn-primary" id="apply-theme-btn">
+                <i class="fa-solid fa-check"></i> Apply to Website
+              </button>
+              <span class="save-feedback" id="theme-save-msg" hidden>✓ Theme applied and saved!</span>
             </div>
-            <form id="passwordForm" class="p-6 space-y-4">
-                <div>
-                    <label for="currentPasswordInput" class="block text-xs font-bold text-slate-700 mb-1">Current Password *</label>
-                    <input type="password" id="currentPasswordInput" required class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500">
-                </div>
-                <div>
-                    <label for="newPasswordInput" class="block text-xs font-bold text-slate-700 mb-1">New Password (Min 6 chars) *</label>
-                    <input type="password" id="newPasswordInput" required minlength="6" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500">
-                </div>
-                <div>
-                    <label for="confirmPasswordInput" class="block text-xs font-bold text-slate-700 mb-1">Confirm New Password *</label>
-                    <input type="password" id="confirmPasswordInput" required minlength="6" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500">
-                </div>
-
-                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2">
-                    <button type="button" id="cancelPasswordModalBtn" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors">
-                        Cancel
-                    </button>
-                    <button type="submit" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg shadow-sm transition-colors">
-                        Update Password
-                    </button>
-                </div>
-            </form>
+          </div>
         </div>
-    </div>
+      </section>
 
+    </main><!-- /content-area -->
+  </div><!-- /main-wrap -->
+</div><!-- /admin-app -->
 
-    <!-- Modal 4: Fullscreen Photo Lightbox -->
-    <div id="photoModal" class="modal-overlay">
-        <div class="relative max-w-4xl max-h-[85vh] p-2">
-            <button type="button" id="closePhotoModalBtn" class="absolute -top-10 right-0 text-white text-2xl hover:text-slate-300">
-                <i class="fas fa-times"></i>
-            </button>
-            <img id="photoModalImg" src="" alt="Enlarged yard photo" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl object-contain">
-        </div>
-    </div>
+<!-- TOAST NOTIFICATIONS -->
+<div id="toast-container" aria-live="polite"></div>
 
-
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!-- 5. FLOATING CONFIRMATION TOAST NOTIFICATION -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <div id="adminToast" class="admin-toast">
-        <i class="fas fa-check-circle text-emerald-400 text-base"></i>
-        <span id="toastMessage">Action completed successfully!</span>
-    </div>
-
-    <!-- GSAP 3 CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
-    <!-- Admin Controller Script -->
-    <script src="admin.js"></script>
-
+<script src="admin.js"></script>
 </body>
 </html>

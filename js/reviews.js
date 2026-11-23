@@ -359,14 +359,32 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─────────────────────────────────────────────────────────────
     function initializeSavedReviews() {
         const stored = getStoredReviews();
-        if (stored.length > 0 && reviewsGrid) {
+        // Also load admin-approved reviews (added via admin portal)
+        let adminApproved = [];
+        try {
+            const raw = localStorage.getItem('fla_admin_approved_reviews');
+            adminApproved = raw ? JSON.parse(raw) : [];
+        } catch (e) { adminApproved = []; }
+
+        const allReviews = [...stored, ...adminApproved];
+        if (allReviews.length > 0 && reviewsGrid) {
             // Prepend in reverse so newest appears first
-            stored.slice().reverse().forEach(reviewData => {
-                const card = createReviewCardElement(reviewData, false);
+            allReviews.slice().reverse().forEach(reviewData => {
+                // Normalize admin review format to match frontend format
+                const normalized = {
+                    name: reviewData.name,
+                    city: reviewData.city || reviewData.location || 'Florida',
+                    propertyType: reviewData.propertyType || reviewData.role || 'Homeowner',
+                    service: reviewData.service || 'Lawn Mowing & Edging',
+                    rating: reviewData.rating || 5,
+                    message: reviewData.message,
+                    createdAt: reviewData.createdAt
+                };
+                const card = createReviewCardElement(normalized, false);
                 reviewsGrid.prepend(card);
             });
         }
-        updateHeroStats(stored.length);
+        updateHeroStats(allReviews.length);
     }
 
     initializeSavedReviews();

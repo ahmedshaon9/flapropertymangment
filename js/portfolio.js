@@ -259,4 +259,74 @@
         }
     });
 
+    // ── 5. LOAD ADMIN-ADDED PORTFOLIO ITEMS ─────────────────────
+    function loadAdminPortfolio() {
+        const gallery = document.getElementById('bentoGallery');
+        if (!gallery) return;
+
+        let adminItems = [];
+        try {
+            const raw = localStorage.getItem('fla_portfolio');
+            adminItems = raw ? JSON.parse(raw) : [];
+        } catch (e) { adminItems = []; }
+
+        if (!adminItems.length) return;
+
+        const catMap = {
+            'Lawn Mowing': 'mowing',
+            'Landscape Design': 'makeovers',
+            'Mulch & Rock': 'mulch-rock',
+            'Bush & Hedge': 'tree-hedge',
+            'Irrigation': 'makeovers',
+            'Yard Cleanup': 'cleanups',
+            'One-Time Mow': 'mowing'
+        };
+
+        adminItems.forEach(item => {
+            const cat = catMap[item.category] || 'makeovers';
+            const img = (item.images && item.images.length > 0) ? item.images[0] : 'assets/images/landscape-bed-makeover.webp';
+            const location = item.location || 'Central Florida';
+            const desc = item.description || '';
+            const title = item.title || 'Project Showcase';
+
+            const card = document.createElement('article');
+            card.className = 'bento-card bento-card--span-6';
+            card.setAttribute('data-category', cat);
+            card.setAttribute('data-title', title);
+            card.setAttribute('data-location', location);
+            card.setAttribute('data-service', item.category || 'Property Maintenance');
+            card.setAttribute('data-type', 'Residential / Commercial');
+            card.setAttribute('data-turnaround', item.date || 'Completed');
+            card.setAttribute('data-image', img);
+            card.setAttribute('data-desc', desc);
+
+            card.innerHTML = `
+                <div class="bento-card__img-wrap">
+                    <img src="${img}" alt="${title}" class="bento-card__img" width="800" height="500" loading="lazy">
+                    <div class="bento-card__overlay"></div>
+                </div>
+                <div class="bento-card__top">
+                    <span class="bento-badge-city"><i class="fas fa-map-marker-alt"></i> ${location}</span>
+                    <span class="bento-badge-cat"><i class="fas fa-star"></i> ${item.category || 'Portfolio'}</span>
+                </div>
+                <div class="bento-card__content">
+                    <div class="bento-card__meta-bar">
+                        <span class="bento-card__meta-item"><i class="fas fa-check-circle"></i> Verified Work</span>
+                        <span class="bento-card__meta-item"><i class="fas fa-calendar"></i> ${item.date || 'Recent'}</span>
+                    </div>
+                    <h3 class="bento-card__title">${title}</h3>
+                    <p class="bento-card__desc">${desc}</p>
+                    <span class="bento-card__cta-btn">
+                        Quick View Project <i class="fas fa-arrow-right"></i>
+                    </span>
+                </div>
+            `;
+
+            card.addEventListener('click', () => openModal(card));
+            gallery.prepend(card);
+        });
+    }
+
+    loadAdminPortfolio();
+
 })();
