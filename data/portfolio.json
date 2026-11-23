@@ -1,0 +1,24 @@
+[
+  {
+    "id": "port_201",
+    "title": "ChampionsGate Lawn Precision Striping",
+    "category": "Lawn Mowing",
+    "description": "Weekly commercial-grade turf cutting and clean perimeter mechanical edging with zero-turn Scag mower in ChampionsGate residential estate.",
+    "location": "Davenport, FL",
+    "date": "2026-11",
+    "images": ["assets/images/residential-lawn-striping.webp"],
+    "video": null,
+    "createdAt": "2026-11-15T12:00:00.000Z"
+  },
+  {
+    "id": "port_202",
+    "title": "Front Yard Flower Bed & Mulch Transformation",
+    "category": "Landscape Design",
+    "description": "Removed dying turf, cut deep spade bed trenches, laid commercial-grade weed fabric, and installed triple-shredded dark chocolate mulch around tropical palms.",
+    "location": "Kissimmee, FL",
+    "date": "2026-11",
+    "images": ["assets/images/landscape-bed-makeover.webp"],
+    "video": null,
+    "createdAt": "2026-11-12T15:30:00.000Z"
+  }
+]

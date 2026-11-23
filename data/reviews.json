@@ -1,0 +1,35 @@
+[
+  {
+    "id": "rev_101",
+    "name": "Evelyn M.",
+    "city": "Haines City",
+    "role": "Homeowner",
+    "service": "Mulch & Rock Installation",
+    "rating": 5,
+    "message": "Got their info from a neighbor. They laid chocolate mulch across all our plant beds and edged around all our palms. Our yard is easily the prettiest on the street now!",
+    "approved": true,
+    "createdAt": "2026-11-19T08:30:00.000Z"
+  },
+  {
+    "id": "rev_102",
+    "name": "Carlos M.",
+    "city": "Kissimmee",
+    "role": "Property Manager",
+    "service": "Lawn Mowing & Edging",
+    "rating": 5,
+    "message": "Managing 8 rental homes in Poinciana and FLA handles every single cut on time. Clean stripes, zero missed dates, and gates always latched back shut.",
+    "approved": true,
+    "createdAt": "2026-11-18T11:15:00.000Z"
+  },
+  {
+    "id": "rev_103",
+    "name": "Brenda T.",
+    "city": "Davenport",
+    "role": "Homeowner",
+    "service": "Bush, Hedge & Tree Care",
+    "rating": 5,
+    "message": "Our bougainvilleas and viburnum hedges were out of control after storm season. The crew leveled everything laser-straight and hauled all debris away. 10/10 service!",
+    "approved": false,
+    "createdAt": "2026-11-23T09:12:00.000Z"
+  }
+]

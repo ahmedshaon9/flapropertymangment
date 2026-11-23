@@ -447,16 +447,36 @@
                     phone: state.phone,
                     contactPref: state.contactPref,
                     photosCount: state.photos.length,
+                    status: 'new',
+                    id: 'quote_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
                     createdAt: new Date().toISOString()
                 };
 
+                // Save to localStorage
                 try {
                     const existing = JSON.parse(localStorage.getItem('fla_quote_leads') || '[]');
-                    existing.push(leadPayload);
+                    existing.unshift(leadPayload);
                     localStorage.setItem('fla_quote_leads', JSON.stringify(existing));
                 } catch (err) {
                     console.warn('LocalStorage save error:', err);
                 }
+
+                // Send to backend REST API if available
+                try {
+                    fetch('/api/quotes', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(leadPayload)
+                    }).catch(() => {});
+                } catch (e) {}
+
+                // Broadcast to admin panel tabs in real time
+                try {
+                    if (typeof BroadcastChannel !== 'undefined') {
+                        const bc = new BroadcastChannel('fla_realtime_channel');
+                        bc.postMessage({ type: 'quotes', payload: leadPayload });
+                    }
+                } catch (e) {}
 
                 // Show confirmation screen
                 showConfirmation(leadPayload);

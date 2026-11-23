@@ -1,0 +1,65 @@
+[
+  {
+    "id": "quote_17001",
+    "name": "Marcus Vance",
+    "email": "m.vance88@gmail.com",
+    "phone": "(863) 555-0142",
+    "services": [
+      "Lawn Mowing & Edging",
+      "Bush, Hedge & Tree Care"
+    ],
+    "city": "Davenport",
+    "address": "412 Bella Vista Dr",
+    "propertyType": "Residential Home",
+    "condition": "Maintained / Normal Height",
+    "gateAccess": "Wide Gate (Fits Scag)",
+    "frequency": "Bi-Weekly Maintenance",
+    "contactPref": "Text Message",
+    "notes": "Looking for clean edging along our driveway and paver patio. Side yard has a 48-inch gate.",
+    "photosCount": 2,
+    "status": "new",
+    "createdAt": "2026-11-22T10:15:00.000Z"
+  },
+  {
+    "id": "quote_17002",
+    "name": "Elena Rodriguez",
+    "email": "elena.rodriguez@outlook.com",
+    "phone": "(407) 555-8931",
+    "services": [
+      "Landscape Bed Makeovers",
+      "Mulch & Rock Installation"
+    ],
+    "city": "Kissimmee",
+    "address": "1840 Poinciana Blvd",
+    "propertyType": "Residential Home",
+    "condition": "Overgrown (Needs Cleanup First)",
+    "gateAccess": "No Gate (Fully Open Yard)",
+    "frequency": "One-Time Project",
+    "contactPref": "Phone Call",
+    "notes": "Need old pine needles removed and dark brown chocolate mulch installed across 4 front beds.",
+    "photosCount": 1,
+    "status": "contacted",
+    "createdAt": "2026-11-21T14:40:00.000Z"
+  },
+  {
+    "id": "quote_17003",
+    "name": "David Sterling",
+    "email": "dsterling@cypressmgmt.com",
+    "phone": "(863) 555-7720",
+    "services": [
+      "Lawn Mowing & Edging",
+      "Irrigation & Turf Care"
+    ],
+    "city": "Haines City",
+    "address": "520 Southern Dunes Blvd",
+    "propertyType": "Commercial Property",
+    "condition": "Maintained / Normal Height",
+    "gateAccess": "Wide Gate (Fits Scag)",
+    "frequency": "Weekly Maintenance",
+    "contactPref": "Email",
+    "notes": "Commercial clubhouse lawn area and 2 entrance monuments. Please provide Certificate of Insurance.",
+    "photosCount": 0,
+    "status": "quoted",
+    "createdAt": "2026-11-20T09:00:00.000Z"
+  }
+]

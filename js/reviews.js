@@ -357,20 +357,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─────────────────────────────────────────────────────────────
     // 4. LOAD SAVED REVIEWS ON INITIALIZATION
     // ─────────────────────────────────────────────────────────────
-    function initializeSavedReviews() {
-        const stored = getStoredReviews();
-        // Also load admin-approved reviews (added via admin portal)
-        let adminApproved = [];
-        try {
-            const raw = localStorage.getItem('fla_admin_approved_reviews');
-            adminApproved = raw ? JSON.parse(raw) : [];
-        } catch (e) { adminApproved = []; }
+    async function initializeSavedReviews() {
+        let reviewsList = [];
 
-        const allReviews = [...stored, ...adminApproved];
-        if (allReviews.length > 0 && reviewsGrid) {
+        // Check backend REST API if available
+        try {
+            const res = await fetch('/api/reviews?approved=true');
+            if (res.ok) {
+                reviewsList = await res.json();
+            }
+        } catch (e) {}
+
+        // Fallback or merge with localStorage
+        if (!reviewsList.length) {
+            const stored = getStoredReviews();
+            // Filter to only approved reviews
+            reviewsList = stored.filter(r => r.approved !== false);
+        }
+
+        if (reviewsList.length > 0 && reviewsGrid) {
+            // Clear existing dynamically appended cards first
+            const existingDynamic = reviewsGrid.querySelectorAll('.review-card--dynamic');
+            existingDynamic.forEach(el => el.remove());
+
             // Prepend in reverse so newest appears first
-            allReviews.slice().reverse().forEach(reviewData => {
-                // Normalize admin review format to match frontend format
+            reviewsList.slice().reverse().forEach(reviewData => {
                 const normalized = {
                     name: reviewData.name,
                     city: reviewData.city || reviewData.location || 'Florida',
@@ -381,19 +392,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     createdAt: reviewData.createdAt
                 };
                 const card = createReviewCardElement(normalized, false);
+                card.classList.add('review-card--dynamic');
                 reviewsGrid.prepend(card);
             });
         }
-        updateHeroStats(allReviews.length);
+        updateHeroStats(reviewsList.length);
     }
 
     initializeSavedReviews();
 
+    // Realtime broadcast listener for reviews approved in Admin
+    try {
+        if (typeof BroadcastChannel !== 'undefined') {
+            const bc = new BroadcastChannel('fla_realtime_channel');
+            bc.onmessage = (msg) => {
+                if (msg && msg.data && msg.data.type === 'reviews') {
+                    initializeSavedReviews();
+                }
+            };
+        }
+    } catch (err) {}
+
+    window.addEventListener('storage', (e) => {
+        if (e.key === STORAGE_KEY || e.key === 'fla_admin_approved_reviews') {
+            initializeSavedReviews();
+        }
+    });
+
     // ─────────────────────────────────────────────────────────────
-    // 5. FORM SUBMISSION HANDLER
+    // 5. FORM SUBMISSION HANDLER (SAVES TO PENDING FOR ADMIN APPROVAL)
     // ─────────────────────────────────────────────────────────────
     if (reviewForm) {
-        reviewForm.addEventListener('submit', (e) => {
+        reviewForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const name = (reviewerNameInput ? reviewerNameInput.value.trim() : '');
@@ -426,15 +456,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const newReview = {
-                id: Date.now(),
+                id: 'rev_' + Date.now(),
                 name,
                 city,
                 service,
                 propertyType,
                 message,
                 rating,
+                approved: false, // PENDING ADMIN APPROVAL!
                 photo: uploadedPhotoBase64,
-                time: 'Verified Just Now'
+                createdAt: new Date().toISOString()
             };
 
             // Save to localStorage
@@ -442,34 +473,40 @@ document.addEventListener('DOMContentLoaded', () => {
             stored.unshift(newReview);
             saveStoredReviews(stored);
 
-            // Animate submission into DOM using GSAP Flip if available
-            let flipState = null;
-            if (typeof Flip !== 'undefined' && reviewsGrid) {
-                flipState = Flip.getState('.review-card');
+            // Sync to backend REST API
+            try {
+                fetch('/api/reviews', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newReview)
+                }).catch(() => {});
+            } catch (err) {}
+
+            // Broadcast to admin panel
+            try {
+                if (typeof BroadcastChannel !== 'undefined') {
+                    const bc = new BroadcastChannel('fla_realtime_channel');
+                    bc.postMessage({ type: 'reviews', payload: newReview });
+                }
+            } catch (err) {}
+
+            // Display celebration message to client
+            let successNotice = document.getElementById('reviewPendingNotice');
+            if (!successNotice) {
+                successNotice = document.createElement('div');
+                successNotice.id = 'reviewPendingNotice';
+                successNotice.style.cssText = 'background:#ecfdf5; border:1.5px solid #10b981; border-radius:12px; padding:18px 24px; margin-bottom:24px; color:#065f46; display:flex; align-items:flex-start; gap:14px; animation:fadeIn 0.4s ease;';
+                reviewForm.parentNode.insertBefore(successNotice, reviewForm);
             }
 
-            const newCard = createReviewCardElement(newReview, true);
-            if (reviewsGrid) {
-                reviewsGrid.prepend(newCard);
-            }
-
-            if (flipState && typeof Flip !== 'undefined') {
-                Flip.from(flipState, {
-                    duration: 0.6,
-                    ease: 'power2.out',
-                    stagger: 0.04
-                });
-            } else if (typeof gsap !== 'undefined') {
-                gsap.from(newCard, {
-                    y: -30,
-                    opacity: 0,
-                    duration: 0.6,
-                    ease: 'power3.out'
-                });
-            }
-
-            // Update hero review counter
-            updateHeroStats(stored.length);
+            successNotice.innerHTML = `
+                <i class="fas fa-check-circle" style="font-size:24px; color:#059669; margin-top:2px; flex-shrink:0;"></i>
+                <div>
+                    <h4 style="margin:0 0 4px; font-weight:700; color:#065f46; font-size:16px;">Thank you, ${escapeHtml(name)}!</h4>
+                    <p style="margin:0; font-size:14px; color:#047857; line-height:1.5;">Your ${rating}-star review has been received! As part of our verified client guarantee, it will appear publicly on this page once approved by our admin team.</p>
+                </div>
+            `;
+            successNotice.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
             // Reset form fields
             reviewForm.reset();
@@ -483,6 +520,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (photoPlaceholderIcon) {
                 photoPlaceholderIcon.style.display = 'block';
+            }
+            if (photoPreviewBox) {
+                photoPreviewBox.classList.remove('has-preview');
             }
 
             // Scroll smoothly to reviews grid so the user sees their new post and close form

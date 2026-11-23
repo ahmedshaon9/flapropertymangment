@@ -1,22 +1,32 @@
 /**
- * FLA PROPERTY MANAGEMENT — ADMIN PANEL ENGINE (admin.js)
- * Full SPA Admin: Auth · Dashboard · Quotes · Reviews · Portfolio · Settings · Theme
+ * FLA PROPERTY MANAGEMENT — ADVANCED ADMIN PORTAL ENGINE (admin.js)
+ * 
+ * Features:
+ *  - Dual-Mode Engine: Seamlessly connects to Node.js REST API (/api/*) 
+ *    with automatic fallback to localStorage for static deployments
+ *  - Real-time Multi-Client Sync: Server-Sent Events (SSE) + BroadcastChannel + Storage events
+ *  - Rock-Solid Modal System: Fixes all popup close bugs with zero CSS specificity conflicts
+ *  - Bilingual i18n System: Instant English (EN) & Spanish (ES) switching for Florida teams
+ *  - Live Dynamic Theme Engine: Instant real-time color adaptation across all site pages
+ *  - Complete Quotes, Reviews Approval Pipeline, Portfolio & Site Settings modules
  */
+
 (function () {
   'use strict';
 
   /* ══════════════════════════════════════════════════════════════
-     CONSTANTS & STORAGE KEYS
+     CONSTANTS, KEYS & STORAGE
   ══════════════════════════════════════════════════════════════ */
   const KEY = {
     AUTH:      'fla_admin_auth',
     CREDS:     'fla_admin_creds',
     QUOTES:    'fla_quote_leads',
-    REVIEWS:   'fla_admin_reviews',
+    REVIEWS:   'fla_customer_reviews',
     PORTFOLIO: 'fla_portfolio',
     META:      'fla_site_meta',
     BRANDING:  'fla_branding',
-    THEME:     'fla_theme_colors'
+    THEME:     'fla_theme_colors',
+    LANG:      'fla_admin_lang'
   };
 
   const DEFAULT_CREDS = { username: 'admin', password: 'FLA@admin2024' };
@@ -30,46 +40,449 @@
     btnText:    '#ffffff',
     navBg:      '#ffffff',
     navText:    '#374151',
-    heroBg:     '#f8fafc'
+    heroBg:     '#f0f9f6'
   };
 
   const COLOR_PRESETS = [
     {
       name: 'Forest Green',
+      nameEs: 'Verde Bosque',
       colors: { primary:'#007f5f', primaryH:'#00664c', secondary:'#80b918', heading:'#0f172a', body:'#374151', btnText:'#ffffff', navBg:'#ffffff', navText:'#374151', heroBg:'#f0f9f6' }
     },
     {
       name: 'Ocean Blue',
+      nameEs: 'Azul Océano',
       colors: { primary:'#1d4ed8', primaryH:'#1e40af', secondary:'#0ea5e9', heading:'#0f172a', body:'#374151', btnText:'#ffffff', navBg:'#ffffff', navText:'#374151', heroBg:'#eff6ff' }
     },
     {
       name: 'Sunset Coral',
+      nameEs: 'Coral Atardecer',
       colors: { primary:'#ea580c', primaryH:'#c2410c', secondary:'#f59e0b', heading:'#1c1917', body:'#44403c', btnText:'#ffffff', navBg:'#ffffff', navText:'#44403c', heroBg:'#fff7ed' }
     },
     {
       name: 'Royal Purple',
+      nameEs: 'Púrpura Real',
       colors: { primary:'#7c3aed', primaryH:'#6d28d9', secondary:'#a78bfa', heading:'#1e1b4b', body:'#374151', btnText:'#ffffff', navBg:'#ffffff', navText:'#374151', heroBg:'#f5f3ff' }
     },
     {
       name: 'Midnight Slate',
+      nameEs: 'Pizarra Medianoche',
       colors: { primary:'#0f172a', primaryH:'#1e293b', secondary:'#64748b', heading:'#0f172a', body:'#475569', btnText:'#ffffff', navBg:'#0f172a', navText:'#e2e8f0', heroBg:'#f8fafc' }
     }
   ];
 
   const COLOR_FIELDS = [
-    { id: 'primary',   label: 'Primary / Brand Color',   desc: 'Buttons, links, highlights, active states' },
-    { id: 'primaryH',  label: 'Primary Hover',            desc: 'Button hover & active press state' },
-    { id: 'secondary', label: 'Secondary / Accent',       desc: 'Accent stripe, secondary elements' },
-    { id: 'heading',   label: 'Heading Color',            desc: 'H1, H2, H3 text across the site' },
-    { id: 'body',      label: 'Body Text Color',          desc: 'Paragraphs, descriptions, labels' },
-    { id: 'btnText',   label: 'Button Text Color',        desc: 'Text inside primary buttons' },
-    { id: 'navBg',     label: 'Navigation Background',    desc: 'Main navbar background color' },
-    { id: 'navText',   label: 'Navigation Text',          desc: 'Menu link text & icon color' },
-    { id: 'heroBg',    label: 'Hero Background',          desc: 'Homepage hero section background tint' }
+    { id: 'primary',   label: 'Primary / Brand Color',  labelEs: 'Color Primario / Marca',       desc: 'Buttons, links, highlights, active states' },
+    { id: 'primaryH',  label: 'Primary Hover',           labelEs: 'Color al Pasar el Cursor',    desc: 'Button hover & active press state' },
+    { id: 'secondary', label: 'Secondary / Accent',      labelEs: 'Acento Secundario',           desc: 'Accent stripes, secondary badges' },
+    { id: 'heading',   label: 'Heading Color',           labelEs: 'Color de Encabezados',        desc: 'H1, H2, H3 titles across website' },
+    { id: 'body',      label: 'Body Text Color',         labelEs: 'Color de Texto General',      desc: 'Paragraphs, descriptions, labels' },
+    { id: 'btnText',   label: 'Button Text Color',       labelEs: 'Texto de Botones',            desc: 'Text color inside primary buttons' },
+    { id: 'navBg',     label: 'Navigation Background',   labelEs: 'Fondo del Menú de Navegación',desc: 'Main navbar background color' },
+    { id: 'navText',   label: 'Navigation Text',         labelEs: 'Texto de Navegación',         desc: 'Menu link text & icon color' },
+    { id: 'heroBg',    label: 'Hero Background',         labelEs: 'Fondo de la Sección Principal',desc: 'Hero section background tint' }
   ];
 
   /* ══════════════════════════════════════════════════════════════
-     UTILITIES
+     BILINGUAL (i18n) DICTIONARY
+  ══════════════════════════════════════════════════════════════ */
+  const I18N = {
+    en: {
+      dashboard: 'Dashboard',
+      quotes: 'Quote Requests',
+      reviews: 'Reviews',
+      portfolio: 'Portfolio',
+      settings: 'Site Settings',
+      colors: 'Theme & Colors',
+      viewWeb: 'View Website',
+      logOut: 'Log Out',
+      welcome: 'Welcome back, Admin 👋',
+      welcomeSub: "Here's what's happening with your FLA Property website today.",
+      totalQuotes: 'Total Quote Requests',
+      newThisWeek: 'New This Week',
+      pendingReviews: 'Pending Reviews',
+      portfolioItems: 'Portfolio Items',
+      recentQuotes: 'Recent Quote Requests',
+      viewAll: 'View all',
+      noQuotesYet: 'No quote requests yet',
+      noPendingReviews: 'No pending reviews',
+      quoteDetails: 'Quote Details',
+      updateStatus: 'Update Status:',
+      exportCsv: 'Export CSV',
+      allStatus: 'All Status',
+      addReview: 'Add Review',
+      approved: 'Approved',
+      pending: 'Pending',
+      addItem: 'Add Item',
+      liveSync: 'Realtime Active',
+      themeApplied: '✓ Theme applied in real time!'
+    },
+    es: {
+      dashboard: 'Panel Principal',
+      quotes: 'Presupuestos',
+      reviews: 'Reseñas',
+      portfolio: 'Portafolio',
+      settings: 'Ajustes del Sitio',
+      colors: 'Tema y Colores',
+      viewWeb: 'Ver Sitio Web',
+      logOut: 'Cerrar Sesión',
+      welcome: '¡Bienvenido, Administrador! 👋',
+      welcomeSub: 'Estado actualizado de su sitio web de mantenimiento FLA Property.',
+      totalQuotes: 'Total de Cotizaciones',
+      newThisWeek: 'Nuevas Esta Semana',
+      pendingReviews: 'Reseñas Pendientes',
+      portfolioItems: 'Proyectos en Portafolio',
+      recentQuotes: 'Cotizaciones Recientes',
+      viewAll: 'Ver todas',
+      noQuotesYet: 'Sin cotizaciones aún',
+      noPendingReviews: 'Sin reseñas pendientes',
+      quoteDetails: 'Detalles de la Cotización',
+      updateStatus: 'Actualizar Estado:',
+      exportCsv: 'Exportar CSV',
+      allStatus: 'Todos los Estados',
+      addReview: 'Añadir Reseña',
+      approved: 'Aprobadas',
+      pending: 'Pendientes',
+      addItem: 'Añadir Proyecto',
+      liveSync: 'Tiempo Real Activo',
+      themeApplied: '✓ ¡Tema aplicado en tiempo real!'
+    }
+  };
+
+  let currentLang = localStorage.getItem(KEY.LANG) || 'en';
+
+  /* ══════════════════════════════════════════════════════════════
+     REAL-TIME BROADCAST CHANNEL
+  ══════════════════════════════════════════════════════════════ */
+  let broadcastChannel = null;
+  try {
+    if (typeof BroadcastChannel !== 'undefined') {
+      broadcastChannel = new BroadcastChannel('fla_realtime_channel');
+      broadcastChannel.onmessage = (msg) => {
+        if (msg && msg.data) {
+          handleRealtimeUpdate(msg.data.type, msg.data.payload);
+        }
+      };
+    }
+  } catch (e) {
+    console.warn('BroadcastChannel unavailable:', e);
+  }
+
+  function broadcast(type, payload) {
+    if (broadcastChannel) {
+      try { broadcastChannel.postMessage({ type, payload }); } catch (e) {}
+    }
+  }
+
+  function handleRealtimeUpdate(type) {
+    if (type === 'quotes') {
+      if (Nav.current === 'quotes') Quotes.render();
+      Dashboard.refresh();
+    } else if (type === 'reviews') {
+      if (Nav.current === 'reviews') {
+        Reviews.renderPending();
+        Reviews.renderApproved();
+      }
+      Dashboard.refresh();
+    } else if (type === 'portfolio') {
+      if (Nav.current === 'portfolio') Portfolio.render();
+      Dashboard.refresh();
+    } else if (type === 'theme') {
+      Theme.load();
+      if (Nav.current === 'colors') {
+        Theme.renderPickers();
+        Theme.renderPresets();
+      }
+    }
+  }
+
+  // Cross-tab storage fallback listener
+  window.addEventListener('storage', (e) => {
+    if (e.key === KEY.QUOTES) handleRealtimeUpdate('quotes');
+    if (e.key === KEY.REVIEWS) handleRealtimeUpdate('reviews');
+    if (e.key === KEY.PORTFOLIO) handleRealtimeUpdate('portfolio');
+    if (e.key === KEY.THEME) handleRealtimeUpdate('theme');
+  });
+
+  /* ══════════════════════════════════════════════════════════════
+     API CLIENT WITH LOCALSTORAGE AUTO-FALLBACK
+  ══════════════════════════════════════════════════════════════ */
+  let apiAvailable = false;
+
+  const API = {
+    async check() {
+      try {
+        const res = await fetch('/api/settings', { method: 'GET', cache: 'no-store' });
+        apiAvailable = res.ok;
+        updateLiveIndicator(apiAvailable);
+      } catch (e) {
+        apiAvailable = false;
+        updateLiveIndicator(false);
+      }
+      if (apiAvailable) this.initSSE();
+      return apiAvailable;
+    },
+
+    initSSE() {
+      try {
+        const es = new EventSource('/api/events');
+        es.addEventListener('quote_created', () => handleRealtimeUpdate('quotes'));
+        es.addEventListener('quote_updated', () => handleRealtimeUpdate('quotes'));
+        es.addEventListener('quote_deleted', () => handleRealtimeUpdate('quotes'));
+        es.addEventListener('review_created', () => handleRealtimeUpdate('reviews'));
+        es.addEventListener('review_updated', () => handleRealtimeUpdate('reviews'));
+        es.addEventListener('review_deleted', () => handleRealtimeUpdate('reviews'));
+        es.addEventListener('portfolio_created', () => handleRealtimeUpdate('portfolio'));
+        es.addEventListener('portfolio_updated', () => handleRealtimeUpdate('portfolio'));
+        es.addEventListener('portfolio_deleted', () => handleRealtimeUpdate('portfolio'));
+        es.addEventListener('theme_updated', () => handleRealtimeUpdate('theme'));
+      } catch (err) {
+        console.warn('SSE not supported or disabled', err);
+      }
+    },
+
+    async getQuotes() {
+      if (apiAvailable) {
+        try {
+          const res = await fetch('/api/quotes');
+          if (res.ok) {
+            const data = await res.json();
+            storage(KEY.QUOTES, data);
+            return data;
+          }
+        } catch (e) {}
+      }
+      return storage(KEY.QUOTES) || [];
+    },
+
+    async saveQuote(quote) {
+      if (apiAvailable) {
+        try {
+          const res = await fetch('/api/quotes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quote)
+          });
+          if (res.ok) return await res.json();
+        } catch (e) {}
+      }
+      const list = storage(KEY.QUOTES) || [];
+      quote.id = quote.id || 'quote_' + Date.now();
+      list.unshift(quote);
+      storage(KEY.QUOTES, list);
+      broadcast('quotes', quote);
+      return quote;
+    },
+
+    async updateQuoteStatus(id, status) {
+      if (apiAvailable) {
+        try {
+          await fetch('/api/quotes/' + encodeURIComponent(id), {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+          });
+        } catch (e) {}
+      }
+      const list = storage(KEY.QUOTES) || [];
+      const item = list.find(q => String(q.id) === String(id));
+      if (item) {
+        item.status = status;
+        storage(KEY.QUOTES, list);
+        broadcast('quotes', item);
+      }
+    },
+
+    async deleteQuote(id) {
+      if (apiAvailable) {
+        try {
+          await fetch('/api/quotes/' + encodeURIComponent(id), { method: 'DELETE' });
+        } catch (e) {}
+      }
+      const list = (storage(KEY.QUOTES) || []).filter(q => String(q.id) !== String(id));
+      storage(KEY.QUOTES, list);
+      broadcast('quotes', { id });
+    },
+
+    async getReviews() {
+      if (apiAvailable) {
+        try {
+          const res = await fetch('/api/reviews');
+          if (res.ok) {
+            const data = await res.json();
+            storage(KEY.REVIEWS, data);
+            return data;
+          }
+        } catch (e) {}
+      }
+      return storage(KEY.REVIEWS) || [];
+    },
+
+    async saveReview(rev) {
+      if (apiAvailable) {
+        try {
+          const res = await fetch('/api/reviews', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(rev)
+          });
+          if (res.ok) return await res.json();
+        } catch (e) {}
+      }
+      const list = storage(KEY.REVIEWS) || [];
+      rev.id = rev.id || 'rev_' + Date.now();
+      list.unshift(rev);
+      storage(KEY.REVIEWS, list);
+      broadcast('reviews', rev);
+      return rev;
+    },
+
+    async updateReview(id, data) {
+      if (apiAvailable) {
+        try {
+          await fetch('/api/reviews/' + encodeURIComponent(id), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        } catch (e) {}
+      }
+      const list = storage(KEY.REVIEWS) || [];
+      const idx = list.findIndex(r => String(r.id) === String(id));
+      if (idx !== -1) {
+        list[idx] = { ...list[idx], ...data };
+        storage(KEY.REVIEWS, list);
+        broadcast('reviews', list[idx]);
+      }
+    },
+
+    async setReviewApproval(id, approved) {
+      if (apiAvailable) {
+        try {
+          await fetch('/api/reviews/' + encodeURIComponent(id) + '/approve', {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ approved })
+          });
+        } catch (e) {}
+      }
+      const list = storage(KEY.REVIEWS) || [];
+      const item = list.find(r => String(r.id) === String(id));
+      if (item) {
+        item.approved = approved;
+        storage(KEY.REVIEWS, list);
+        broadcast('reviews', item);
+      }
+    },
+
+    async deleteReview(id) {
+      if (apiAvailable) {
+        try {
+          await fetch('/api/reviews/' + encodeURIComponent(id), { method: 'DELETE' });
+        } catch (e) {}
+      }
+      const list = (storage(KEY.REVIEWS) || []).filter(r => String(r.id) !== String(id));
+      storage(KEY.REVIEWS, list);
+      broadcast('reviews', { id });
+    },
+
+    async getPortfolio() {
+      if (apiAvailable) {
+        try {
+          const res = await fetch('/api/portfolio');
+          if (res.ok) {
+            const data = await res.json();
+            storage(KEY.PORTFOLIO, data);
+            return data;
+          }
+        } catch (e) {}
+      }
+      return storage(KEY.PORTFOLIO) || [];
+    },
+
+    async savePortfolio(item) {
+      if (apiAvailable) {
+        try {
+          const isEdit = !!item.id;
+          const url = isEdit ? '/api/portfolio/' + encodeURIComponent(item.id) : '/api/portfolio';
+          const method = isEdit ? 'PUT' : 'POST';
+          const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(item)
+          });
+          if (res.ok) return await res.json();
+        } catch (e) {}
+      }
+      const list = storage(KEY.PORTFOLIO) || [];
+      if (item.id) {
+        const idx = list.findIndex(p => String(p.id) === String(item.id));
+        if (idx !== -1) list[idx] = item;
+      } else {
+        item.id = 'port_' + Date.now();
+        list.unshift(item);
+      }
+      storage(KEY.PORTFOLIO, list);
+      broadcast('portfolio', item);
+      return item;
+    },
+
+    async deletePortfolio(id) {
+      if (apiAvailable) {
+        try {
+          await fetch('/api/portfolio/' + encodeURIComponent(id), { method: 'DELETE' });
+        } catch (e) {}
+      }
+      const list = (storage(KEY.PORTFOLIO) || []).filter(p => String(p.id) !== String(id));
+      storage(KEY.PORTFOLIO, list);
+      broadcast('portfolio', { id });
+    },
+
+    async getTheme() {
+      if (apiAvailable) {
+        try {
+          const res = await fetch('/api/theme');
+          if (res.ok) {
+            const data = await res.json();
+            storage(KEY.THEME, data);
+            return data;
+          }
+        } catch (e) {}
+      }
+      return storage(KEY.THEME) || DEFAULT_THEME;
+    },
+
+    async saveTheme(theme) {
+      if (apiAvailable) {
+        try {
+          await fetch('/api/theme', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(theme)
+          });
+        } catch (e) {}
+      }
+      storage(KEY.THEME, theme);
+      broadcast('theme', theme);
+    }
+  };
+
+  function updateLiveIndicator(isOnline) {
+    const textEl = $id('live-indicator-text');
+    const wrapEl = $id('live-indicator');
+    if (textEl && wrapEl) {
+      if (isOnline) {
+        textEl.textContent = currentLang === 'es' ? 'Servidor Conectado' : 'Live Sync Active';
+        wrapEl.style.display = 'inline-flex';
+      } else {
+        textEl.textContent = currentLang === 'es' ? 'Local y Nube' : 'Client Sync';
+        wrapEl.style.display = 'inline-flex';
+      }
+    }
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     DOM & GENERAL UTILITIES
   ══════════════════════════════════════════════════════════════ */
   function storage(key, value) {
     try {
@@ -78,67 +491,159 @@
         return v ? JSON.parse(v) : null;
       }
       localStorage.setItem(key, JSON.stringify(value));
-    } catch (e) { console.warn('Storage error', e); return null; }
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+      return null;
+    }
   }
 
   function esc(str) {
-    if (!str) return '';
+    if (str === null || str === undefined) return '';
     return String(str)
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
 
-  function $id(id)   { return document.getElementById(id); }
-  function $qs(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function $id(id) { return document.getElementById(id); }
   function $all(sel, ctx) { return [...(ctx || document).querySelectorAll(sel)]; }
 
-  function fmt(isoStr) {
+  function fmtDate(isoStr) {
     if (!isoStr) return '—';
-    const d = new Date(isoStr);
-    return d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+    try {
+      const d = new Date(isoStr);
+      return d.toLocaleDateString(currentLang === 'es' ? 'es-ES' : 'en-US', {
+        month: 'short', day: 'numeric', year: 'numeric'
+      });
+    } catch (e) { return isoStr; }
   }
 
   function timeAgo(isoStr) {
     if (!isoStr) return '';
-    const diff = (Date.now() - new Date(isoStr)) / 1000;
-    if (diff < 60) return 'Just now';
-    if (diff < 3600) return Math.floor(diff/60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
-    if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
-    return fmt(isoStr);
+    try {
+      const diff = (Date.now() - new Date(isoStr)) / 1000;
+      if (diff < 60) return currentLang === 'es' ? 'Ahora' : 'Just now';
+      if (diff < 3600) return Math.floor(diff / 60) + (currentLang === 'es' ? ' min' : 'm ago');
+      if (diff < 86400) return Math.floor(diff / 3600) + (currentLang === 'es' ? ' h' : 'h ago');
+      return fmtDate(isoStr);
+    } catch (e) { return ''; }
   }
 
   function initials(name) {
     if (!name) return 'FL';
     const p = name.trim().split(/\s+/);
-    return p.length === 1 ? p[0].substring(0,2).toUpperCase() : (p[0][0] + p[p.length-1][0]).toUpperCase();
+    return p.length === 1 ? p[0].substring(0, 2).toUpperCase() : (p[0][0] + p[p.length - 1][0]).toUpperCase();
   }
 
   function toast(msg, type = 'success') {
     const c = $id('toast-container');
     if (!c) return;
-    const icon = { success:'fa-circle-check', error:'fa-circle-xmark', info:'fa-circle-info' }[type] || 'fa-circle-check';
+    const icon = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info' }[type] || 'fa-circle-check';
     const el = document.createElement('div');
     el.className = `toast toast--${type}`;
-    el.innerHTML = `<i class="fa-solid ${icon}"></i><span>${msg}</span>`;
+    el.innerHTML = `<i class="fa-solid ${icon}"></i><span>${esc(msg)}</span>`;
     c.appendChild(el);
-    setTimeout(() => el.remove(), 4000);
+    setTimeout(() => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(10px)';
+      el.style.transition = 'all 0.3s ease';
+      setTimeout(() => el.remove(), 300);
+    }, 3800);
   }
-
-  function uuid() {
-    return crypto.randomUUID ? crypto.randomUUID()
-      : Date.now().toString(36) + Math.random().toString(36).substring(2);
-  }
-
-  function uid() { return uuid(); }
 
   /* ══════════════════════════════════════════════════════════════
-     AUTH MODULE
+     ROCK-SOLID MODALS ENGINE (FIXES CLOSE BUGS FOREVER)
+  ══════════════════════════════════════════════════════════════ */
+  const Modals = {
+    open(id) {
+      const el = typeof id === 'string' ? $id(id) : id;
+      if (!el) return;
+      el.removeAttribute('hidden');
+      el.classList.add('is-active');
+      el.style.display = 'flex';
+      document.body.classList.add('modal-open');
+    },
+
+    close(id) {
+      const el = typeof id === 'string' ? $id(id) : id;
+      if (!el) return;
+      el.setAttribute('hidden', '');
+      el.classList.remove('is-active');
+      el.style.display = 'none';
+      
+      const anyActive = document.querySelector('.modal.is-active:not([hidden])');
+      if (!anyActive) {
+        document.body.classList.remove('modal-open');
+      }
+    },
+
+    closeAll() {
+      $all('.modal').forEach(m => this.close(m));
+    },
+
+    bindAll() {
+      // Delegated click handler on the entire document
+      document.addEventListener('click', (e) => {
+        // 1. Click on close button inside any modal
+        const closeBtn = e.target.closest('.modal-close');
+        if (closeBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const targetId = closeBtn.dataset.modal || closeBtn.getAttribute('data-modal');
+          if (targetId && $id(targetId)) {
+            Modals.close(targetId);
+          } else {
+            const parentModal = closeBtn.closest('.modal');
+            if (parentModal) Modals.close(parentModal);
+          }
+          return;
+        }
+
+        // 2. Click on modal backdrop overlay
+        const backdrop = e.target.closest('.modal-backdrop');
+        if (backdrop) {
+          e.preventDefault();
+          e.stopPropagation();
+          const parentModal = backdrop.closest('.modal');
+          if (parentModal) Modals.close(parentModal);
+        }
+      });
+
+      // Escape key closes modals
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          Modals.closeAll();
+        }
+      });
+    }
+  };
+
+  /* ══════════════════════════════════════════════════════════════
+     AUTHENTICATION
   ══════════════════════════════════════════════════════════════ */
   const Auth = {
     isLoggedIn() { return !!storage(KEY.AUTH); },
 
-    login(username, password) {
+    async login(username, password) {
+      // Check Node server if available
+      if (apiAvailable) {
+        try {
+          const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            storage(KEY.AUTH, { user: username, token: data.token, ts: Date.now() });
+            return true;
+          }
+        } catch (e) {}
+      }
+
+      // Local storage fallback check
       const saved = storage(KEY.CREDS) || DEFAULT_CREDS;
       if (username === saved.username && password === saved.password) {
         storage(KEY.AUTH, { user: username, ts: Date.now() });
@@ -154,474 +659,633 @@
 
     changePassword(currentPass, newPass, confirmPass) {
       const saved = storage(KEY.CREDS) || DEFAULT_CREDS;
-      if (currentPass !== saved.password) return { ok: false, msg: 'Current password is incorrect.' };
-      if (newPass !== confirmPass) return { ok: false, msg: 'New passwords do not match.' };
-      if (newPass.length < 6) return { ok: false, msg: 'Password must be at least 6 characters.' };
+      if (currentPass !== saved.password) {
+        return { ok: false, msg: currentLang === 'es' ? 'La contraseña actual es incorrecta.' : 'Current password is incorrect.' };
+      }
+      if (newPass !== confirmPass) {
+        return { ok: false, msg: currentLang === 'es' ? 'Las nuevas contraseñas no coinciden.' : 'New passwords do not match.' };
+      }
+      if (newPass.length < 6) {
+        return { ok: false, msg: currentLang === 'es' ? 'La contraseña debe tener al menos 6 caracteres.' : 'Password must be at least 6 characters.' };
+      }
       storage(KEY.CREDS, { username: saved.username, password: newPass });
-      return { ok: true, msg: 'Password updated successfully!' };
+      return { ok: true, msg: currentLang === 'es' ? '¡Contraseña actualizada con éxito!' : 'Password updated successfully!' };
     }
   };
 
   /* ══════════════════════════════════════════════════════════════
-     NAVIGATION
+     NAVIGATION & BILINGUAL ENGINE
   ══════════════════════════════════════════════════════════════ */
   const Nav = {
-    sections: ['dashboard','quotes','reviews','portfolio','settings','colors'],
+    sections: ['dashboard', 'quotes', 'reviews', 'portfolio', 'settings', 'colors'],
     current: 'dashboard',
 
     goto(section) {
       if (!this.sections.includes(section)) return;
       this.current = section;
 
-      // Hide all, show target
+      // Close open modals
+      Modals.closeAll();
+
       this.sections.forEach(s => {
         const el = $id('section-' + s);
-        if (el) { el.classList.remove('active'); el.hidden = true; }
+        if (el) {
+          el.classList.remove('active');
+          el.setAttribute('hidden', '');
+          el.style.display = 'none';
+        }
       });
-      const target = $id('section-' + section);
-      if (target) { target.classList.add('active'); target.hidden = false; }
 
-      // Update nav links
+      const target = $id('section-' + section);
+      if (target) {
+        target.classList.add('active');
+        target.removeAttribute('hidden');
+        target.style.display = 'block';
+      }
+
       $all('.nav-link').forEach(a => {
         a.classList.toggle('active', a.dataset.section === section);
       });
 
-      // Update header title
-      const titles = {
-        dashboard: 'Dashboard', quotes: 'Quote Requests', reviews: 'Reviews',
-        portfolio: 'Portfolio', settings: 'Site Settings', colors: 'Theme & Colors'
-      };
       const pt = $id('page-title');
-      if (pt) pt.textContent = titles[section] || section;
+      if (pt) {
+        pt.textContent = I18N[currentLang][section] || section;
+      }
 
-      // Load section data
+      // Load specific section
       Sections.load(section);
     },
 
-    bindLinks() {
-      document.addEventListener('click', e => {
+    bind() {
+      document.addEventListener('click', (e) => {
         const link = e.target.closest('[data-section]');
         if (!link) return;
         e.preventDefault();
         Nav.goto(link.dataset.section);
       });
+
+      // Language Switcher
+      const langWrap = $id('lang-switcher');
+      if (langWrap) {
+        langWrap.addEventListener('click', (e) => {
+          const btn = e.target.closest('.lang-btn');
+          if (!btn) return;
+          const lang = btn.dataset.lang;
+          setLanguage(lang);
+        });
+      }
     }
   };
 
+  function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem(KEY.LANG, lang);
+
+    $all('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+    // Update nav links
+    $all('.nav-link').forEach(link => {
+      const s = link.dataset.section;
+      const textEl = link.querySelector('.nav-link-text');
+      if (textEl && I18N[lang][s]) textEl.textContent = I18N[lang][s];
+    });
+
+    const pt = $id('page-title');
+    if (pt) pt.textContent = I18N[lang][Nav.current] || Nav.current;
+
+    updateLiveIndicator(apiAvailable);
+    Sections.load(Nav.current);
+    Theme.renderPresets();
+    toast(lang === 'es' ? 'Idioma cambiado a Español' : 'Language set to English', 'info');
+  }
+
   /* ══════════════════════════════════════════════════════════════
-     QUOTES MODULE
+     QUOTE REQUESTS MODULE
   ══════════════════════════════════════════════════════════════ */
   const Quotes = {
-    getAll()         { return storage(KEY.QUOTES) || []; },
-    save(list)       { storage(KEY.QUOTES, list); },
-
-    updateStatus(id, status) {
-      const list = this.getAll();
-      const q = list.find(q => q.id === id);
-      if (q) { q.status = status; this.save(list); }
+    async getAll() {
+      const list = await API.getQuotes();
+      // Ensure every quote has an ID and status
+      let modified = false;
+      list.forEach((q, idx) => {
+        if (!q.id) {
+          q.id = 'quote_' + Date.now() + '_' + idx;
+          modified = true;
+        }
+        if (!q.status) {
+          q.status = 'new';
+          modified = true;
+        }
+      });
+      if (modified) storage(KEY.QUOTES, list);
+      return list;
     },
 
-    isThisWeek(isoStr) {
-      const d = new Date(isoStr);
-      const now = new Date();
-      const weekStart = new Date(now);
-      weekStart.setDate(now.getDate() - now.getDay());
-      weekStart.setHours(0,0,0,0);
-      return d >= weekStart;
+    async updateStatus(id, status) {
+      await API.updateQuoteStatus(id, status);
+      await this.render($id('quotes-search')?.value || '');
+      Dashboard.refresh();
+      toast(currentLang === 'es' ? `Estado actualizado a "${status}"` : `Status updated to "${status}"`, 'success');
     },
 
-    render(filter = '') {
-      const tbody = $id('quotes-tbody');
-      if (!tbody) return;
-      let list = this.getAll();
+    async deleteQuote(id) {
+      const msg = currentLang === 'es' 
+        ? '¿Eliminar esta solicitud de presupuesto? Esta acción no se puede deshacer.'
+        : 'Delete this quote request? This action cannot be undone.';
+      if (!confirm(msg)) return;
 
-      // Status filter
-      const statusFilter = $id('quotes-status-filter');
-      const sf = statusFilter ? statusFilter.value : 'all';
-      if (sf !== 'all') list = list.filter(q => (q.status || 'new') === sf);
-
-      // Search
-      if (filter) {
-        const q = filter.toLowerCase();
-        list = list.filter(x =>
-          (x.name||'').toLowerCase().includes(q) ||
-          (x.email||'').toLowerCase().includes(q) ||
-          (x.city||'').toLowerCase().includes(q) ||
-          (x.phone||'').toLowerCase().includes(q) ||
-          (x.services||[]).join(' ').toLowerCase().includes(q)
-        );
-      }
-
-      if (!list.length) {
-        tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>No quote requests found</p></div></td></tr>`;
-        return;
-      }
-
-      tbody.innerHTML = list.map((q, i) => {
-        const status = q.status || 'new';
-        const statusBadge = `<span class="status-badge status-badge--${status}">${esc(status.charAt(0).toUpperCase()+status.slice(1))}</span>`;
-        return `<tr>
-          <td>${list.length - i}</td>
-          <td>${fmt(q.createdAt)}</td>
-          <td class="table-name-cell">${esc(q.name||'—')}</td>
-          <td>${esc(q.phone||'—')}</td>
-          <td>${esc(q.email||'—')}</td>
-          <td>${esc((q.services||[]).join(', ')||'—')}</td>
-          <td>${esc(q.city||'—')}</td>
-          <td>${esc(q.propertyType||'—')}</td>
-          <td>${esc(q.frequency||'—')}</td>
-          <td>${statusBadge}</td>
-          <td><div class="table-actions">
-            <button class="btn-tbl" title="View details" data-quote-view="${esc(q.id||'')}"><i class="fa-solid fa-eye"></i></button>
-            <button class="btn-tbl btn-tbl--danger" title="Delete" data-quote-del="${esc(q.id||'')}"><i class="fa-solid fa-trash"></i></button>
-          </div></td>
-        </tr>`;
-      }).join('');
+      await API.deleteQuote(id);
+      await this.render($id('quotes-search')?.value || '');
+      Dashboard.refresh();
+      toast(currentLang === 'es' ? 'Solicitud eliminada' : 'Quote request deleted', 'info');
     },
 
-    openDetail(id) {
-      const q = this.getAll().find(x => x.id === id);
+    async openDetail(id) {
+      const list = await this.getAll();
+      const q = list.find(x => String(x.id) === String(id));
       if (!q) return;
+
       const body = $id('modal-quote-body');
       if (!body) return;
+
+      const labels = currentLang === 'es' ? {
+        name: 'Nombre', email: 'Correo Electrónico', phone: 'Teléfono',
+        pref: 'Preferencia de Contacto', city: 'Ciudad', address: 'Dirección',
+        prop: 'Tipo de Propiedad', cond: 'Condición del Terreno',
+        gate: 'Acceso de Portón', freq: 'Frecuencia', date: 'Fecha de Envío',
+        photos: 'Fotos Adjuntas', services: 'Servicios Solicitados', notes: 'Notas / Detalles'
+      } : {
+        name: 'Name', email: 'Email', phone: 'Phone',
+        pref: 'Contact Preference', city: 'City', address: 'Address',
+        prop: 'Property Type', cond: 'Lawn Condition',
+        gate: 'Gate Access', freq: 'Frequency', date: 'Submitted',
+        photos: 'Photos Attached', services: 'Services Requested', notes: 'Notes / Additional Info'
+      };
+
       const fields = [
-        ['Name', q.name], ['Email', q.email], ['Phone', q.phone],
-        ['Contact Preference', q.contactPref], ['City', q.city],
-        ['Address', q.address], ['Property Type', q.propertyType],
-        ['Condition', q.condition], ['Gate Access', q.gateAccess],
-        ['Frequency', q.frequency], ['Submitted', fmt(q.createdAt)],
-        ['Photos', q.photosCount ? q.photosCount + ' attached' : 'None']
+        [labels.name, q.name],
+        [labels.phone, q.phone],
+        [labels.email, q.email],
+        [labels.city, q.city],
+        [labels.address, q.address],
+        [labels.prop, q.propertyType],
+        [labels.freq, q.frequency],
+        [labels.cond, q.condition],
+        [labels.gate, q.gateAccess],
+        [labels.pref, q.contactPref],
+        [labels.date, fmtDate(q.createdAt)],
+        [labels.photos, q.photosCount ? `${q.photosCount} files` : 'None']
       ];
-      const services = (q.services||[]).join(', ') || '—';
-      const notes = q.notes || '—';
-      const status = q.status || 'new';
+
+      const servicesStr = Array.isArray(q.services) ? q.services.join(', ') : (q.services || '—');
+      const currentStatus = q.status || 'new';
 
       body.innerHTML = `
         <div class="quote-detail-grid">
-          ${fields.map(([l,v]) => `<div class="quote-detail-item"><label>${esc(l)}</label><p>${esc(v||'—')}</p></div>`).join('')}
-          <div class="quote-detail-item quote-detail-full"><label>Services Requested</label><p>${esc(services)}</p></div>
-          <div class="quote-detail-item quote-detail-full"><label>Notes / Additional Info</label><p>${esc(notes)}</p></div>
+          ${fields.map(([lbl, val]) => `
+            <div class="quote-detail-item">
+              <label>${esc(lbl)}</label>
+              <p>${esc(val || '—')}</p>
+            </div>
+          `).join('')}
+          <div class="quote-detail-item quote-detail-full">
+            <label>${esc(labels.services)}</label>
+            <p style="font-weight:600; color:var(--a-primary);">${esc(servicesStr)}</p>
+          </div>
+          <div class="quote-detail-item quote-detail-full">
+            <label>${esc(labels.notes)}</label>
+            <p>${esc(q.notes || '—')}</p>
+          </div>
         </div>
-        <div class="quote-status-changer">
-          <span style="font-size:12.5px;font-weight:700;color:var(--a-text-xs);align-self:center;text-transform:uppercase;letter-spacing:.06em;">Update Status:</span>
-          ${['new','contacted','quoted','won','lost'].map(s =>
-            `<button class="btn-secondary btn-sm ${s === status ? 'btn-primary' : ''}" data-status-set="${esc(s)}" data-quote-id="${esc(id)}">${s.charAt(0).toUpperCase()+s.slice(1)}</button>`
-          ).join('')}
-        </div>`;
 
-      // Status change buttons
-      $all('[data-status-set]', body).forEach(btn => {
-        btn.addEventListener('click', () => {
-          Quotes.updateStatus(btn.dataset.quoteId, btn.dataset.statusSet);
-          Quotes.render($id('quotes-search')?.value || '');
-          Dashboard.refresh();
+        <div class="quote-status-changer">
+          <span style="font-size:12px;font-weight:700;color:var(--a-text-xs);align-self:center;text-transform:uppercase;">
+            ${esc(I18N[currentLang].updateStatus)}
+          </span>
+          ${['new', 'contacted', 'quoted', 'won', 'lost'].map(st => `
+            <button type="button" class="btn-secondary btn-sm ${st === currentStatus ? 'btn-primary' : ''}" 
+              data-set-status="${st}" data-quote-id="${esc(q.id)}">
+              ${esc(st.charAt(0).toUpperCase() + st.slice(1))}
+            </button>
+          `).join('')}
+        </div>
+      `;
+
+      // Status change buttons inside modal
+      $all('[data-set-status]', body).forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const targetStatus = btn.dataset.setStatus;
+          await Quotes.updateStatus(q.id, targetStatus);
           Modals.close('modal-quote');
-          toast('Status updated to "' + btn.dataset.statusSet + '"', 'success');
         });
       });
 
       Modals.open('modal-quote');
     },
 
-    deleteQuote(id) {
-      if (!confirm('Delete this quote request? This cannot be undone.')) return;
-      const list = this.getAll().filter(q => q.id !== id);
-      this.save(list);
-      this.render($id('quotes-search')?.value || '');
-      Dashboard.refresh();
-      toast('Quote request deleted.', 'info');
+    async render(filter = '') {
+      const tbody = $id('quotes-tbody');
+      if (!tbody) return;
+
+      let list = await this.getAll();
+
+      // Status filter
+      const sf = $id('quotes-status-filter')?.value || 'all';
+      if (sf !== 'all') {
+        list = list.filter(q => (q.status || 'new') === sf);
+      }
+
+      // Keyword Search
+      if (filter) {
+        const qStr = filter.toLowerCase().trim();
+        list = list.filter(q =>
+          (q.name || '').toLowerCase().includes(qStr) ||
+          (q.email || '').toLowerCase().includes(qStr) ||
+          (q.phone || '').toLowerCase().includes(qStr) ||
+          (q.city || '').toLowerCase().includes(qStr) ||
+          (Array.isArray(q.services) ? q.services.join(' ') : '').toLowerCase().includes(qStr)
+        );
+      }
+
+      if (!list.length) {
+        tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>${esc(I18N[currentLang].noQuotesYet)}</p></div></td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map((q, i) => {
+        const st = q.status || 'new';
+        const stBadge = `<span class="status-badge status-badge--${st}">${esc(st.charAt(0).toUpperCase() + st.slice(1))}</span>`;
+        const servicesStr = Array.isArray(q.services) ? q.services.join(', ') : (q.services || '—');
+
+        return `
+          <tr>
+            <td>${list.length - i}</td>
+            <td>${fmtDate(q.createdAt)}</td>
+            <td class="table-name-cell">${esc(q.name || '—')}</td>
+            <td>${esc(q.phone || '—')}</td>
+            <td>${esc(q.email || '—')}</td>
+            <td>${esc(servicesStr)}</td>
+            <td>${esc(q.city || '—')}</td>
+            <td>${esc(q.propertyType || '—')}</td>
+            <td>${esc(q.frequency || '—')}</td>
+            <td>${stBadge}</td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn-tbl" title="View details" data-quote-view="${esc(q.id)}">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                <button type="button" class="btn-tbl btn-tbl--danger" title="Delete" data-quote-del="${esc(q.id)}">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
     },
 
-    exportCSV() {
-      const list = this.getAll();
-      if (!list.length) { toast('No quotes to export.', 'info'); return; }
-      const headers = ['#','Date','Name','Email','Phone','Services','City','Property Type','Frequency','Condition','Gate Access','Notes','Status'];
-      const rows = list.map((q, i) => [
-        list.length - i,
-        fmt(q.createdAt),
-        q.name||'',
-        q.email||'',
-        q.phone||'',
-        (q.services||[]).join('; '),
-        q.city||'',
-        q.propertyType||'',
-        q.frequency||'',
-        q.condition||'',
-        q.gateAccess||'',
-        (q.notes||'').replace(/"/g,'""'),
-        q.status||'new'
+    async exportCSV() {
+      const list = await this.getAll();
+      if (!list.length) {
+        toast('No quote records to export.', 'info');
+        return;
+      }
+      const headers = ['ID', 'Date', 'Name', 'Phone', 'Email', 'Services', 'City', 'Address', 'Property', 'Condition', 'Gate', 'Frequency', 'Notes', 'Status'];
+      const rows = list.map(q => [
+        q.id || '',
+        fmtDate(q.createdAt),
+        q.name || '',
+        q.phone || '',
+        q.email || '',
+        Array.isArray(q.services) ? q.services.join('; ') : (q.services || ''),
+        q.city || '',
+        q.address || '',
+        q.propertyType || '',
+        q.condition || '',
+        q.gateAccess || '',
+        q.frequency || '',
+        (q.notes || '').replace(/"/g, '""'),
+        q.status || 'new'
       ]);
-      const csv = [headers, ...rows].map(r => r.map(c => `"${c}"`).join(',')).join('\n');
-      const blob = new Blob([csv], { type: 'text/csv' });
+
+      const csvContent = [headers, ...rows].map(row => row.map(c => `"${c}"`).join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'fla-quote-requests-' + new Date().toISOString().split('T')[0] + '.csv';
+      a.download = `FLA-Quotes-${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
-      toast('CSV export downloaded!', 'success');
+      toast('CSV file downloaded!', 'success');
     },
 
     bind() {
-      // Search
       const search = $id('quotes-search');
-      if (search) search.addEventListener('input', () => this.render(search.value));
+      if (search) {
+        search.addEventListener('input', () => this.render(search.value));
+      }
 
-      // Status filter
-      const sf = $id('quotes-status-filter');
-      if (sf) sf.addEventListener('change', () => this.render(search?.value || ''));
+      const statusFilter = $id('quotes-status-filter');
+      if (statusFilter) {
+        statusFilter.addEventListener('change', () => this.render(search?.value || ''));
+      }
 
-      // Export
-      const expBtn = $id('export-quotes-btn');
-      if (expBtn) expBtn.addEventListener('click', () => this.exportCSV());
+      const exportBtn = $id('export-quotes-btn');
+      if (exportBtn) {
+        exportBtn.addEventListener('click', () => this.exportCSV());
+      }
 
-      // Table actions (delegated)
-      const tbl = $id('quotes-table');
-      if (tbl) {
-        tbl.addEventListener('click', e => {
+      const tbody = $id('quotes-tbody');
+      if (tbody) {
+        tbody.addEventListener('click', (e) => {
           const viewBtn = e.target.closest('[data-quote-view]');
-          if (viewBtn) { this.openDetail(viewBtn.dataset.quoteView); return; }
+          if (viewBtn) {
+            e.preventDefault();
+            this.openDetail(viewBtn.dataset.quoteView);
+            return;
+          }
+
           const delBtn = e.target.closest('[data-quote-del]');
-          if (delBtn) { this.deleteQuote(delBtn.dataset.quoteDel); }
+          if (delBtn) {
+            e.preventDefault();
+            this.deleteQuote(delBtn.dataset.quoteDel);
+          }
         });
       }
     }
   };
 
   /* ══════════════════════════════════════════════════════════════
-     REVIEWS MODULE
+     REVIEWS MODERATION & APPROVAL PIPELINE
   ══════════════════════════════════════════════════════════════ */
   const Reviews = {
-    getAll()   { return storage(KEY.REVIEWS) || []; },
-    save(list) { storage(KEY.REVIEWS, list); this.syncToFrontend(list); },
-
-    // Sync approved reviews to the key the frontend reviews.js reads
-    syncToFrontend(list) {
-      const approved = list
-        .filter(r => r.approved)
-        .map(r => ({
-          id: r.id, name: r.name, city: r.city || 'Florida',
-          propertyType: r.role || 'Homeowner',
-          service: r.service || 'Lawn Mowing & Edging',
-          rating: r.rating || 5, message: r.message,
-          createdAt: r.createdAt, source: 'admin'
-        }));
-      try { localStorage.setItem('fla_admin_approved_reviews', JSON.stringify(approved)); } catch(e){}
+    async getAll() {
+      return await API.getReviews();
     },
 
     starsHtml(rating) {
-      return Array.from({length:5}, (_,i) =>
-        `<i class="fa-${i < rating ? 'solid' : 'regular'} fa-star"></i>`
+      const r = Math.max(1, Math.min(5, parseInt(rating) || 5));
+      return Array.from({ length: 5 }, (_, i) =>
+        `<i class="fa-${i < r ? 'solid' : 'regular'} fa-star"></i>`
       ).join('');
     },
 
-    renderPending() {
-      const list = this.getAll().filter(r => !r.approved);
-      const container = $id('pending-reviews-list');
+    async approve(id, approveStatus) {
+      await API.setReviewApproval(id, approveStatus);
+      await this.renderPending();
+      await this.renderApproved();
+      Dashboard.refresh();
+      toast(approveStatus ? '✓ Review approved & published live!' : 'Review unpublished to pending.', 'success');
+    },
+
+    async delete(id) {
+      if (!confirm('Delete this customer review?')) return;
+      await API.deleteReview(id);
+      await this.renderPending();
+      await this.renderApproved();
+      Dashboard.refresh();
+      toast('Review removed.', 'info');
+    },
+
+    async renderPending() {
+      const all = await this.getAll();
+      const pending = all.filter(r => !r.approved);
+
       const count = $id('count-pending');
       const badge = $id('badge-reviews');
-      if (count) count.textContent = list.length;
-      if (badge) { badge.textContent = list.length; badge.hidden = !list.length; }
-      if (!container) return;
-      if (!list.length) {
-        container.innerHTML = `<div class="empty-state"><i class="fa-regular fa-clock"></i><p>No pending reviews — inbox is clear! 🎉</p></div>`;
+      if (count) count.textContent = pending.length;
+      if (badge) {
+        badge.textContent = pending.length;
+        badge.hidden = pending.length === 0;
+      }
+
+      const listWrap = $id('pending-reviews-list');
+      if (!listWrap) return;
+
+      if (!pending.length) {
+        listWrap.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-regular fa-clock"></i>
+            <p>${esc(I18N[currentLang].noPendingReviews)} — inbox clear! 🎉</p>
+          </div>
+        `;
         return;
       }
-      container.innerHTML = `<div class="admin-reviews-list">
-        ${list.map(r => this.reviewCard(r, 'pending')).join('')}
-      </div>`;
-      this.bindCardActions(container);
+
+      listWrap.innerHTML = `
+        <div class="admin-reviews-list">
+          ${pending.map(r => this.cardHtml(r, 'pending')).join('')}
+        </div>
+      `;
     },
 
-    renderApproved() {
-      const list = this.getAll().filter(r => r.approved);
-      const container = $id('approved-reviews-list');
+    async renderApproved() {
+      const all = await this.getAll();
+      const approved = all.filter(r => r.approved);
+
       const count = $id('count-approved');
-      if (count) count.textContent = list.length;
-      if (!container) return;
-      if (!list.length) {
-        container.innerHTML = `<div class="empty-state"><i class="fa-solid fa-check-circle" style="color:var(--a-success)"></i><p>No approved reviews yet</p></div>`;
+      if (count) count.textContent = approved.length;
+
+      const listWrap = $id('approved-reviews-list');
+      if (!listWrap) return;
+
+      if (!approved.length) {
+        listWrap.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-solid fa-check-circle" style="color:var(--a-success)"></i>
+            <p>No approved reviews published yet.</p>
+          </div>
+        `;
         return;
       }
-      container.innerHTML = `<div class="admin-reviews-list">
-        ${list.map(r => this.reviewCard(r, 'approved')).join('')}
-      </div>`;
-      this.bindCardActions(container);
-    },
 
-    reviewCard(r, context) {
-      return `<div class="review-admin-card" data-review-id="${esc(r.id)}">
-        <div class="review-admin-avatar">${initials(r.name)}</div>
-        <div class="review-admin-body">
-          <div class="review-admin-name">${esc(r.name)}</div>
-          <div class="review-admin-meta">${esc(r.role||'Homeowner')} · ${esc(r.city||'Florida')} · ${timeAgo(r.createdAt)}</div>
-          <div class="review-admin-stars">${this.starsHtml(r.rating||5)}</div>
-          <div class="review-admin-text">"${esc(r.message)}"</div>
+      listWrap.innerHTML = `
+        <div class="admin-reviews-list">
+          ${approved.map(r => this.cardHtml(r, 'approved')).join('')}
         </div>
-        <div class="review-admin-actions">
-          ${context === 'pending'
-            ? `<button class="btn-tbl btn-tbl--success" title="Approve & publish" data-rv-approve="${esc(r.id)}"><i class="fa-solid fa-check"></i></button>`
-            : `<button class="btn-tbl" title="Unapprove" data-rv-unapprove="${esc(r.id)}"><i class="fa-solid fa-eye-slash"></i></button>`
-          }
-          <button class="btn-tbl" title="Edit" data-rv-edit="${esc(r.id)}"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn-tbl btn-tbl--danger" title="Delete" data-rv-delete="${esc(r.id)}"><i class="fa-solid fa-trash"></i></button>
+      `;
+    },
+
+    cardHtml(r, type) {
+      const city = r.city || 'Central Florida';
+      const role = r.role || r.propertyType || 'Homeowner';
+      return `
+        <div class="review-admin-card" data-review-id="${esc(r.id)}">
+          <div class="review-admin-avatar">${initials(r.name)}</div>
+          <div class="review-admin-body">
+            <div class="review-admin-name">${esc(r.name || 'Anonymous')}</div>
+            <div class="review-admin-meta">${esc(role)} · ${esc(city)}, FL · ${timeAgo(r.createdAt)}</div>
+            <div class="review-admin-stars">${this.starsHtml(r.rating || 5)}</div>
+            <div class="review-admin-text">"${esc(r.message || '')}"</div>
+          </div>
+          <div class="review-admin-actions">
+            ${type === 'pending'
+              ? `<button type="button" class="btn-tbl btn-tbl--success" title="Approve & publish live" data-rv-approve="${esc(r.id)}"><i class="fa-solid fa-check"></i></button>`
+              : `<button type="button" class="btn-tbl" title="Move back to pending" data-rv-unapprove="${esc(r.id)}"><i class="fa-solid fa-eye-slash"></i></button>`
+            }
+            <button type="button" class="btn-tbl" title="Edit review" data-rv-edit="${esc(r.id)}"><i class="fa-solid fa-pen"></i></button>
+            <button type="button" class="btn-tbl btn-tbl--danger" title="Delete" data-rv-delete="${esc(r.id)}"><i class="fa-solid fa-trash"></i></button>
+          </div>
         </div>
-      </div>`;
+      `;
     },
 
-    bindCardActions(container) {
-      container.addEventListener('click', e => {
-        const approve  = e.target.closest('[data-rv-approve]');
-        const unapprove= e.target.closest('[data-rv-unapprove]');
-        const edit     = e.target.closest('[data-rv-edit]');
-        const del      = e.target.closest('[data-rv-delete]');
-        if (approve)   { this.approve(approve.dataset.rvApprove, true); }
-        if (unapprove) { this.approve(unapprove.dataset.rvUnapprove, false); }
-        if (edit)      { this.openEdit(edit.dataset.rvEdit); }
-        if (del)       { this.delete(del.dataset.rvDelete); }
-      });
-    },
-
-    approve(id, val) {
-      const list = this.getAll();
-      const r = list.find(x => x.id === id);
-      if (r) { r.approved = val; this.save(list); }
-      this.renderPending();
-      this.renderApproved();
-      Dashboard.refresh();
-      toast(val ? '✅ Review approved and published!' : 'Review unpublished.', val ? 'success' : 'info');
-    },
-
-    delete(id) {
-      if (!confirm('Delete this review? This cannot be undone.')) return;
-      const list = this.getAll().filter(r => r.id !== id);
-      this.save(list);
-      this.renderPending();
-      this.renderApproved();
-      Dashboard.refresh();
-      toast('Review deleted.', 'info');
-    },
-
-    add(formData) {
-      const r = {
-        id: uid(),
-        name: formData.get('name'),
-        city: formData.get('city'),
-        role: formData.get('role'),
-        service: formData.get('service'),
-        rating: parseInt(formData.get('rating')) || 5,
-        message: formData.get('message'),
-        approved: formData.get('approved') === 'on',
-        createdAt: new Date().toISOString()
-      };
-      const list = this.getAll();
-      list.unshift(r);
-      this.save(list);
-      this.renderPending();
-      this.renderApproved();
-      Dashboard.refresh();
-      toast(r.approved ? '✅ Review added and published!' : 'Review added — pending approval.', 'success');
-    },
-
-    openEdit(id) {
-      const r = this.getAll().find(x => x.id === id);
+    async openEdit(id) {
+      const all = await this.getAll();
+      const r = all.find(x => String(x.id) === String(id));
       if (!r) return;
+
       const form = $id('form-edit-review');
       if (!form) return;
+
       form.querySelector('[name="id"]').value = r.id;
       form.querySelector('[name="name"]').value = r.name || '';
       form.querySelector('[name="city"]').value = r.city || '';
-      form.querySelector('[name="role"]').value = r.role || '';
+      form.querySelector('[name="role"]').value = r.role || r.propertyType || '';
       form.querySelector('[name="message"]').value = r.message || '';
       form.querySelector('[name="rating"]').value = r.rating || 5;
+
       StarPicker.set('edit-star-picker', r.rating || 5);
       Modals.open('modal-review-edit');
     },
 
-    saveEdit(formData) {
-      const id = formData.get('id');
-      const list = this.getAll();
-      const r = list.find(x => x.id === id);
-      if (!r) return;
-      r.name    = formData.get('name');
-      r.city    = formData.get('city');
-      r.role    = formData.get('role');
-      r.message = formData.get('message');
-      r.rating  = parseInt(formData.get('rating')) || 5;
-      this.save(list);
-      this.renderPending();
-      this.renderApproved();
-      Modals.close('modal-review-edit');
-      toast('Review updated!', 'success');
-    },
-
     bind() {
-      // Add review form
-      const addForm = $id('form-add-review');
-      if (addForm) {
-        addForm.addEventListener('submit', e => {
-          e.preventDefault();
-          if (!addForm.querySelector('[name="name"]').value.trim()) {
-            toast('Please enter reviewer name.', 'error'); return;
-          }
-          if (!addForm.querySelector('[name="message"]').value.trim()) {
-            toast('Please enter review text.', 'error'); return;
-          }
-          this.add(new FormData(addForm));
-          addForm.reset();
-          StarPicker.set('add-star-picker', 5);
-          addForm.querySelector('[name="rating"]').value = 5;
+      // Pending list actions
+      const pendingWrap = $id('pending-reviews-list');
+      if (pendingWrap) {
+        pendingWrap.addEventListener('click', (e) => {
+          const btnApprove = e.target.closest('[data-rv-approve]');
+          if (btnApprove) this.approve(btnApprove.dataset.rvApprove, true);
+          const btnEdit = e.target.closest('[data-rv-edit]');
+          if (btnEdit) this.openEdit(btnEdit.dataset.rvEdit);
+          const btnDel = e.target.closest('[data-rv-delete]');
+          if (btnDel) this.delete(btnDel.dataset.rvDelete);
         });
       }
 
-      // Edit form
-      const editForm = $id('form-edit-review');
-      if (editForm) {
-        editForm.addEventListener('submit', e => {
+      // Approved list actions
+      const approvedWrap = $id('approved-reviews-list');
+      if (approvedWrap) {
+        approvedWrap.addEventListener('click', (e) => {
+          const btnUnapprove = e.target.closest('[data-rv-unapprove]');
+          if (btnUnapprove) this.approve(btnUnapprove.dataset.rvUnapprove, false);
+          const btnEdit = e.target.closest('[data-rv-edit]');
+          if (btnEdit) this.openEdit(btnEdit.dataset.rvEdit);
+          const btnDel = e.target.closest('[data-rv-delete]');
+          if (btnDel) this.delete(btnDel.dataset.rvDelete);
+        });
+      }
+
+      // Add Review form
+      const formAdd = $id('form-add-review');
+      if (formAdd) {
+        formAdd.addEventListener('submit', async (e) => {
           e.preventDefault();
-          this.saveEdit(new FormData(editForm));
+          const name = formAdd.querySelector('[name="name"]').value.trim();
+          const message = formAdd.querySelector('[name="message"]').value.trim();
+
+          if (!name || !message) {
+            toast('Please fill out reviewer name and review text.', 'error');
+            return;
+          }
+
+          const fd = new FormData(formAdd);
+          const rev = {
+            id: 'rev_' + Date.now(),
+            name: fd.get('name'),
+            city: fd.get('city') || 'Florida',
+            role: fd.get('role') || 'Homeowner',
+            service: fd.get('service') || 'Lawn Mowing & Edging',
+            rating: parseInt(fd.get('rating')) || 5,
+            message: fd.get('message'),
+            approved: fd.get('approved') === 'on',
+            createdAt: new Date().toISOString()
+          };
+
+          await API.saveReview(rev);
+          formAdd.reset();
+          StarPicker.set('add-star-picker', 5);
+          formAdd.querySelector('[name="rating"]').value = 5;
+
+          await this.renderPending();
+          await this.renderApproved();
+          Dashboard.refresh();
+          toast(rev.approved ? '✓ Review added & published live!' : '✓ Review saved to pending moderation', 'success');
+        });
+      }
+
+      // Edit Review form
+      const formEdit = $id('form-edit-review');
+      if (formEdit) {
+        formEdit.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const fd = new FormData(formEdit);
+          const id = fd.get('id');
+          const updates = {
+            name: fd.get('name'),
+            city: fd.get('city'),
+            role: fd.get('role'),
+            message: fd.get('message'),
+            rating: parseInt(fd.get('rating')) || 5
+          };
+
+          await API.updateReview(id, updates);
+          Modals.close('modal-review-edit');
+          await this.renderPending();
+          await this.renderApproved();
+          Dashboard.refresh();
+          toast('✓ Review updated successfully!', 'success');
         });
       }
     }
   };
 
   /* ══════════════════════════════════════════════════════════════
-     PORTFOLIO MODULE
+     PORTFOLIO MANAGEMENT
   ══════════════════════════════════════════════════════════════ */
   const Portfolio = {
-    getAll()   { return storage(KEY.PORTFOLIO) || []; },
-    save(list) { storage(KEY.PORTFOLIO, list); },
+    async getAll() {
+      return await API.getPortfolio();
+    },
 
-    render() {
+    async render() {
       const grid = $id('portfolio-grid');
       if (!grid) return;
-      const list = this.getAll();
+
+      const list = await this.getAll();
       if (!list.length) {
-        grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-images"></i><p>No portfolio items yet. Click "Add Item" to get started.</p></div>`;
+        grid.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-solid fa-images"></i>
+            <p>No portfolio items yet. Click "Add Item" to add your first showcase project.</p>
+          </div>
+        `;
         return;
       }
+
       grid.innerHTML = list.map(p => {
-        const thumb = p.images && p.images[0]
+        const thumb = (p.images && p.images[0])
           ? `<img src="${esc(p.images[0])}" alt="${esc(p.title)}" class="portfolio-admin-thumb">`
           : `<div class="portfolio-admin-thumb-placeholder"><i class="fa-solid fa-image"></i></div>`;
-        return `<div class="portfolio-admin-card">
-          ${thumb}
-          <div class="portfolio-admin-info">
-            <span class="portfolio-admin-category">${esc(p.category||'')}</span>
-            <div class="portfolio-admin-title">${esc(p.title)}</div>
-            <div class="portfolio-admin-desc">${esc(p.description)}</div>
-            <div class="portfolio-admin-actions">
-              <button class="btn-secondary btn-sm" data-pf-edit="${esc(p.id)}"><i class="fa-solid fa-pen"></i> Edit</button>
-              <button class="btn-secondary btn-sm btn-danger" data-pf-delete="${esc(p.id)}"><i class="fa-solid fa-trash"></i> Remove</button>
+
+        return `
+          <div class="portfolio-admin-card" data-portfolio-id="${esc(p.id)}">
+            ${thumb}
+            <div class="portfolio-admin-info">
+              <span class="portfolio-admin-category">${esc(p.category || 'Maintenance')}</span>
+              <div class="portfolio-admin-title">${esc(p.title)}</div>
+              <div class="portfolio-admin-desc">${esc(p.description || '')}</div>
+              <div class="portfolio-admin-actions">
+                <button type="button" class="btn-secondary btn-sm" data-pf-edit="${esc(p.id)}">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </button>
+                <button type="button" class="btn-secondary btn-sm btn-danger" data-pf-del="${esc(p.id)}">
+                  <i class="fa-solid fa-trash"></i> Remove
+                </button>
+              </div>
             </div>
           </div>
-        </div>`;
+        `;
       }).join('');
-
-      grid.addEventListener('click', e => {
-        const editBtn = e.target.closest('[data-pf-edit]');
-        const delBtn  = e.target.closest('[data-pf-delete]');
-        if (editBtn) { this.openEdit(editBtn.dataset.pfEdit); }
-        if (delBtn)  { this.delete(delBtn.dataset.pfDelete); }
-      });
     },
 
     openAdd() {
@@ -636,36 +1300,44 @@
       Modals.open('modal-portfolio');
     },
 
-    openEdit(id) {
-      const p = this.getAll().find(x => x.id === id);
+    async openEdit(id) {
+      const list = await this.getAll();
+      const p = list.find(x => String(x.id) === String(id));
       if (!p) return;
+
       const form = $id('form-portfolio');
       if (!form) return;
+
       form.querySelector('[name="id"]').value = p.id;
       form.querySelector('[name="title"]').value = p.title || '';
       form.querySelector('[name="category"]').value = p.category || 'Lawn Mowing';
       form.querySelector('[name="description"]').value = p.description || '';
       form.querySelector('[name="location"]').value = p.location || '';
       form.querySelector('[name="date"]').value = p.date || '';
+
       $id('portfolio-modal-title').textContent = 'Edit Portfolio Item';
       $id('portfolio-submit-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
 
-      // Restore image previews
       PortfolioUpload.reset();
-      PortfolioUpload.existingImages = p.images || [];
+      PortfolioUpload.existingImages = Array.isArray(p.images) ? [...p.images] : [];
+
       const prevWrap = $id('preview-images');
       if (prevWrap) {
-        prevWrap.innerHTML = (p.images||[]).map((src, i) =>
-          `<div class="preview-img-item" data-img-idx="${i}">
-            <img src="${esc(src)}" alt="Image ${i+1}">
-            <button type="button" class="preview-img-remove" data-rm-idx="${i}"><i class="fa-solid fa-xmark"></i></button>
-          </div>`
-        ).join('');
-        $all('[data-rm-idx]', prevWrap).forEach(btn => {
-          btn.addEventListener('click', () => {
-            const idx = parseInt(btn.dataset.rmIdx);
+        prevWrap.innerHTML = PortfolioUpload.existingImages.map((src, i) => `
+          <div class="preview-img-item">
+            <img src="${esc(src)}" alt="Thumbnail">
+            <button type="button" class="preview-img-remove" data-rm-img="${i}">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        `).join('');
+
+        $all('[data-rm-img]', prevWrap).forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const idx = parseInt(btn.dataset.rmImg);
             PortfolioUpload.existingImages.splice(idx, 1);
-            Portfolio.openEdit(id); // re-open to refresh
+            btn.closest('.preview-img-item')?.remove();
           });
         });
       }
@@ -673,81 +1345,77 @@
       Modals.open('modal-portfolio');
     },
 
-    save_item(formData, images, video) {
-      const id = formData.get('id');
-      const list = this.getAll();
-      const isEdit = !!id;
-      const existing = isEdit ? list.find(x => x.id === id) : null;
-
-      const item = {
-        id: isEdit ? id : uid(),
-        title:       formData.get('title'),
-        category:    formData.get('category'),
-        description: formData.get('description'),
-        location:    formData.get('location'),
-        date:        formData.get('date'),
-        images:      images,
-        video:       video || (existing ? existing.video : null),
-        createdAt:   isEdit ? (existing?.createdAt || new Date().toISOString()) : new Date().toISOString(),
-        updatedAt:   new Date().toISOString()
-      };
-
-      if (isEdit) {
-        const idx = list.findIndex(x => x.id === id);
-        if (idx > -1) list[idx] = item;
-      } else {
-        list.unshift(item);
-      }
-
-      this.save(list);
-      this.render();
-      Modals.close('modal-portfolio');
+    async delete(id) {
+      if (!confirm('Remove this portfolio project?')) return;
+      await API.deletePortfolio(id);
+      await this.render();
       Dashboard.refresh();
-      toast(isEdit ? '✅ Portfolio item updated!' : '✅ Portfolio item added!', 'success');
-    },
-
-    delete(id) {
-      if (!confirm('Remove this portfolio item? This cannot be undone.')) return;
-      const list = this.getAll().filter(x => x.id !== id);
-      this.save(list);
-      this.render();
-      Dashboard.refresh();
-      toast('Portfolio item removed.', 'info');
+      toast('Portfolio project removed.', 'info');
     },
 
     bind() {
-      // Add button
       const addBtn = $id('add-portfolio-btn');
       if (addBtn) addBtn.addEventListener('click', () => this.openAdd());
 
-      // Form submit
+      const grid = $id('portfolio-grid');
+      if (grid) {
+        grid.addEventListener('click', (e) => {
+          const editBtn = e.target.closest('[data-pf-edit]');
+          if (editBtn) this.openEdit(editBtn.dataset.pfEdit);
+          const delBtn = e.target.closest('[data-pf-del]');
+          if (delBtn) this.delete(delBtn.dataset.pfDel);
+        });
+      }
+
       const form = $id('form-portfolio');
       if (form) {
-        form.addEventListener('submit', async e => {
+        form.addEventListener('submit', async (e) => {
           e.preventDefault();
-          const submitBtn = $id('portfolio-submit-btn');
-          if (!form.querySelector('[name="title"]').value.trim()) {
-            toast('Please enter a title.', 'error'); return;
+          const title = form.querySelector('[name="title"]').value.trim();
+          const desc = form.querySelector('[name="description"]').value.trim();
+
+          if (!title || !desc) {
+            toast('Please enter a project title and description.', 'error');
+            return;
           }
-          if (!form.querySelector('[name="description"]').value.trim()) {
-            toast('Please enter a description.', 'error'); return;
-          }
-          if (submitBtn) submitBtn.disabled = true;
+
+          const btn = $id('portfolio-submit-btn');
+          if (btn) btn.disabled = true;
+
           try {
             const images = await PortfolioUpload.getImages();
-            const video  = await PortfolioUpload.getVideo();
-            this.save_item(new FormData(form), images, video);
-          } catch(err) {
-            toast(err.message || 'Upload error.', 'error');
+            const video = await PortfolioUpload.getVideo();
+            const fd = new FormData(form);
+            const id = fd.get('id');
+
+            const item = {
+              id: id || 'port_' + Date.now(),
+              title: fd.get('title'),
+              category: fd.get('category'),
+              description: fd.get('description'),
+              location: fd.get('location'),
+              date: fd.get('date'),
+              images: images,
+              video: video,
+              updatedAt: new Date().toISOString()
+            };
+
+            await API.savePortfolio(item);
+            Modals.close('modal-portfolio');
+            await this.render();
+            Dashboard.refresh();
+            toast('✓ Portfolio project saved successfully!', 'success');
+          } catch (err) {
+            toast('Failed to save portfolio project: ' + err.message, 'error');
           } finally {
-            if (submitBtn) submitBtn.disabled = false;
+            if (btn) btn.disabled = false;
           }
         });
       }
     }
   };
 
-  /* Upload handler */
+  /* Upload Helper for Portfolio */
   const PortfolioUpload = {
     newFiles: [],
     newVideo: null,
@@ -763,7 +1431,7 @@
       return new Promise((resolve, reject) => {
         const r = new FileReader();
         r.onload = () => resolve(r.result);
-        r.onerror = () => reject(new Error('Could not read file: ' + file.name));
+        r.onerror = () => reject(new Error('Failed reading ' + file.name));
         r.readAsDataURL(file);
       });
     },
@@ -775,87 +1443,49 @@
 
     async getVideo() {
       if (!this.newVideo) return null;
-      return this.readFile(this.newVideo);
+      return await this.readFile(this.newVideo);
     },
 
     bind() {
-      // Image upload
-      const imgZone  = $id('img-drop-zone');
+      const imgZone = $id('img-drop-zone');
       const imgInput = $id('input-portfolio-images');
       if (imgZone && imgInput) {
         imgZone.addEventListener('click', () => imgInput.click());
         imgInput.addEventListener('change', () => this.handleImages(imgInput.files));
-        this.bindDrop(imgZone, files => {
-          const imgs = [...files].filter(f => f.type.startsWith('image/'));
-          this.handleImages(imgs);
-        });
       }
 
-      // Video upload
-      const vidZone  = $id('vid-drop-zone');
+      const vidZone = $id('vid-drop-zone');
       const vidInput = $id('input-portfolio-video');
       if (vidZone && vidInput) {
         vidZone.addEventListener('click', () => vidInput.click());
-        vidInput.addEventListener('change', () => this.handleVideo(vidInput.files[0]));
-        this.bindDrop(vidZone, files => {
-          const vid = [...files].find(f => f.type.startsWith('video/'));
-          if (vid) this.handleVideo(vid);
-        });
-      }
-
-      // Logo upload
-      const logoZone  = $id('logo-drop-zone');
-      const logoInput = $id('input-logo');
-      if (logoZone && logoInput) {
-        logoZone.addEventListener('click', () => logoInput.click());
-        logoInput.addEventListener('change', () => {
-          const f = logoInput.files[0];
-          if (!f) return;
-          if (f.size > 500*1024) { toast('Logo must be under 500 KB.', 'error'); return; }
-          const r = new FileReader();
-          r.onload = () => {
-            const prev = $id('logo-new-preview');
-            if (prev) prev.innerHTML = `<img src="${r.result}" style="max-height:60px;margin-top:8px;border-radius:var(--a-radius-sm);">`;
-            const branding = storage(KEY.BRANDING) || {};
-            branding.logo = r.result;
-            storage(KEY.BRANDING, branding);
-            toast('Logo saved! Apply changes to see on website.', 'success');
-          };
-          r.readAsDataURL(f);
-        });
-      }
-
-      // Favicon upload
-      const favZone  = $id('favicon-drop-zone');
-      const favInput = $id('input-favicon');
-      if (favZone && favInput) {
-        favZone.addEventListener('click', () => favInput.click());
-        favInput.addEventListener('change', () => {
-          const f = favInput.files[0];
-          if (!f) return;
-          const r = new FileReader();
-          r.onload = () => {
-            const prev = $id('favicon-preview');
-            if (prev) prev.innerHTML = `<img src="${r.result}" style="width:32px;height:32px;margin-top:8px;border-radius:4px;">`;
-            const branding = storage(KEY.BRANDING) || {};
-            branding.favicon = r.result;
-            storage(KEY.BRANDING, branding);
-            toast('Favicon saved!', 'success');
-          };
-          r.readAsDataURL(f);
+        vidInput.addEventListener('change', () => {
+          const file = vidInput.files[0];
+          if (file) {
+            if (file.size > 10 * 1024 * 1024) {
+              toast('Video must be under 10 MB limit.', 'error');
+              return;
+            }
+            this.newVideo = file;
+            const wrap = $id('preview-video');
+            if (wrap) {
+              wrap.innerHTML = `<video src="${URL.createObjectURL(file)}" controls style="max-width:280px;margin-top:10px;border-radius:8px;border:1px solid var(--a-border);"></video>`;
+            }
+          }
         });
       }
     },
 
     handleImages(files) {
       const MAX = 3;
-      const existing = this.existingImages.length;
-      const remaining = MAX - existing - this.newFiles.length;
-      const toAdd = [...files].slice(0, remaining);
+      const space = MAX - this.existingImages.length - this.newFiles.length;
+      const slice = [...files].slice(0, space);
 
-      toAdd.forEach(f => {
+      slice.forEach(f => {
         if (!f.type.startsWith('image/')) return;
-        if (f.size > 3*1024*1024) { toast(`"${f.name}" exceeds 3 MB limit.`, 'error'); return; }
+        if (f.size > 3 * 1024 * 1024) {
+          toast(`"${f.name}" exceeds 3 MB limit.`, 'error');
+          return;
+        }
         this.newFiles.push(f);
         const r = new FileReader();
         r.onload = () => {
@@ -863,215 +1493,113 @@
           if (!wrap) return;
           const item = document.createElement('div');
           item.className = 'preview-img-item';
-          item.innerHTML = `<img src="${r.result}" alt="Preview"><button type="button" class="preview-img-remove"><i class="fa-solid fa-xmark"></i></button>`;
-          item.querySelector('.preview-img-remove').addEventListener('click', () => {
+          item.innerHTML = `
+            <img src="${r.result}" alt="Preview">
+            <button type="button" class="preview-img-remove"><i class="fa-solid fa-xmark"></i></button>
+          `;
+          item.querySelector('.preview-img-remove').addEventListener('click', (e) => {
+            e.preventDefault();
             const idx = this.newFiles.indexOf(f);
-            if (idx > -1) this.newFiles.splice(idx, 1);
+            if (idx !== -1) this.newFiles.splice(idx, 1);
             item.remove();
           });
           wrap.appendChild(item);
         };
         r.readAsDataURL(f);
       });
-
-      if ([...files].length > remaining) {
-        toast(`Max ${MAX} images allowed. ${[...files].length - remaining} skipped.`, 'info');
-      }
-    },
-
-    handleVideo(file) {
-      if (!file) return;
-      if (file.size > 10*1024*1024) { toast('Video must be under 10 MB.', 'error'); return; }
-      this.newVideo = file;
-      const r = new FileReader();
-      r.onload = () => {
-        const wrap = $id('preview-video');
-        if (!wrap) return;
-        wrap.innerHTML = `<video src="${r.result}" controls style="max-width:300px;margin-top:12px;border-radius:var(--a-radius);border:1px solid var(--a-border);"></video>`;
-      };
-      r.readAsDataURL(file);
-    },
-
-    bindDrop(zone, handler) {
-      zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-      zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-      zone.addEventListener('drop', e => {
-        e.preventDefault();
-        zone.classList.remove('drag-over');
-        handler(e.dataTransfer.files);
-      });
     }
   };
 
   /* ══════════════════════════════════════════════════════════════
-     SITE SETTINGS MODULE
-  ══════════════════════════════════════════════════════════════ */
-  const Settings = {
-    loadMeta() {
-      const meta = storage(KEY.META) || {};
-      const form = $id('form-meta');
-      if (!form) return;
-      form.querySelector('[name="siteTitle"]').value     = meta.siteTitle || '';
-      form.querySelector('[name="metaDesc"]').value      = meta.metaDesc || '';
-      form.querySelector('[name="metaKeywords"]').value  = meta.metaKeywords || '';
-      form.querySelector('[name="ogImage"]').value       = meta.ogImage || '';
-      this.updateDescCount(meta.metaDesc || '');
-    },
-
-    updateDescCount(text) {
-      const el = $id('meta-desc-chars');
-      if (el) {
-        el.textContent = text.length;
-        el.style.color = text.length > 160 ? 'var(--a-danger)' : 'var(--a-text-xs)';
-      }
-    },
-
-    saveMeta(formData) {
-      const meta = {
-        siteTitle:    formData.get('siteTitle'),
-        metaDesc:     formData.get('metaDesc'),
-        metaKeywords: formData.get('metaKeywords'),
-        ogImage:      formData.get('ogImage')
-      };
-      storage(KEY.META, meta);
-      const msg = $id('meta-save-msg');
-      if (msg) { msg.hidden = false; setTimeout(() => msg.hidden = true, 3000); }
-      toast('Meta settings saved!', 'success');
-    },
-
-    loadBranding() {
-      const b = storage(KEY.BRANDING) || {};
-      const phone = $id('branding-phone');
-      const email = $id('branding-email');
-      if (phone) phone.value = b.phone || '';
-      if (email) email.value = b.email || '';
-    },
-
-    saveBranding() {
-      const b = storage(KEY.BRANDING) || {};
-      const phone = $id('branding-phone');
-      const email = $id('branding-email');
-      b.phone = phone ? phone.value : '';
-      b.email = email ? email.value : '';
-      storage(KEY.BRANDING, b);
-      const msg = $id('branding-save-msg');
-      if (msg) { msg.hidden = false; setTimeout(() => msg.hidden = true, 3000); }
-      toast('Branding saved!', 'success');
-    },
-
-    bind() {
-      const metaForm = $id('form-meta');
-      if (metaForm) {
-        const textarea = metaForm.querySelector('[name="metaDesc"]');
-        if (textarea) textarea.addEventListener('input', () => this.updateDescCount(textarea.value));
-        metaForm.addEventListener('submit', e => { e.preventDefault(); this.saveMeta(new FormData(metaForm)); });
-      }
-
-      const saveBtn = $id('save-branding-btn');
-      if (saveBtn) saveBtn.addEventListener('click', () => this.saveBranding());
-
-      const passForm = $id('form-change-pass');
-      if (passForm) {
-        passForm.addEventListener('submit', e => {
-          e.preventDefault();
-          const fd = new FormData(passForm);
-          const result = Auth.changePassword(fd.get('currentPass'), fd.get('newPass'), fd.get('confirmPass'));
-          const fb = $id('pass-change-feedback');
-          if (fb) {
-            fb.className = `form-feedback form-feedback--${result.ok ? 'ok' : 'error'}`;
-            fb.textContent = result.msg;
-            fb.hidden = false;
-          }
-          if (result.ok) { passForm.reset(); toast('Password updated!', 'success'); }
-          else { toast(result.msg, 'error'); }
-        });
-      }
-    }
-  };
-
-  /* ══════════════════════════════════════════════════════════════
-     THEME / COLOR MODULE
+     DYNAMIC THEME & COLOR CHANGER (REALTIME AUTOMATIC)
   ══════════════════════════════════════════════════════════════ */
   const Theme = {
-    current: {},
+    current: { ...DEFAULT_THEME },
 
-    load() {
-      this.current = { ...DEFAULT_THEME, ...(storage(KEY.THEME) || {}) };
+    async load() {
+      this.current = await API.getTheme();
+      this.applyToDocument(this.current);
     },
 
-    save(colors) {
-      storage(KEY.THEME, colors);
-      this.current = colors;
+    applyToDocument(c) {
+      // Apply CSS overrides to admin document
+      document.documentElement.style.setProperty('--a-primary', c.primary);
+      document.documentElement.style.setProperty('--a-primary-h', c.primaryH || c.primary);
+
+      // Trigger frontend theme injector if on same page or window
+      if (window.FLATheme && window.FLATheme.apply) {
+        window.FLATheme.apply();
+      }
     },
 
-    apply(colors) {
-      // Apply to frontend via global key (read by theme.js)
-      storage(KEY.THEME, colors);
-      this.current = colors;
+    async saveAndBroadcast(c) {
+      this.current = { ...c };
+      await API.saveTheme(this.current);
+      this.applyToDocument(this.current);
+      toast(I18N[currentLang].themeApplied, 'success');
     },
 
     renderPresets() {
       const container = $id('preset-swatches');
       if (!container) return;
-      const saved = storage(KEY.THEME);
-      container.innerHTML = COLOR_PRESETS.map((preset, i) => {
-        const isActive = saved && saved.primary === preset.colors.primary;
-        return `<div class="preset-swatch ${isActive ? 'active' : ''}" data-preset="${i}" title="Apply ${esc(preset.name)} theme">
-          <div class="preset-dots">
-            <div class="preset-dot" style="background:${preset.colors.primary}"></div>
-            <div class="preset-dot" style="background:${preset.colors.secondary}"></div>
-            <div class="preset-dot" style="background:${preset.colors.heading}"></div>
-          </div>
-          <span class="preset-name">${esc(preset.name)}</span>
-        </div>`;
-      }).join('');
 
-      container.addEventListener('click', e => {
-        const swatch = e.target.closest('[data-preset]');
-        if (!swatch) return;
-        const preset = COLOR_PRESETS[parseInt(swatch.dataset.preset)];
-        this.applyPreset(preset.colors);
-        $all('.preset-swatch').forEach(s => s.classList.remove('active'));
-        swatch.classList.add('active');
-      });
+      container.innerHTML = COLOR_PRESETS.map((preset, i) => {
+        const isActive = this.current.primary === preset.colors.primary;
+        const displayName = currentLang === 'es' ? (preset.nameEs || preset.name) : preset.name;
+        return `
+          <div class="preset-swatch ${isActive ? 'active' : ''}" data-preset-idx="${i}" title="Apply ${esc(displayName)}">
+            <div class="preset-dots">
+              <div class="preset-dot" style="background:${preset.colors.primary}"></div>
+              <div class="preset-dot" style="background:${preset.colors.secondary}"></div>
+              <div class="preset-dot" style="background:${preset.colors.heading}"></div>
+            </div>
+            <span class="preset-name">${esc(displayName)}</span>
+          </div>
+        `;
+      }).join('');
     },
 
     renderPickers() {
       const grid = $id('color-pickers-grid');
       if (!grid) return;
-      this.load();
-      grid.innerHTML = COLOR_FIELDS.map(field => `
-        <div class="color-picker-card">
-          <label class="color-picker-label">${esc(field.label)}</label>
-          <div class="color-picker-row">
-            <input type="color" id="cp-${field.id}" value="${esc(this.current[field.id] || '#007f5f')}">
-            <input type="text" id="cph-${field.id}" value="${esc(this.current[field.id] || '#007f5f')}" maxlength="7" placeholder="#000000">
-          </div>
-          <p class="color-picker-desc">${esc(field.desc)}</p>
-        </div>`).join('');
 
-      // Sync pickers ↔ hex inputs
-      COLOR_FIELDS.forEach(field => {
-        const picker = $id('cp-' + field.id);
-        const hex    = $id('cph-' + field.id);
+      grid.innerHTML = COLOR_FIELDS.map(f => {
+        const val = this.current[f.id] || DEFAULT_THEME[f.id] || '#007f5f';
+        const label = currentLang === 'es' ? (f.labelEs || f.label) : f.label;
+        return `
+          <div class="color-picker-card">
+            <label class="color-picker-label">${esc(label)}</label>
+            <div class="color-picker-row">
+              <input type="color" id="cp-${f.id}" value="${esc(val)}">
+              <input type="text" id="cph-${f.id}" value="${esc(val)}" maxlength="7">
+            </div>
+            <p class="color-picker-desc">${esc(f.desc)}</p>
+          </div>
+        `;
+      }).join('');
+
+      // Wire two-way binding & immediate live preview
+      COLOR_FIELDS.forEach(f => {
+        const picker = $id('cp-' + f.id);
+        const hex = $id('cph-' + f.id);
         if (picker && hex) {
           picker.addEventListener('input', () => {
             hex.value = picker.value;
-            this.updatePreviewFromPickers();
+            this.updateLivePreview();
           });
           hex.addEventListener('input', () => {
             if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) {
               picker.value = hex.value;
-              this.updatePreviewFromPickers();
+              this.updateLivePreview();
             }
           });
         }
       });
 
-      this.updatePreviewFromPickers();
+      this.updateLivePreview();
     },
 
-    getCurrentPickerColors() {
+    getCurrentFromPickers() {
       const c = {};
       COLOR_FIELDS.forEach(f => {
         const picker = $id('cp-' + f.id);
@@ -1080,346 +1608,418 @@
       return c;
     },
 
-    applyPreset(colors) {
-      COLOR_FIELDS.forEach(f => {
-        const picker = $id('cp-' + f.id);
-        const hex    = $id('cph-' + f.id);
-        if (picker && colors[f.id]) picker.value = colors[f.id];
-        if (hex    && colors[f.id]) hex.value    = colors[f.id];
-      });
-      this.updatePreviewFromPickers();
-    },
-
-    updatePreviewFromPickers() {
-      const c = this.getCurrentPickerColors();
-      const previewH  = $id('preview-heading');
-      const previewP  = $id('preview-body');
-      const previewBtn= $id('preview-button');
-      if (previewH)   previewH.style.color = c.heading;
-      if (previewP)   previewP.style.color = c.body;
-      if (previewBtn) {
-        previewBtn.style.background = c.primary;
-        previewBtn.style.color      = c.btnText;
-        previewBtn.style.border     = 'none';
-        previewBtn.style.padding    = '10px 20px';
-        previewBtn.style.borderRadius = '8px';
-        previewBtn.style.cursor     = 'default';
+    updateLivePreview() {
+      const c = this.getCurrentFromPickers();
+      const h = $id('preview-heading');
+      const p = $id('preview-body');
+      const btn = $id('preview-button');
+      if (h) h.style.color = c.heading;
+      if (p) p.style.color = c.body;
+      if (btn) {
+        btn.style.background = c.primary;
+        btn.style.color = c.btnText;
+        btn.style.borderColor = c.primary;
       }
     },
 
     bind() {
-      const applyBtn = $id('apply-theme-btn');
-      if (applyBtn) {
-        applyBtn.addEventListener('click', () => {
-          const c = this.getCurrentPickerColors();
-          this.apply(c);
-          const msg = $id('theme-save-msg');
-          if (msg) { msg.hidden = false; setTimeout(() => msg.hidden = true, 4000); }
-          toast('✅ Theme colors applied to website!', 'success');
-          this.renderPresets(); // refresh active state
+      // Clicking ANY preset AUTOMATICALLY updates all colors in real time!
+      const presetWrap = $id('preset-swatches');
+      if (presetWrap) {
+        presetWrap.addEventListener('click', async (e) => {
+          const swatch = e.target.closest('[data-preset-idx]');
+          if (!swatch) return;
+          const idx = parseInt(swatch.dataset.presetIdx);
+          const preset = COLOR_PRESETS[idx];
+          if (!preset) return;
+
+          // Update pickers
+          COLOR_FIELDS.forEach(f => {
+            const picker = $id('cp-' + f.id);
+            const hex = $id('cph-' + f.id);
+            if (picker && preset.colors[f.id]) picker.value = preset.colors[f.id];
+            if (hex && preset.colors[f.id]) hex.value = preset.colors[f.id];
+          });
+
+          this.updateLivePreview();
+          await this.saveAndBroadcast(preset.colors);
+          this.renderPresets();
         });
       }
 
+      // Explicit Apply Button
+      const applyBtn = $id('apply-theme-btn');
+      if (applyBtn) {
+        applyBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const c = this.getCurrentFromPickers();
+          await this.saveAndBroadcast(c);
+          this.renderPresets();
+        });
+      }
+
+      // Reset Button
       const resetBtn = $id('reset-theme-btn');
       if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-          if (!confirm('Reset to default green theme?')) return;
-          localStorage.removeItem(KEY.THEME);
-          this.load();
+        resetBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          if (!confirm('Reset colors back to default Forest Green?')) return;
+          await this.saveAndBroadcast(DEFAULT_THEME);
           this.renderPickers();
           this.renderPresets();
-          toast('Theme reset to default.', 'info');
         });
       }
     }
   };
 
   /* ══════════════════════════════════════════════════════════════
-     STAR PICKER
+     SITE SETTINGS & SEO
   ══════════════════════════════════════════════════════════════ */
-  const StarPicker = {
-    init(pickerId, hiddenName) {
-      const container = $id(pickerId);
-      if (!container) return;
-      const form = container.closest('form');
-      const hidden = form ? form.querySelector(`[name="${hiddenName}"]`) : null;
-      let val = parseInt(hidden?.value) || 5;
+  const Settings = {
+    load() {
+      const meta = storage(KEY.META) || {};
+      const form = $id('form-meta');
+      if (form) {
+        form.querySelector('[name="siteTitle"]').value = meta.siteTitle || '';
+        form.querySelector('[name="metaDesc"]').value = meta.metaDesc || '';
+        form.querySelector('[name="metaKeywords"]').value = meta.metaKeywords || '';
+        form.querySelector('[name="ogImage"]').value = meta.ogImage || '';
+      }
 
-      function update(n) {
-        val = n;
-        if (hidden) hidden.value = n;
-        $all('.star-pick', container).forEach(s => {
-          s.classList.toggle('star-pick--on', parseInt(s.dataset.v) <= n);
+      const branding = storage(KEY.BRANDING) || {};
+      const phone = $id('branding-phone');
+      const email = $id('branding-email');
+      if (phone) phone.value = branding.phone || '';
+      if (email) email.value = branding.email || '';
+    },
+
+    bind() {
+      const formMeta = $id('form-meta');
+      if (formMeta) {
+        formMeta.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const fd = new FormData(formMeta);
+          const meta = {
+            siteTitle: fd.get('siteTitle'),
+            metaDesc: fd.get('metaDesc'),
+            metaKeywords: fd.get('metaKeywords'),
+            ogImage: fd.get('ogImage')
+          };
+          storage(KEY.META, meta);
+          toast('✓ SEO Meta settings saved!', 'success');
         });
       }
 
-      $all('.star-pick', container).forEach(s => {
-        s.addEventListener('click', () => update(parseInt(s.dataset.v)));
-        s.addEventListener('mouseenter', () => {
-          $all('.star-pick', container).forEach(x =>
-            x.classList.toggle('star-pick--on', parseInt(x.dataset.v) <= parseInt(s.dataset.v))
-          );
+      const saveBrandingBtn = $id('save-branding-btn');
+      if (saveBrandingBtn) {
+        saveBrandingBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const branding = storage(KEY.BRANDING) || {};
+          branding.phone = $id('branding-phone')?.value || '';
+          branding.email = $id('branding-email')?.value || '';
+          storage(KEY.BRANDING, branding);
+          toast('✓ Branding & contact info saved!', 'success');
+        });
+      }
+
+      const formPass = $id('form-change-pass');
+      if (formPass) {
+        formPass.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const fd = new FormData(formPass);
+          const res = Auth.changePassword(fd.get('currentPass'), fd.get('newPass'), fd.get('confirmPass'));
+          if (res.ok) {
+            formPass.reset();
+            toast(res.msg, 'success');
+          } else {
+            toast(res.msg, 'error');
+          }
+        });
+      }
+    }
+  };
+
+  /* ══════════════════════════════════════════════════════════════
+     STAR RATING PICKER WIDGET
+  ══════════════════════════════════════════════════════════════ */
+  const StarPicker = {
+    init(pickerId, fieldName) {
+      const c = $id(pickerId);
+      if (!c) return;
+      const form = c.closest('form');
+      const hidden = form ? form.querySelector(`[name="${fieldName}"]`) : null;
+      let val = parseInt(hidden?.value) || 5;
+
+      const update = (n) => {
+        val = n;
+        if (hidden) hidden.value = n;
+        $all('.star-pick', c).forEach(s => {
+          s.classList.toggle('star-pick--on', parseInt(s.dataset.v) <= n);
+        });
+      };
+
+      $all('.star-pick', c).forEach(s => {
+        s.addEventListener('click', (e) => {
+          e.preventDefault();
+          update(parseInt(s.dataset.v));
         });
       });
 
-      container.addEventListener('mouseleave', () => update(val));
       update(val);
     },
 
     set(pickerId, val) {
-      const container = $id(pickerId);
-      if (!container) return;
-      const form = container.closest('form');
+      const c = $id(pickerId);
+      if (!c) return;
+      const form = c.closest('form');
       const hidden = form ? form.querySelector('[name="rating"]') : null;
       if (hidden) hidden.value = val;
-      $all('.star-pick', container).forEach(s => {
+      $all('.star-pick', c).forEach(s => {
         s.classList.toggle('star-pick--on', parseInt(s.dataset.v) <= val);
       });
     }
   };
 
   /* ══════════════════════════════════════════════════════════════
-     MODALS
-  ══════════════════════════════════════════════════════════════ */
-  const Modals = {
-    open(id) {
-      const el = $id(id);
-      if (el) el.hidden = false;
-    },
-    close(id) {
-      const el = $id(id);
-      if (el) el.hidden = true;
-    },
-    bindAll() {
-      document.addEventListener('click', e => {
-        const closeBtn = e.target.closest('.modal-close');
-        if (closeBtn) this.close(closeBtn.dataset.modal);
-        const backdrop = e.target.closest('.modal-backdrop');
-        if (backdrop) {
-          const modal = backdrop.closest('.modal');
-          if (modal) this.close(modal.id);
-        }
-      });
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-          $all('.modal:not([hidden])').forEach(m => this.close(m.id));
-        }
-      });
-    }
-  };
-
-  /* ══════════════════════════════════════════════════════════════
-     TABS
-  ══════════════════════════════════════════════════════════════ */
-  function bindTabs() {
-    document.addEventListener('click', e => {
-      const btn = e.target.closest('.tab-btn');
-      if (!btn) return;
-      const targetId = btn.dataset.tab;
-      if (!targetId) return;
-      const parent = btn.closest('section') || document;
-      $all('.tab-btn', parent).forEach(b => b.classList.remove('active'));
-      $all('.tab-panel', parent).forEach(p => { p.classList.remove('active'); p.hidden = true; });
-      btn.classList.add('active');
-      const panel = $id(targetId);
-      if (panel) { panel.classList.add('active'); panel.hidden = false; }
-    });
-  }
-
-  /* ══════════════════════════════════════════════════════════════
-     DASHBOARD
+     DASHBOARD REFRESH
   ══════════════════════════════════════════════════════════════ */
   const Dashboard = {
-    refresh() {
-      const quotes    = Quotes.getAll();
-      const reviews   = Reviews.getAll();
-      const portfolio = Portfolio.getAll();
-      const pending   = reviews.filter(r => !r.approved);
+    async refresh() {
+      const quotes = await Quotes.getAll();
+      const reviews = await Reviews.getAll();
+      const portfolio = await Portfolio.getAll();
+      const pendingReviews = reviews.filter(r => !r.approved);
 
-      // Stat cards
+      // KPI Counts
       const totalQ = $id('stat-total-quotes');
-      const weekQ  = $id('stat-week-quotes');
-      const penR   = $id('stat-pending-reviews');
-      const portC  = $id('stat-portfolio-count');
+      const weekQ = $id('stat-week-quotes');
+      const penR = $id('stat-pending-reviews');
+      const portC = $id('stat-portfolio-count');
+
       if (totalQ) totalQ.textContent = quotes.length;
-      if (weekQ)  weekQ.textContent  = quotes.filter(q => Quotes.isThisWeek(q.createdAt)).length;
-      if (penR)   penR.textContent   = pending.length;
-      if (portC)  portC.textContent  = portfolio.length;
+      if (weekQ) {
+        const now = new Date();
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        weekQ.textContent = quotes.filter(q => new Date(q.createdAt) >= weekAgo).length;
+      }
+      if (penR) penR.textContent = pendingReviews.length;
+      if (portC) portC.textContent = portfolio.length;
 
-      // Update nav badges
+      // Badges
       const qBadge = $id('badge-quotes');
-      if (qBadge) { qBadge.textContent = quotes.length; qBadge.hidden = !quotes.length; }
+      if (qBadge) {
+        qBadge.textContent = quotes.length;
+        qBadge.hidden = quotes.length === 0;
+      }
       const rBadge = $id('badge-reviews');
-      if (rBadge) { rBadge.textContent = pending.length; rBadge.hidden = !pending.length; }
+      if (rBadge) {
+        rBadge.textContent = pendingReviews.length;
+        rBadge.hidden = pendingReviews.length === 0;
+      }
 
-      // Recent quotes list
+      // Recent Quotes
       const rqList = $id('dash-recent-quotes');
       if (rqList) {
-        const recent = quotes.slice(0, 5);
+        const recent = quotes.slice(0, 4);
         if (!recent.length) {
-          rqList.innerHTML = `<div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>No quote requests yet</p></div>`;
+          rqList.innerHTML = `<div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>${esc(I18N[currentLang].noQuotesYet)}</p></div>`;
         } else {
-          rqList.innerHTML = recent.map(q => `
-            <div class="dash-quote-row">
-              <div class="dash-avatar">${initials(q.name)}</div>
-              <div class="dash-row-info">
-                <div class="dash-row-name">${esc(q.name||'Unknown')}</div>
-                <div class="dash-row-sub">${esc((q.services||[]).slice(0,1).join('')||'—')} · ${esc(q.city||'—')}</div>
+          rqList.innerHTML = recent.map(q => {
+            const serv = Array.isArray(q.services) ? q.services[0] : (q.services || 'Lawn Care');
+            return `
+              <div class="dash-quote-row" data-quote-row="${esc(q.id)}" style="cursor:pointer;">
+                <div class="dash-avatar">${initials(q.name)}</div>
+                <div class="dash-row-info">
+                  <div class="dash-row-name">${esc(q.name || 'Anonymous')}</div>
+                  <div class="dash-row-sub">${esc(serv)} · ${esc(q.city || 'FL')}</div>
+                </div>
+                <div class="dash-row-time">${timeAgo(q.createdAt)}</div>
               </div>
-              <div class="dash-row-time">${timeAgo(q.createdAt)}</div>
-            </div>`).join('');
+            `;
+          }).join('');
+
+          $all('.dash-quote-row', rqList).forEach(row => {
+            row.addEventListener('click', () => Quotes.openDetail(row.dataset.quoteRow));
+          });
         }
       }
 
-      // Pending reviews
+      // Pending Reviews
       const prList = $id('dash-pending-reviews');
       if (prList) {
-        if (!pending.length) {
-          prList.innerHTML = `<div class="empty-state"><i class="fa-regular fa-star"></i><p>No pending reviews</p></div>`;
+        if (!pendingReviews.length) {
+          prList.innerHTML = `<div class="empty-state"><i class="fa-regular fa-star"></i><p>${esc(I18N[currentLang].noPendingReviews)}</p></div>`;
         } else {
-          prList.innerHTML = pending.slice(0, 4).map(r => `
+          prList.innerHTML = pendingReviews.slice(0, 3).map(r => `
             <div class="dash-quote-row">
               <div class="dash-avatar" style="background:var(--a-amber-lt);color:var(--a-amber)">${initials(r.name)}</div>
               <div class="dash-row-info">
                 <div class="dash-row-name">${esc(r.name)}</div>
-                <div class="dash-row-sub">${'★'.repeat(r.rating||5)} · ${esc(r.city||'FL')}</div>
+                <div class="dash-row-sub">${'★'.repeat(r.rating || 5)} · ${esc(r.city || 'FL')}</div>
               </div>
               <div class="dash-row-time">${timeAgo(r.createdAt)}</div>
-            </div>`).join('');
+            </div>
+          `).join('');
         }
       }
     }
   };
 
   /* ══════════════════════════════════════════════════════════════
-     SECTION LOADER
+     SECTION DISPATCHER
   ══════════════════════════════════════════════════════════════ */
   const Sections = {
-    load(section) {
-      if (section === 'dashboard') Dashboard.refresh();
-      if (section === 'quotes')    Quotes.render();
-      if (section === 'reviews')   { Reviews.renderPending(); Reviews.renderApproved(); }
-      if (section === 'portfolio') Portfolio.render();
-      if (section === 'settings')  { Settings.loadMeta(); Settings.loadBranding(); }
-      if (section === 'colors')    { Theme.renderPresets(); Theme.renderPickers(); }
+    async load(section) {
+      if (section === 'dashboard') await Dashboard.refresh();
+      if (section === 'quotes') await Quotes.render();
+      if (section === 'reviews') {
+        await Reviews.renderPending();
+        await Reviews.renderApproved();
+      }
+      if (section === 'portfolio') await Portfolio.render();
+      if (section === 'settings') Settings.load();
+      if (section === 'colors') {
+        await Theme.load();
+        Theme.renderPresets();
+        Theme.renderPickers();
+      }
     }
   };
 
   /* ══════════════════════════════════════════════════════════════
-     CLOCK
+     TABS MANAGER
   ══════════════════════════════════════════════════════════════ */
-  function startClock() {
-    const el = $id('header-clock');
-    if (!el) return;
-    function tick() {
-      el.textContent = new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', hour12: true });
-    }
-    tick();
-    setInterval(tick, 1000);
-  }
+  function bindTabs() {
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      const targetId = btn.dataset.tab;
+      if (!targetId) return;
 
-  /* ══════════════════════════════════════════════════════════════
-     SIDEBAR TOGGLE
-  ══════════════════════════════════════════════════════════════ */
-  function bindSidebar() {
-    const toggle = $id('sidebar-toggle');
-    const app    = $id('admin-app');
-    const sidebar= $id('sidebar');
-    if (!toggle || !app) return;
-    toggle.addEventListener('click', () => {
-      if (window.innerWidth <= 768) {
-        sidebar.classList.toggle('mobile-open');
-      } else {
-        app.classList.toggle('sidebar-collapsed');
-        sidebar.classList.toggle('sidebar-collapsed');
+      const parent = btn.closest('section') || document;
+      $all('.tab-btn', parent).forEach(b => b.classList.remove('active'));
+      $all('.tab-panel', parent).forEach(p => {
+        p.classList.remove('active');
+        p.setAttribute('hidden', '');
+        p.style.display = 'none';
+      });
+
+      btn.classList.add('active');
+      const panel = $id(targetId);
+      if (panel) {
+        panel.classList.add('active');
+        panel.removeAttribute('hidden');
+        panel.style.display = 'block';
       }
     });
-    // Close mobile sidebar on nav click
-    $all('.nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        if (window.innerWidth <= 768) sidebar.classList.remove('mobile-open');
-      });
-    });
   }
 
   /* ══════════════════════════════════════════════════════════════
-     LOGIN SCREEN
+     INITIALIZATION & BOOT
   ══════════════════════════════════════════════════════════════ */
-  function bindLogin() {
-    const form   = $id('login-form');
-    const toggle = $id('toggle-password');
-    const passIn = $id('login-password');
+  document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Check API availability
+    await API.check();
 
-    if (toggle && passIn) {
-      toggle.addEventListener('click', () => {
-        const isPass = passIn.type === 'password';
-        passIn.type = isPass ? 'text' : 'password';
-        toggle.querySelector('i').className = isPass ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+    // 2. Bind modals
+    Modals.bindAll();
+
+    // 3. Bind tabs
+    bindTabs();
+
+    // 4. Bind navigation
+    Nav.bind();
+
+    // 5. Sidebar toggle
+    const sbToggle = $id('sidebar-toggle');
+    const app = $id('admin-app');
+    const sidebar = $id('sidebar');
+    if (sbToggle && app && sidebar) {
+      sbToggle.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          sidebar.classList.toggle('mobile-open');
+        } else {
+          app.classList.toggle('sidebar-collapsed');
+          sidebar.classList.toggle('sidebar-collapsed');
+        }
       });
     }
 
-    if (form) {
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        const username = $id('login-username').value.trim();
-        const password = $id('login-password').value;
-        const errEl = $id('login-error');
-        const btn   = $id('login-submit-btn');
+    // 6. Header Clock
+    const clock = $id('header-clock');
+    if (clock) {
+      const updateClock = () => {
+        clock.textContent = new Date().toLocaleTimeString(currentLang === 'es' ? 'es-ES' : 'en-US', {
+          hour: '2-digit', minute: '2-digit', hour12: true
+        });
+      };
+      updateClock();
+      setInterval(updateClock, 1000);
+    }
 
-        if (!username || !password) {
-          if (errEl) { errEl.textContent = 'Please enter username and password.'; errEl.hidden = false; }
+    // 7. Login logic
+    const loginForm = $id('login-form');
+    const togglePass = $id('toggle-password');
+    const passIn = $id('login-password');
+
+    if (togglePass && passIn) {
+      togglePass.addEventListener('click', () => {
+        const isPass = passIn.type === 'password';
+        passIn.type = isPass ? 'text' : 'password';
+        togglePass.querySelector('i').className = isPass ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+      });
+    }
+
+    if (loginForm) {
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = $id('login-username').value.trim();
+        const pass = $id('login-password').value;
+        const errEl = $id('login-error');
+        const btn = $id('login-submit-btn');
+
+        if (!user || !pass) {
+          if (errEl) {
+            errEl.textContent = 'Please enter both username and password.';
+            errEl.hidden = false;
+          }
           return;
         }
 
-        if (btn) { btn.disabled = true; btn.querySelector('span').textContent = 'Signing in…'; }
+        if (btn) {
+          btn.disabled = true;
+          btn.querySelector('span').textContent = 'Signing in…';
+        }
 
-        setTimeout(() => {
-          if (Auth.login(username, password)) {
-            showApp();
-          } else {
-            if (errEl) { errEl.textContent = 'Incorrect username or password. Please try again.'; errEl.hidden = false; }
-            if (btn)   { btn.disabled = false; btn.querySelector('span').textContent = 'Sign In'; }
+        const ok = await Auth.login(user, pass);
+        if (ok) {
+          $id('login-screen').style.display = 'none';
+          $id('admin-app').hidden = false;
+          $id('admin-app').style.display = 'flex';
+          Nav.goto('dashboard');
+        } else {
+          if (errEl) {
+            errEl.textContent = 'Incorrect username or password. Please try again.';
+            errEl.hidden = false;
           }
-        }, 400);
+          if (btn) {
+            btn.disabled = false;
+            btn.querySelector('span').textContent = 'Sign In';
+          }
+        }
       });
-    }
-  }
-
-  function showLogin() {
-    $id('login-screen').style.display = '';
-    $id('admin-app').hidden = true;
-  }
-
-  function showApp() {
-    $id('login-screen').style.display = 'none';
-    $id('admin-app').hidden = false;
-    Dashboard.refresh();
-  }
-
-  /* ══════════════════════════════════════════════════════════════
-     BOOT
-  ══════════════════════════════════════════════════════════════ */
-  document.addEventListener('DOMContentLoaded', () => {
-    bindLogin();
-    Modals.bindAll();
-    bindTabs();
-    Nav.bindLinks();
-    bindSidebar();
-    startClock();
-
-    if (Auth.isLoggedIn()) {
-      showApp();
-    } else {
-      showLogin();
     }
 
     // Logout
     const logoutBtn = $id('logout-btn');
-    if (logoutBtn) logoutBtn.addEventListener('click', () => {
-      if (confirm('Log out of admin portal?')) Auth.logout();
-    });
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (confirm('Log out of admin portal?')) Auth.logout();
+      });
+    }
 
-    // Bind all modules
+    // 8. Bind all core modules
     Quotes.bind();
     Reviews.bind();
     Portfolio.bind();
@@ -1427,15 +2027,25 @@
     Settings.bind();
     Theme.bind();
 
-    // Star pickers
     StarPicker.init('add-star-picker', 'rating');
     StarPicker.init('edit-star-picker', 'rating');
 
-    // Initial nav
-    Nav.goto('dashboard');
+    // 9. Check logged in state
+    if (Auth.isLoggedIn()) {
+      $id('login-screen').style.display = 'none';
+      $id('admin-app').hidden = false;
+      $id('admin-app').style.display = 'flex';
+      Nav.goto('dashboard');
+    } else {
+      $id('login-screen').style.display = 'flex';
+      $id('admin-app').hidden = true;
+      $id('admin-app').style.display = 'none';
+    }
+
+    // Apply language preference
+    setLanguage(currentLang);
   });
 
-  // Expose minimal public API for debugging
-  window.FLAAdmin = { Nav, Quotes, Reviews, Portfolio, Theme, Auth };
-
+  // Expose API
+  window.FLAAdmin = { Modals, Nav, Quotes, Reviews, Portfolio, Theme, Auth, API };
 })();

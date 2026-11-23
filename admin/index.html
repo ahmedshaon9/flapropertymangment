@@ -125,10 +125,18 @@
           <i class="fa-solid fa-bars"></i>
         </button>
         <div class="header-breadcrumb">
-          <span id="page-title" class="header-page-title">Dashboard</span>
+          <span id="page-title" class="header-page-title" data-i18n="dashboard">Dashboard</span>
         </div>
       </div>
       <div class="header-right">
+        <div class="live-indicator" id="live-indicator" title="Connected to realtime updates">
+          <span class="live-indicator-dot"></span>
+          <span id="live-indicator-text">Realtime Active</span>
+        </div>
+        <div class="lang-switcher" id="lang-switcher" title="Switch Language / Cambiar Idioma">
+          <button type="button" class="lang-btn active" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="es">ES</button>
+        </div>
         <div class="header-clock" id="header-clock"></div>
         <div class="header-user">
           <div class="user-avatar">A</div>

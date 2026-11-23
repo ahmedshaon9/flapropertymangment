@@ -95,6 +95,22 @@
   // Also run after DOM in case styles load late
   document.addEventListener('DOMContentLoaded', applyTheme);
 
+  // Realtime multi-tab & BroadcastChannel listener
+  window.addEventListener('storage', function (e) {
+    if (e.key === KEY_THEME) applyTheme();
+  });
+
+  try {
+    if (typeof BroadcastChannel !== 'undefined') {
+      var bc = new BroadcastChannel('fla_realtime_channel');
+      bc.onmessage = function (msg) {
+        if (msg && msg.data && msg.data.type === 'theme') {
+          applyTheme();
+        }
+      };
+    }
+  } catch (err) {}
+
   // Expose for manual re-trigger
   window.FLATheme = { apply: applyTheme };
 })();
