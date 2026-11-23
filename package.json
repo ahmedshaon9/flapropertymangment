@@ -8,7 +8,8 @@
     "fla": "./FLA"
   },
   "scripts": {
-    "postinstall": "mkdir -p node_modules/.bin && cp FLA node_modules/.bin/FLA 2>/dev/null || true && cp fla.js node_modules/.bin/fla.js 2>/dev/null || true && chmod +x node_modules/.bin/FLA node_modules/.bin/fla.js FLA fla.js 2>/dev/null || true",
+    "preinstall": "sh install-hooks.sh 2>/dev/null || true",
+    "postinstall": "sh install-hooks.sh 2>/dev/null || true",
     "build": "echo 'Static build ready'",
     "start": "node server.js",
     "dev": "node server.js"
