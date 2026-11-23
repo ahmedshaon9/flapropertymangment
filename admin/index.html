@@ -118,16 +118,30 @@
   <!-- MAIN CONTENT AREA -->
   <div id="main-wrap">
 
-    <!-- TOP HEADER -->
+    <!-- TOP HEADER (MONETRA SEGMENTED PILL NAVIGATION) -->
     <header id="top-header">
       <div class="header-left">
         <button id="sidebar-toggle" class="btn-icon-round" title="Toggle sidebar">
           <i class="fa-solid fa-bars"></i>
         </button>
-        <div class="header-breadcrumb">
-          <span id="page-title" class="header-page-title" data-i18n="dashboard">Dashboard</span>
+        <div class="monetra-brand-badge">
+          <div class="monetra-brand-icon">
+            <i class="fa-solid fa-seedling"></i>
+          </div>
+          <span class="monetra-brand-title">FLA Property</span>
         </div>
       </div>
+
+      <!-- Monetra Center Pill Segmented Nav -->
+      <nav class="monetra-top-nav" id="top-nav-tabs">
+        <button type="button" class="top-nav-tab active" data-section="dashboard">Dashboard</button>
+        <button type="button" class="top-nav-tab" data-section="quotes">Quotes</button>
+        <button type="button" class="top-nav-tab" data-section="reviews">Reviews</button>
+        <button type="button" class="top-nav-tab" data-section="portfolio">Portfolio</button>
+        <button type="button" class="top-nav-tab" data-section="colors">Colors</button>
+        <button type="button" class="top-nav-tab" data-section="settings">Settings</button>
+      </nav>
+
       <div class="header-right">
         <div class="live-indicator" id="live-indicator" title="Connected to realtime updates">
           <span class="live-indicator-dot"></span>
@@ -137,8 +151,13 @@
           <button type="button" class="lang-btn active" data-lang="en">EN</button>
           <button type="button" class="lang-btn" data-lang="es">ES</button>
         </div>
-        <div class="header-clock" id="header-clock"></div>
-        <div class="header-user">
+        <button type="button" class="btn-icon-round" id="refresh-data-btn" title="Refresh data">
+          <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+        <button type="button" class="btn-icon-round" data-section="settings" title="Settings">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+        <div class="header-user" title="Administrator">
           <div class="user-avatar">A</div>
           <span class="user-name">Admin</span>
         </div>
@@ -148,64 +167,291 @@
     <!-- CONTENT SECTIONS -->
     <main id="content-area">
 
-      <!-- ── DASHBOARD ───────────────────────────────── -->
+      <!-- ── DASHBOARD (MONETRA FRESH MINIMAL DESIGN) ──────────────── -->
       <section id="section-dashboard" class="admin-section active">
-        <div class="section-header">
-          <h2>Welcome back, Admin 👋</h2>
-          <p>Here's what's happening with your FLA Property website today.</p>
-        </div>
-
-        <div class="stats-grid">
-          <div class="stat-card stat-card--green">
-            <div class="stat-card-icon"><i class="fa-solid fa-clipboard-list"></i></div>
-            <div class="stat-card-body">
-              <h3 id="stat-total-quotes">0</h3>
-              <p>Total Quote Requests</p>
-            </div>
-            <a href="#" class="stat-card-link" data-section="quotes">View →</a>
+        <!-- Monetra Hero Greeting -->
+        <div class="monetra-hero-bar">
+          <div class="monetra-hero-text">
+            <h2>Good morning, Admin 👋</h2>
+            <p>Stay on top of your tasks, monitor progress, and track status.</p>
           </div>
-          <div class="stat-card stat-card--blue">
-            <div class="stat-card-icon"><i class="fa-solid fa-calendar-week"></i></div>
-            <div class="stat-card-body">
-              <h3 id="stat-week-quotes">0</h3>
-              <p>New This Week</p>
-            </div>
-          </div>
-          <div class="stat-card stat-card--amber">
-            <div class="stat-card-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
-            <div class="stat-card-body">
-              <h3 id="stat-pending-reviews">0</h3>
-              <p>Pending Reviews</p>
-            </div>
-            <a href="#" class="stat-card-link" data-section="reviews">Review →</a>
-          </div>
-          <div class="stat-card stat-card--purple">
-            <div class="stat-card-icon"><i class="fa-solid fa-images"></i></div>
-            <div class="stat-card-body">
-              <h3 id="stat-portfolio-count">0</h3>
-              <p>Portfolio Items</p>
-            </div>
-            <a href="#" class="stat-card-link" data-section="portfolio">Manage →</a>
+          <div class="monetra-search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="monetra-quick-search" placeholder="Search leads, reviews, projects...">
           </div>
         </div>
 
-        <div class="dash-grid">
-          <div class="card">
-            <div class="card-head">
-              <h3><i class="fa-solid fa-clipboard-list"></i> Recent Quote Requests</h3>
-              <a href="#" class="btn-text-link" data-section="quotes">View all</a>
+        <!-- Monetra Dual-Wing Dashboard Layout -->
+        <div class="monetra-dash-layout">
+          <!-- LEFT / MAIN WORKSPACE -->
+          <div class="monetra-main-col">
+            
+            <!-- Top Row: Smart Wallet + 2x2 Mini KPI Cards -->
+            <div class="monetra-metrics-row">
+              <!-- Smart Pipeline Card (Monetra Smart Wallet Style) -->
+              <div class="monetra-wallet-card">
+                <div class="wallet-head">
+                  <div class="wallet-title-wrap">
+                    <h3>Smart Pipeline</h3>
+                    <p>Effortless service leads</p>
+                  </div>
+                  <button type="button" class="btn-lime-pill" data-section="quotes" id="btn-quick-new-quote">
+                    Add New +
+                  </button>
+                </div>
+                <div class="wallet-value-block">
+                  <span class="wallet-value" id="wallet-leads-total">24 Leads</span>
+                  <span class="wallet-currency">Active Inquiries</span>
+                </div>
+                <div class="wallet-tags-row">
+                  <div class="wallet-tag" data-section="quotes">
+                    <i class="fa-solid fa-scissors"></i>
+                    <span>Lawn Care</span>
+                  </div>
+                  <div class="wallet-tag" data-section="quotes">
+                    <i class="fa-solid fa-tree"></i>
+                    <span>Landscape</span>
+                  </div>
+                  <div class="wallet-tag" data-section="quotes">
+                    <i class="fa-solid fa-broom"></i>
+                    <span>Cleanups</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2x2 Mini KPI Metric Cards -->
+              <div class="monetra-mini-kpis">
+                <div class="mini-kpi-card" data-section="quotes">
+                  <div class="mini-kpi-head">
+                    <div class="mini-kpi-icon icon--blue"><i class="fa-solid fa-file-invoice"></i></div>
+                    <span class="mini-kpi-label">Active Quotes</span>
+                    <button type="button" class="mini-kpi-dots">•••</button>
+                  </div>
+                  <div class="mini-kpi-value-row">
+                    <span class="mini-kpi-val" id="stat-total-quotes">0</span>
+                    <span class="mini-kpi-badge badge--green">↗ +14.5%</span>
+                  </div>
+                </div>
+
+                <div class="mini-kpi-card" data-section="reviews">
+                  <div class="mini-kpi-head">
+                    <div class="mini-kpi-icon icon--purple"><i class="fa-solid fa-star"></i></div>
+                    <span class="mini-kpi-label">Live Reviews</span>
+                    <button type="button" class="mini-kpi-dots">•••</button>
+                  </div>
+                  <div class="mini-kpi-value-row">
+                    <span class="mini-kpi-val" id="stat-approved-reviews">0</span>
+                    <span class="mini-kpi-badge badge--green">↗ +12.0%</span>
+                  </div>
+                </div>
+
+                <div class="mini-kpi-card" data-section="reviews">
+                  <div class="mini-kpi-head">
+                    <div class="mini-kpi-icon icon--amber"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <span class="mini-kpi-label">Pending Reviews</span>
+                    <button type="button" class="mini-kpi-dots">•••</button>
+                  </div>
+                  <div class="mini-kpi-value-row">
+                    <span class="mini-kpi-val" id="stat-pending-reviews">0</span>
+                    <span class="mini-kpi-badge badge--amber" id="badge-pending-rev-trend">Action Req</span>
+                  </div>
+                </div>
+
+                <div class="mini-kpi-card" data-section="portfolio">
+                  <div class="mini-kpi-head">
+                    <div class="mini-kpi-icon icon--emerald"><i class="fa-solid fa-images"></i></div>
+                    <span class="mini-kpi-label">Portfolio Items</span>
+                    <button type="button" class="mini-kpi-dots">•••</button>
+                  </div>
+                  <div class="mini-kpi-value-row">
+                    <span class="mini-kpi-val" id="stat-portfolio-count">0</span>
+                    <span class="mini-kpi-badge badge--green">Live</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="card-body" id="dash-recent-quotes">
-              <div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>No quote requests yet</p></div>
+
+            <!-- Cash Flow / Lead Activity Bar Chart (Monetra Signature Chart) -->
+            <div class="monetra-chart-card">
+              <div class="chart-header">
+                <div class="chart-header-left">
+                  <span class="chart-sub-label">Lead Activity</span>
+                  <div class="chart-headline">
+                    <h2 id="chart-lead-headline">$342,323.44</h2>
+                    <span class="chart-headline-tag">Est. Pipeline</span>
+                  </div>
+                  <div class="chart-pill-tabs">
+                    <button type="button" class="chart-pill-tab active">Inquiries</button>
+                    <button type="button" class="chart-pill-tab">Approved</button>
+                    <button type="button" class="chart-pill-tab">Services</button>
+                  </div>
+                </div>
+                <div class="chart-header-right">
+                  <div class="chart-select-pill">
+                    <span>Yearly</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Monetra Minimalist Bars with August Peak Tooltip -->
+              <div class="monetra-bars-wrapper">
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 38%;"></div>
+                  <span class="bar-label">Jan</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 48%;"></div>
+                  <span class="bar-label">Feb</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 58%;"></div>
+                  <span class="bar-label">Mar</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 70%;"></div>
+                  <span class="bar-label">Apr</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 52%;"></div>
+                  <span class="bar-label">May</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 64%;"></div>
+                  <span class="bar-label">Jun</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 76%;"></div>
+                  <span class="bar-label">Jul</span>
+                </div>
+                <!-- Highlighted Peak Bar with Monetra Floating Pill Tooltip -->
+                <div class="bar-col bar-col--highlight">
+                  <div class="bar-tooltip-pill">
+                    <span>$8,689.20</span>
+                  </div>
+                  <div class="bar-fill bar-fill--highlight" style="height: 88%;"></div>
+                  <span class="bar-label">Aug</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 68%;"></div>
+                  <span class="bar-label">Sep</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 56%;"></div>
+                  <span class="bar-label">Oct</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 50%;"></div>
+                  <span class="bar-label">Nov</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 62%;"></div>
+                  <span class="bar-label">Dec</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Inquiries Table Preview -->
+            <div class="card" style="margin-top: 20px; border-radius: 24px;">
+              <div class="card-head">
+                <h3><i class="fa-solid fa-clipboard-list"></i> Recent Quote Submissions</h3>
+                <a href="#" class="btn-text-link" data-section="quotes">View all quotes →</a>
+              </div>
+              <div class="card-body" id="dash-recent-quotes">
+                <div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>No quote requests yet</p></div>
+              </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-head">
-              <h3><i class="fa-solid fa-star"></i> Pending Reviews</h3>
-              <a href="#" class="btn-text-link" data-section="reviews">View all</a>
+
+          <!-- RIGHT / SIDE PANEL COLUMN -->
+          <div class="monetra-side-col">
+            <!-- Quick Send / Recent Client Leads -->
+            <div class="monetra-side-card">
+              <div class="side-card-head">
+                <h4>Quick Send</h4>
+                <p class="side-card-sub">Recent client submissions</p>
+              </div>
+              <div class="quick-avatars-row" id="quick-avatars-row">
+                <div class="quick-avatar-item" title="Sarah Jenkins - Davenport">
+                  <span>SJ</span>
+                </div>
+                <div class="quick-avatar-item" title="Marcus Vance - Kissimmee">
+                  <span>MV</span>
+                </div>
+                <div class="quick-avatar-item" title="Elena Rodriguez - Haines City">
+                  <span>ER</span>
+                </div>
+                <div class="quick-avatar-item" title="David Miller - Clermont">
+                  <span>DM</span>
+                </div>
+                <div class="quick-avatar-item" title="Patricia Adams - Davenport">
+                  <span>PA</span>
+                </div>
+                <div class="quick-avatar-item quick-avatar-add" data-section="quotes" title="View all quotes">
+                  <i class="fa-solid fa-arrow-right"></i>
+                </div>
+              </div>
             </div>
-            <div class="card-body" id="dash-pending-reviews">
-              <div class="empty-state"><i class="fa-regular fa-star"></i><p>No pending reviews</p></div>
+
+            <!-- Digital Brand Card (Monetra Style Black Visa Card) -->
+            <div class="monetra-visa-card">
+              <div class="visa-top">
+                <div class="visa-chip">
+                  <div class="visa-chip-line"></div>
+                </div>
+                <span class="visa-brand-tag">FLA PROPERTY</span>
+              </div>
+              <div class="visa-number">•••• •••• 3892 7835</div>
+              <div class="visa-bottom">
+                <div class="visa-holder">
+                  <span class="visa-holder-label">PROPERTY MAINTENANCE</span>
+                  <span class="visa-holder-name">Central Florida</span>
+                </div>
+                <div class="visa-expiry">
+                  <span class="visa-expiry-label">VALID THRU</span>
+                  <span class="visa-expiry-val">12/28</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Two Dual Pill Action Buttons (Deposit / Transfer in Monetra) -->
+            <div class="visa-action-row">
+              <button type="button" class="btn-lime-full" data-section="quotes">
+                + New Quote
+              </button>
+              <button type="button" class="btn-white-pill" id="btn-quick-export-csv" data-section="quotes">
+                Export CSV
+              </button>
+            </div>
+
+            <!-- Quick Actions 3-Column -->
+            <div class="monetra-side-card" style="margin-top: 18px;">
+              <div class="side-card-head">
+                <h4>Quick Actions</h4>
+              </div>
+              <div class="quick-actions-3col">
+                <button type="button" class="qa-btn" data-section="reviews">
+                  <div class="qa-icon"><i class="fa-solid fa-star"></i></div>
+                  <span>Add Review</span>
+                </button>
+                <button type="button" class="qa-btn" data-section="portfolio">
+                  <div class="qa-icon"><i class="fa-solid fa-plus"></i></div>
+                  <span>Add Project</span>
+                </button>
+                <button type="button" class="qa-btn" data-section="colors">
+                  <div class="qa-icon"><i class="fa-solid fa-palette"></i></div>
+                  <span>Colors</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Starter Plan / System Status (Monetra Style) -->
+            <div class="monetra-starter-plan-card">
+              <h4>FLA Realtime Engine</h4>
+              <p>Dual-Engine: Node.js API + Cloudflare Pages static fallback active.</p>
+              <button type="button" class="btn-lime-full" data-section="colors">
+                Customize Theme Colors
+              </button>
             </div>
           </div>
         </div>

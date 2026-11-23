@@ -716,6 +716,9 @@
       $all('.nav-link').forEach(a => {
         a.classList.toggle('active', a.dataset.section === section);
       });
+      $all('.top-nav-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.section === section);
+      });
 
       const pt = $id('page-title');
       if (pt) {
@@ -742,6 +745,46 @@
           if (!btn) return;
           const lang = btn.dataset.lang;
           setLanguage(lang);
+        });
+      }
+
+      // Monetra Quick Search
+      const quickSearch = $id('monetra-quick-search');
+      if (quickSearch) {
+        quickSearch.addEventListener('input', (e) => {
+          const val = e.target.value.trim();
+          if (val.length > 0) {
+            Nav.goto('quotes');
+            const qs = $id('quotes-search');
+            if (qs) {
+              qs.value = val;
+              Quotes.render(val);
+            }
+          }
+        });
+      }
+
+      // Refresh Data button
+      const refreshBtn = $id('refresh-data-btn');
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const icon = refreshBtn.querySelector('i');
+          if (icon) icon.classList.add('fa-spin');
+          await Sections.load(Nav.current);
+          setTimeout(() => {
+            if (icon) icon.classList.remove('fa-spin');
+            toast('Data refreshed successfully', 'info');
+          }, 350);
+        });
+      }
+
+      // Quick export CSV button
+      const quickExport = $id('btn-quick-export-csv');
+      if (quickExport) {
+        quickExport.addEventListener('click', (e) => {
+          e.preventDefault();
+          Quotes.exportCsv();
         });
       }
     }
@@ -1814,6 +1857,31 @@
       }
       if (penR) penR.textContent = pendingReviews.length;
       if (portC) portC.textContent = portfolio.length;
+
+      // Monetra Smart Pipeline & Live Review Counters
+      const appR = $id('stat-approved-reviews');
+      if (appR) appR.textContent = reviews.filter(r => r.approved).length;
+
+      const walletTot = $id('wallet-leads-total');
+      if (walletTot) walletTot.textContent = (quotes.length || 0) + ' Leads';
+
+      // Update Monetra Quick Contact Avatars
+      const quickAvatars = $id('quick-avatars-row');
+      if (quickAvatars && quotes.length) {
+        const topQuotes = quotes.slice(0, 5);
+        quickAvatars.innerHTML = topQuotes.map(q => `
+          <div class="quick-avatar-item" title="${esc(q.name || 'Client')} - ${esc(q.city || 'FL')}" data-quote-row="${esc(q.id)}">
+            <span>${esc(initials(q.name))}</span>
+          </div>
+        `).join('') + `
+          <div class="quick-avatar-item quick-avatar-add" data-section="quotes" title="View all quotes">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        `;
+        $all('[data-quote-row]', quickAvatars).forEach(el => {
+          el.addEventListener('click', () => Quotes.openDetail(el.dataset.quoteRow));
+        });
+      }
 
       // Badges
       const qBadge = $id('badge-quotes');
