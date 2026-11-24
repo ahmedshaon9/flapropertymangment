@@ -1,35 +1,98 @@
 [
   {
-    "id": "rev_101",
-    "name": "Evelyn M.",
-    "city": "Haines City",
-    "role": "Homeowner",
-    "service": "Mulch & Rock Installation",
-    "rating": 5,
-    "message": "Got their info from a neighbor. They laid chocolate mulch across all our plant beds and edged around all our palms. Our yard is easily the prettiest on the street now!",
-    "approved": true,
-    "createdAt": "2026-11-19T08:30:00.000Z"
-  },
-  {
-    "id": "rev_102",
-    "name": "Carlos M.",
-    "city": "Kissimmee",
-    "role": "Property Manager",
+    "id": "rev_1",
+    "name": "Michael R.",
+    "role": "Residential Homeowner",
+    "city": "Lakeland",
     "service": "Lawn Mowing & Edging",
     "rating": 5,
-    "message": "Managing 8 rental homes in Poinciana and FLA handles every single cut on time. Clean stripes, zero missed dates, and gates always latched back shut.",
+    "message": "The lawn striping patterns are phenomenal! My yard looks like a championship golf course every single Thursday after the crew wraps up. The clean edging along the concrete driveway and garden borders is razor-sharp. Best lawn care service in Polk County, hands down!",
     "approved": true,
-    "createdAt": "2026-11-18T11:15:00.000Z"
+    "order": 1,
+    "createdAt": "2026-03-15T14:30:00.000Z"
   },
   {
-    "id": "rev_103",
-    "name": "Brenda T.",
+    "id": "rev_2",
+    "name": "Sarah T.",
+    "role": "Residential Homeowner",
+    "city": "Winter Haven",
+    "service": "Landscape Bed Makeovers",
+    "rating": 5,
+    "message": "FLA Property transformed our neglected flower beds into a tropical oasis. They removed 3 inches of weed-choked old dirt, installed heavy-duty weed barrier, planted gorgeous hibiscus and crotons, and finished with deep black mulch. Absolutely stunning curb appeal!",
+    "approved": true,
+    "order": 2,
+    "createdAt": "2026-04-10T16:20:00.000Z"
+  },
+  {
+    "id": "rev_3",
+    "name": "David K.",
+    "role": "Residential Homeowner",
     "city": "Davenport",
-    "role": "Homeowner",
+    "service": "One-Time Mow & Go",
+    "rating": 5,
+    "message": "Our riding mower broke down right in the middle of Florida rainy season. I called FLA Property for emergency one-time mowing and they arrived within 24 hours. The grass was nearly knee-high and they handled it effortlessly without leaving clumps. Saved my weekend!",
+    "approved": true,
+    "order": 3,
+    "createdAt": "2026-05-18T11:00:00.000Z"
+  },
+  {
+    "id": "rev_4",
+    "name": "Cypress Ridge HOA",
+    "role": "HOA Board Member",
+    "city": "Auburndale",
+    "service": "Commercial Lawn Mowing",
+    "rating": 5,
+    "message": "Reliability was our HOA board's top priority after two consecutive lawn contractors flaked out mid-season. FLA Property Maintenance hasn't missed a single scheduled service day in 8 months. Consistent, professional, fully insured, and prompt billing.",
+    "approved": true,
+    "order": 4,
+    "createdAt": "2026-06-02T09:45:00.000Z"
+  },
+  {
+    "id": "rev_5",
+    "name": "Elena M.",
+    "role": "Residential Homeowner",
+    "city": "Haines City",
+    "service": "Mulch & Rock Installation",
+    "rating": 5,
+    "message": "We ordered 8 yards of river rock and refreshed the mulch around 14 palm trees. The crew arrived right on time at 8:00 AM with their dump trailer and commercial wheelbarrows. By 2:00 PM the entire property was pristine, blown clean, and sparkling.",
+    "approved": true,
+    "order": 5,
+    "createdAt": "2026-06-25T13:15:00.000Z"
+  },
+  {
+    "id": "rev_6",
+    "name": "Marcus V.",
+    "role": "Residential Homeowner",
+    "city": "Bartow",
+    "service": "Bi-Weekly Lawn Maintenance",
+    "rating": 5,
+    "message": "Their bi-weekly mowing service keeps our half-acre property in peak condition all year long. What stands out most is the care they take around fence lines and flower beds — they never scar the sod or ding fence posts with string trimmers. True pros.",
+    "approved": true,
+    "order": 6,
+    "createdAt": "2026-07-12T15:40:00.000Z"
+  },
+  {
+    "id": "rev_7",
+    "name": "Amanda L.",
+    "role": "Residential Homeowner",
+    "city": "Plant City",
     "service": "Bush, Hedge & Tree Care",
     "rating": 5,
-    "message": "Our bougainvilleas and viburnum hedges were out of control after storm season. The crew leveled everything laser-straight and hauled all debris away. 10/10 service!",
-    "approved": false,
-    "createdAt": "2026-11-23T09:12:00.000Z"
+    "message": "Our podocarpus hedge had grown out of control to over 12 feet tall. The FLA crew leveled it to a perfect 7-foot privacy screen with laser-straight lines. They hauled away every last branch and leaf clipping. Our backyard finally feels open and private again.",
+    "approved": true,
+    "order": 7,
+    "createdAt": "2026-08-04T10:10:00.000Z"
+  },
+  {
+    "id": "rev_8",
+    "name": "Sunbelt Rentals Yard",
+    "role": "Facility Manager",
+    "city": "Lake Wales",
+    "service": "Seasonal Yard Cleanups",
+    "rating": 5,
+    "message": "Managing a 2-acre commercial yard requires reliable contractors who respect safety protocols and heavy equipment movement. FLA Property handles our routine mowing, retention pond trimming, and perimeter weed control without disrupting customer traffic.",
+    "approved": true,
+    "order": 8,
+    "createdAt": "2026-09-01T08:30:00.000Z"
   }
 ]

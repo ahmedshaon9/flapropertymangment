@@ -29,7 +29,197 @@
     LANG:      'fla_admin_lang'
   };
 
-  const DEFAULT_CREDS = { username: 'admin', password: 'FLA@admin2024' };
+  const DEFAULT_CREDS = { username: 'admin', password: 'FLA@admin2026' };
+
+  const DEFAULT_REVIEWS = [
+    {
+      id: "rev_1",
+      name: "Michael R.",
+      role: "Residential Homeowner",
+      city: "Lakeland",
+      service: "Lawn Mowing & Edging",
+      rating: 5,
+      message: "The lawn striping patterns are phenomenal! My yard looks like a championship golf course every single Thursday after the crew wraps up. The clean edging along the concrete driveway and garden borders is razor-sharp. Best lawn care service in Polk County, hands down!",
+      approved: true,
+      order: 1,
+      createdAt: "2026-03-15T14:30:00.000Z"
+    },
+    {
+      id: "rev_2",
+      name: "Sarah T.",
+      role: "Residential Homeowner",
+      city: "Winter Haven",
+      service: "Landscape Bed Makeovers",
+      rating: 5,
+      message: "FLA Property transformed our neglected flower beds into a tropical oasis. They removed 3 inches of weed-choked old dirt, installed heavy-duty weed barrier, planted gorgeous hibiscus and crotons, and finished with deep black mulch. Absolutely stunning curb appeal!",
+      approved: true,
+      order: 2,
+      createdAt: "2026-04-10T16:20:00.000Z"
+    },
+    {
+      id: "rev_3",
+      name: "David K.",
+      role: "Residential Homeowner",
+      city: "Davenport",
+      service: "One-Time Mow & Go",
+      rating: 5,
+      message: "Our riding mower broke down right in the middle of Florida rainy season. I called FLA Property for emergency one-time mowing and they arrived within 24 hours. The grass was nearly knee-high and they handled it effortlessly without leaving clumps. Saved my weekend!",
+      approved: true,
+      order: 3,
+      createdAt: "2026-05-18T11:00:00.000Z"
+    },
+    {
+      id: "rev_4",
+      name: "Cypress Ridge HOA",
+      role: "HOA Board Member",
+      city: "Auburndale",
+      service: "Commercial Lawn Mowing",
+      rating: 5,
+      message: "Reliability was our HOA board's top priority after two consecutive lawn contractors flaked out mid-season. FLA Property Maintenance hasn't missed a single scheduled service day in 8 months. Consistent, professional, fully insured, and prompt billing.",
+      approved: true,
+      order: 4,
+      createdAt: "2026-06-02T09:45:00.000Z"
+    },
+    {
+      id: "rev_5",
+      name: "Elena M.",
+      role: "Residential Homeowner",
+      city: "Haines City",
+      service: "Mulch & Rock Installation",
+      rating: 5,
+      message: "We ordered 8 yards of river rock and refreshed the mulch around 14 palm trees. The crew arrived right on time at 8:00 AM with their dump trailer and commercial wheelbarrows. By 2:00 PM the entire property was pristine, blown clean, and sparkling.",
+      approved: true,
+      order: 5,
+      createdAt: "2026-06-25T13:15:00.000Z"
+    },
+    {
+      id: "rev_6",
+      name: "Marcus V.",
+      role: "Residential Homeowner",
+      city: "Bartow",
+      service: "Bi-Weekly Lawn Maintenance",
+      rating: 5,
+      message: "Their bi-weekly mowing service keeps our half-acre property in peak condition all year long. What stands out most is the care they take around fence lines and flower beds — they never scar the sod or ding fence posts with string trimmers. True pros.",
+      approved: true,
+      order: 6,
+      createdAt: "2026-07-12T15:40:00.000Z"
+    },
+    {
+      id: "rev_7",
+      name: "Amanda L.",
+      role: "Residential Homeowner",
+      city: "Plant City",
+      service: "Bush, Hedge & Tree Care",
+      rating: 5,
+      message: "Our podocarpus hedge had grown out of control to over 12 feet tall. The FLA crew leveled it to a perfect 7-foot privacy screen with laser-straight lines. They hauled away every last branch and leaf clipping. Our backyard finally feels open and private again.",
+      approved: true,
+      order: 7,
+      createdAt: "2026-08-04T10:10:00.000Z"
+    },
+    {
+      id: "rev_8",
+      name: "Sunbelt Rentals Yard",
+      role: "Facility Manager",
+      city: "Lake Wales",
+      service: "Seasonal Yard Cleanups",
+      rating: 5,
+      message: "Managing a 2-acre commercial yard requires reliable contractors who respect safety protocols and heavy equipment movement. FLA Property handles our routine mowing, retention pond trimming, and perimeter weed control without disrupting customer traffic.",
+      approved: true,
+      order: 8,
+      createdAt: "2026-09-01T08:30:00.000Z"
+    }
+  ];
+
+  const DEFAULT_PORTFOLIO = [
+    {
+      id: "port_1",
+      title: "Front Yard Curb Appeal Makeover",
+      category: "Landscape Bed Makeovers",
+      location: "Davenport, FL",
+      description: "Complete front yard landscape renovation featuring heavy-duty commercial weed barrier, vibrant red mulch, tropical hibiscus, crotons, and razor-sharp border edging.",
+      images: ["assets/images/landscape-bed-makeover.webp"],
+      video: null,
+      order: 1,
+      date: "2026-08-15"
+    },
+    {
+      id: "port_2",
+      title: "Full Acre Turf Striping",
+      category: "Lawn Mowing & Edging",
+      location: "Winter Haven, FL",
+      description: "Commercial zero-turn mower turf striping with diamond pattern on a 1.2-acre residential estate. Weekly cut height maintained at 3.75 inches for optimal root health.",
+      images: ["assets/images/residential-lawn-striping.webp"],
+      video: null,
+      order: 2,
+      date: "2026-08-10"
+    },
+    {
+      id: "port_3",
+      title: "Black Mulch & Tropical Palms",
+      category: "Mulch & Rock Installation",
+      location: "Haines City, FL",
+      description: "Premium double-shredded black mulch installation around mature Washingtonian palms and stone retaining borders, creating rich color contrast against emerald sod.",
+      images: ["assets/images/tropical-landscaping.webp"],
+      video: null,
+      order: 3,
+      date: "2026-07-28"
+    },
+    {
+      id: "port_4",
+      title: "Overgrown Rental Property Rescue",
+      category: "Seasonal Cleanups",
+      location: "Lakeland, FL",
+      description: "Comprehensive property reset for a rental turnover with waist-high overgrowth. Performed brush clearing, heavy mulching cut, weed abatement, and curb line trenching.",
+      images: ["assets/images/scag-mower-backyard.webp"],
+      video: null,
+      order: 4,
+      date: "2026-07-14"
+    },
+    {
+      id: "port_5",
+      title: "HOA Entrance Refresh",
+      category: "Commercial Maintenance",
+      location: "Auburndale, FL",
+      description: "Multi-phase entrance beautification for a 200-home community. Trimmed 40+ ornamental hedges, freshened seasonal annuals, and power-edged 800 linear feet of curb.",
+      images: ["assets/images/commercial-mower-landscaping.webp"],
+      video: null,
+      order: 5,
+      date: "2026-06-30"
+    },
+    {
+      id: "port_6",
+      title: "Stone Border & Palm Tree Rings",
+      category: "Landscape Design",
+      location: "Clermont, FL",
+      description: "Custom stacked stone landscape edging around 6 Sylvester palms, filled with polished Mexican beach pebble and low-voltage accent lighting.",
+      images: ["assets/images/sunset-curb-appeal.webp"],
+      video: null,
+      order: 6,
+      date: "2026-06-18"
+    },
+    {
+      id: "port_7",
+      title: "Canopy Lift & Privacy Hedge Leveling",
+      category: "Bush & Tree Care",
+      location: "Kissimmee, FL",
+      description: "Precision hedging on a 60-foot Viburnum hedge leveled to a uniform 8-foot height, paired with a 10-foot canopy lift on front oak trees for clear street clearance.",
+      images: ["assets/images/precision-lawn-mowing.webp"],
+      video: null,
+      order: 7,
+      date: "2026-05-22"
+    },
+    {
+      id: "port_8",
+      title: "Spring Storm Cleanup & Property Reset",
+      category: "Seasonal Cleanups",
+      location: "Plant City, FL",
+      description: "Post-storm branch removal, fallen debris shredding, turf aeration, and full estate detail cleanup across a 2-acre wooded lot.",
+      images: ["assets/images/hero-lawn-mowing.webp"],
+      video: null,
+      order: 8,
+      date: "2026-04-12"
+    }
+  ];
 
   const DEFAULT_THEME = {
     primary:    '#007f5f',
@@ -325,7 +515,18 @@
           }
         } catch (e) {}
       }
-      return storage(KEY.REVIEWS) || [];
+      let list = storage(KEY.REVIEWS);
+      if (!list || !list.length) {
+        try {
+          const res = await fetch('../data/reviews.json');
+          if (res.ok) list = await res.json();
+        } catch (e) {}
+      }
+      if (!list || !list.length) {
+        list = JSON.parse(JSON.stringify(DEFAULT_REVIEWS));
+      }
+      storage(KEY.REVIEWS, list);
+      return list;
     },
 
     async saveReview(rev) {
@@ -407,7 +608,18 @@
           }
         } catch (e) {}
       }
-      return storage(KEY.PORTFOLIO) || [];
+      let list = storage(KEY.PORTFOLIO);
+      if (!list || !list.length) {
+        try {
+          const res = await fetch('../data/portfolio.json');
+          if (res.ok) list = await res.json();
+        } catch (e) {}
+      }
+      if (!list || !list.length) {
+        list = JSON.parse(JSON.stringify(DEFAULT_PORTFOLIO));
+      }
+      storage(KEY.PORTFOLIO, list);
+      return list;
     },
 
     async savePortfolio(item) {
@@ -1082,6 +1294,40 @@
       ).join('');
     },
 
+    async setRank(id, targetRank) {
+      let list = await this.getAll();
+      const idx = list.findIndex(r => String(r.id) === String(id));
+      if (idx === -1) return;
+      const item = list.splice(idx, 1)[0];
+      const insertAt = Math.min(Math.max(0, targetRank - 1), list.length);
+      list.splice(insertAt, 0, item);
+      list.forEach((r, i) => { r.order = i + 1; });
+      storage(KEY.REVIEWS, list);
+      broadcast('reviews', { action: 'reorder', list });
+      await this.renderPending();
+      await this.renderApproved();
+      Dashboard.refresh();
+      toast(`✓ Review set as #${insertAt + 1} position! Live on website.`, 'success');
+    },
+
+    async move(id, delta) {
+      let list = await this.getAll();
+      const idx = list.findIndex(r => String(r.id) === String(id));
+      if (idx === -1) return;
+      const targetIdx = idx + delta;
+      if (targetIdx < 0 || targetIdx >= list.length) return;
+      const temp = list[idx];
+      list[idx] = list[targetIdx];
+      list[targetIdx] = temp;
+      list.forEach((r, i) => { r.order = i + 1; });
+      storage(KEY.REVIEWS, list);
+      broadcast('reviews', { action: 'reorder', list });
+      await this.renderPending();
+      await this.renderApproved();
+      Dashboard.refresh();
+      toast('✓ Review order updated', 'info');
+    },
+
     async approve(id, approveStatus) {
       await API.setReviewApproval(id, approveStatus);
       await this.renderPending();
@@ -1091,12 +1337,12 @@
     },
 
     async delete(id) {
-      if (!confirm('Delete this customer review?')) return;
+      if (!confirm('Are you sure you want to delete this customer review?')) return;
       await API.deleteReview(id);
       await this.renderPending();
       await this.renderApproved();
       Dashboard.refresh();
-      toast('Review removed.', 'info');
+      toast('Review deleted successfully.', 'info');
     },
 
     async renderPending() {
@@ -1126,7 +1372,7 @@
 
       listWrap.innerHTML = `
         <div class="admin-reviews-list">
-          ${pending.map(r => this.cardHtml(r, 'pending')).join('')}
+          ${pending.map((r, idx) => this.cardHtml(r, 'pending', idx, pending.length)).join('')}
         </div>
       `;
     },
@@ -1153,30 +1399,62 @@
 
       listWrap.innerHTML = `
         <div class="admin-reviews-list">
-          ${approved.map(r => this.cardHtml(r, 'approved')).join('')}
+          ${approved.map((r, idx) => this.cardHtml(r, 'approved', idx, approved.length)).join('')}
         </div>
       `;
     },
 
-    cardHtml(r, type) {
+    cardHtml(r, type, index = 0, total = 1) {
       const city = r.city || 'Central Florida';
       const role = r.role || r.propertyType || 'Homeowner';
+      const isFirst = index === 0;
+      const isSecond = index === 1;
+      const rankBadge = type === 'approved'
+        ? `<span class="review-rank-badge ${isFirst ? 'rank--first' : isSecond ? 'rank--second' : ''}">
+             ${isFirst ? '⭐ #1 Show First' : isSecond ? '🥈 #2 Show Second' : '#' + (index + 1)}
+           </span>`
+        : `<span class="review-rank-badge">Pending</span>`;
+
       return `
         <div class="review-admin-card" data-review-id="${esc(r.id)}">
           <div class="review-admin-avatar">${initials(r.name)}</div>
           <div class="review-admin-body">
-            <div class="review-admin-name">${esc(r.name || 'Anonymous')}</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+              ${rankBadge}
+              <span class="review-admin-name">${esc(r.name || 'Anonymous')}</span>
+            </div>
             <div class="review-admin-meta">${esc(role)} · ${esc(city)}, FL · ${timeAgo(r.createdAt)}</div>
             <div class="review-admin-stars">${this.starsHtml(r.rating || 5)}</div>
             <div class="review-admin-text">"${esc(r.message || '')}"</div>
           </div>
           <div class="review-admin-actions">
-            ${type === 'pending'
-              ? `<button type="button" class="btn-tbl btn-tbl--success" title="Approve & publish live" data-rv-approve="${esc(r.id)}"><i class="fa-solid fa-check"></i></button>`
-              : `<button type="button" class="btn-tbl" title="Move back to pending" data-rv-unapprove="${esc(r.id)}"><i class="fa-solid fa-eye-slash"></i></button>`
-            }
-            <button type="button" class="btn-tbl" title="Edit review" data-rv-edit="${esc(r.id)}"><i class="fa-solid fa-pen"></i></button>
-            <button type="button" class="btn-tbl btn-tbl--danger" title="Delete" data-rv-delete="${esc(r.id)}"><i class="fa-solid fa-trash"></i></button>
+            ${type === 'approved' ? `
+              <button type="button" class="btn-move-fast" title="Make this review #1 (Show First on Website)" data-rv-rank="1" data-rv-id="${esc(r.id)}">
+                <i class="fa-solid fa-star" style="color:#eab308;"></i> #1 First
+              </button>
+              <button type="button" class="btn-move-fast btn-move-fast--second" title="Make this review #2 (Show Second on Website)" data-rv-rank="2" data-rv-id="${esc(r.id)}">
+                <i class="fa-solid fa-medal" style="color:#2563eb;"></i> #2 Second
+              </button>
+              <button type="button" class="btn-tbl" title="Move 1 position up" data-rv-up="${esc(r.id)}" ${isFirst ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
+                <i class="fa-solid fa-arrow-up"></i>
+              </button>
+              <button type="button" class="btn-tbl" title="Move 1 position down" data-rv-down="${esc(r.id)}" ${index === total - 1 ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
+                <i class="fa-solid fa-arrow-down"></i>
+              </button>
+              <button type="button" class="btn-tbl" title="Move back to pending" data-rv-unapprove="${esc(r.id)}">
+                <i class="fa-solid fa-eye-slash"></i>
+              </button>
+            ` : `
+              <button type="button" class="btn-tbl btn-tbl--success" title="Approve & publish live" data-rv-approve="${esc(r.id)}">
+                <i class="fa-solid fa-check"></i> Approve
+              </button>
+            `}
+            <button type="button" class="btn-tbl" title="Edit review" data-rv-edit="${esc(r.id)}">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
+            <button type="button" class="btn-tbl btn-tbl--danger" title="Delete review" data-rv-delete="${esc(r.id)}">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
           </div>
         </div>
       `;
@@ -1202,31 +1480,51 @@
     },
 
     bind() {
-      // Pending list actions
-      const pendingWrap = $id('pending-reviews-list');
-      if (pendingWrap) {
-        pendingWrap.addEventListener('click', (e) => {
-          const btnApprove = e.target.closest('[data-rv-approve]');
-          if (btnApprove) this.approve(btnApprove.dataset.rvApprove, true);
-          const btnEdit = e.target.closest('[data-rv-edit]');
-          if (btnEdit) this.openEdit(btnEdit.dataset.rvEdit);
-          const btnDel = e.target.closest('[data-rv-delete]');
-          if (btnDel) this.delete(btnDel.dataset.rvDelete);
-        });
-      }
+      const handleListClick = (e) => {
+        const rankBtn = e.target.closest('[data-rv-rank]');
+        if (rankBtn) {
+          const targetRank = parseInt(rankBtn.dataset.rvRank);
+          const id = rankBtn.dataset.rvId;
+          this.setRank(id, targetRank);
+          return;
+        }
+        const upBtn = e.target.closest('[data-rv-up]');
+        if (upBtn) {
+          this.move(upBtn.dataset.rvUp, -1);
+          return;
+        }
+        const downBtn = e.target.closest('[data-rv-down]');
+        if (downBtn) {
+          this.move(downBtn.dataset.rvDown, 1);
+          return;
+        }
+        const btnApprove = e.target.closest('[data-rv-approve]');
+        if (btnApprove) {
+          this.approve(btnApprove.dataset.rvApprove, true);
+          return;
+        }
+        const btnUnapprove = e.target.closest('[data-rv-unapprove]');
+        if (btnUnapprove) {
+          this.approve(btnUnapprove.dataset.rvUnapprove, false);
+          return;
+        }
+        const btnEdit = e.target.closest('[data-rv-edit]');
+        if (btnEdit) {
+          this.openEdit(btnEdit.dataset.rvEdit);
+          return;
+        }
+        const btnDel = e.target.closest('[data-rv-delete]');
+        if (btnDel) {
+          this.delete(btnDel.dataset.rvDelete);
+          return;
+        }
+      };
 
-      // Approved list actions
+      const pendingWrap = $id('pending-reviews-list');
+      if (pendingWrap) pendingWrap.addEventListener('click', handleListClick);
+
       const approvedWrap = $id('approved-reviews-list');
-      if (approvedWrap) {
-        approvedWrap.addEventListener('click', (e) => {
-          const btnUnapprove = e.target.closest('[data-rv-unapprove]');
-          if (btnUnapprove) this.approve(btnUnapprove.dataset.rvUnapprove, false);
-          const btnEdit = e.target.closest('[data-rv-edit]');
-          if (btnEdit) this.openEdit(btnEdit.dataset.rvEdit);
-          const btnDel = e.target.closest('[data-rv-delete]');
-          if (btnDel) this.delete(btnDel.dataset.rvDelete);
-        });
-      }
+      if (approvedWrap) approvedWrap.addEventListener('click', handleListClick);
 
       // Add Review form
       const formAdd = $id('form-add-review');
@@ -1245,7 +1543,7 @@
           const rev = {
             id: 'rev_' + Date.now(),
             name: fd.get('name'),
-            city: fd.get('city') || 'Florida',
+            city: fd.get('city') || 'Central Florida',
             role: fd.get('role') || 'Homeowner',
             service: fd.get('service') || 'Lawn Mowing & Edging',
             rating: parseInt(fd.get('rating')) || 5,
@@ -1300,6 +1598,38 @@
       return await API.getPortfolio();
     },
 
+    async setRank(id, targetRank) {
+      let list = await this.getAll();
+      const idx = list.findIndex(p => String(p.id) === String(id));
+      if (idx === -1) return;
+      const item = list.splice(idx, 1)[0];
+      const insertAt = Math.min(Math.max(0, targetRank - 1), list.length);
+      list.splice(insertAt, 0, item);
+      list.forEach((p, i) => { p.order = i + 1; });
+      storage(KEY.PORTFOLIO, list);
+      broadcast('portfolio', { action: 'reorder', list });
+      await this.render();
+      Dashboard.refresh();
+      toast(`✓ Project moved to #${insertAt + 1} position! Live on site.`, 'success');
+    },
+
+    async move(id, delta) {
+      let list = await this.getAll();
+      const idx = list.findIndex(p => String(p.id) === String(id));
+      if (idx === -1) return;
+      const targetIdx = idx + delta;
+      if (targetIdx < 0 || targetIdx >= list.length) return;
+      const temp = list[idx];
+      list[idx] = list[targetIdx];
+      list[targetIdx] = temp;
+      list.forEach((p, i) => { p.order = i + 1; });
+      storage(KEY.PORTFOLIO, list);
+      broadcast('portfolio', { action: 'reorder', list });
+      await this.render();
+      Dashboard.refresh();
+      toast('✓ Portfolio order updated', 'info');
+    },
+
     async render() {
       const grid = $id('portfolio-grid');
       if (!grid) return;
@@ -1315,7 +1645,8 @@
         return;
       }
 
-      grid.innerHTML = list.map(p => {
+      grid.innerHTML = list.map((p, idx) => {
+        const isFirst = idx === 0;
         const thumb = (p.images && p.images[0])
           ? `<img src="${esc(p.images[0])}" alt="${esc(p.title)}" class="portfolio-admin-thumb">`
           : `<div class="portfolio-admin-thumb-placeholder"><i class="fa-solid fa-image"></i></div>`;
@@ -1324,15 +1655,29 @@
           <div class="portfolio-admin-card" data-portfolio-id="${esc(p.id)}">
             ${thumb}
             <div class="portfolio-admin-info">
-              <span class="portfolio-admin-category">${esc(p.category || 'Maintenance')}</span>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span class="portfolio-admin-category">${esc(p.category || 'Maintenance')}</span>
+                <span class="portfolio-rank-badge ${isFirst ? 'rank--featured' : ''}">
+                  ${isFirst ? '⭐ #1 Featured' : '#' + (idx + 1)}
+                </span>
+              </div>
               <div class="portfolio-admin-title">${esc(p.title)}</div>
               <div class="portfolio-admin-desc">${esc(p.description || '')}</div>
-              <div class="portfolio-admin-actions">
+              <div class="portfolio-admin-actions" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;">
+                <button type="button" class="btn-move-fast" title="Set this project as #1 (Featured First)" data-pf-rank="1" data-pf-id="${esc(p.id)}">
+                  <i class="fa-solid fa-star" style="color:#eab308;"></i> Show First
+                </button>
+                <button type="button" class="btn-tbl btn-tbl--sm" title="Move Up" data-pf-up="${esc(p.id)}" ${isFirst ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
+                  <i class="fa-solid fa-arrow-up"></i>
+                </button>
+                <button type="button" class="btn-tbl btn-tbl--sm" title="Move Down" data-pf-down="${esc(p.id)}" ${idx === list.length - 1 ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
+                  <i class="fa-solid fa-arrow-down"></i>
+                </button>
                 <button type="button" class="btn-secondary btn-sm" data-pf-edit="${esc(p.id)}">
                   <i class="fa-solid fa-pen"></i> Edit
                 </button>
                 <button type="button" class="btn-secondary btn-sm btn-danger" data-pf-del="${esc(p.id)}">
-                  <i class="fa-solid fa-trash"></i> Remove
+                  <i class="fa-solid fa-trash"></i> Delete
                 </button>
               </div>
             </div>
@@ -1347,7 +1692,8 @@
       $id('preview-images').innerHTML = '';
       $id('preview-video').innerHTML = '';
       $id('portfolio-modal-title').textContent = 'Add Portfolio Item';
-      $id('portfolio-submit-btn').innerHTML = '<i class="fa-solid fa-plus"></i> Add Portfolio Item';
+      const submitBtn = $id('portfolio-submit-btn');
+      if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Portfolio Item';
       if (form) form.querySelector('[name="id"]').value = '';
       PortfolioUpload.reset();
       Modals.open('modal-portfolio');
@@ -1369,7 +1715,8 @@
       form.querySelector('[name="date"]').value = p.date || '';
 
       $id('portfolio-modal-title').textContent = 'Edit Portfolio Item';
-      $id('portfolio-submit-btn').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
+      const submitBtn = $id('portfolio-submit-btn');
+      if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
 
       PortfolioUpload.reset();
       PortfolioUpload.existingImages = Array.isArray(p.images) ? [...p.images] : [];
@@ -1399,7 +1746,7 @@
     },
 
     async delete(id) {
-      if (!confirm('Remove this portfolio project?')) return;
+      if (!confirm('Are you sure you want to delete this portfolio project?')) return;
       await API.deletePortfolio(id);
       await this.render();
       Dashboard.refresh();
@@ -1413,10 +1760,33 @@
       const grid = $id('portfolio-grid');
       if (grid) {
         grid.addEventListener('click', (e) => {
+          const rankBtn = e.target.closest('[data-pf-rank]');
+          if (rankBtn) {
+            const targetRank = parseInt(rankBtn.dataset.pfRank);
+            const id = rankBtn.dataset.pfId;
+            this.setRank(id, targetRank);
+            return;
+          }
+          const upBtn = e.target.closest('[data-pf-up]');
+          if (upBtn) {
+            this.move(upBtn.dataset.pfUp, -1);
+            return;
+          }
+          const downBtn = e.target.closest('[data-pf-down]');
+          if (downBtn) {
+            this.move(downBtn.dataset.pfDown, 1);
+            return;
+          }
           const editBtn = e.target.closest('[data-pf-edit]');
-          if (editBtn) this.openEdit(editBtn.dataset.pfEdit);
+          if (editBtn) {
+            this.openEdit(editBtn.dataset.pfEdit);
+            return;
+          }
           const delBtn = e.target.closest('[data-pf-del]');
-          if (delBtn) this.delete(delBtn.dataset.pfDel);
+          if (delBtn) {
+            this.delete(delBtn.dataset.pfDel);
+            return;
+          }
         });
       }
 
@@ -1448,7 +1818,7 @@
               description: fd.get('description'),
               location: fd.get('location'),
               date: fd.get('date'),
-              images: images,
+              images: images.length ? images : ['assets/images/landscape-bed-makeover.webp'],
               video: video,
               updatedAt: new Date().toISOString()
             };
@@ -1457,7 +1827,7 @@
             Modals.close('modal-portfolio');
             await this.render();
             Dashboard.refresh();
-            toast('✓ Portfolio project saved successfully!', 'success');
+            toast(id ? '✓ Portfolio project updated!' : '✓ New portfolio project added!', 'success');
           } catch (err) {
             toast('Failed to save portfolio project: ' + err.message, 'error');
           } finally {
@@ -1952,143 +2322,102 @@
   const TrafficAnalytics = {
     currentMetric: 'views', // 'views' | 'unique' | 'quotes'
 
-    getData() {
-      try {
-        const raw = localStorage.getItem('fla_analytics');
-        if (raw) return JSON.parse(raw);
-      } catch (e) {}
-      return {
-        totalVisits: 12480,
-        weeklyVisits: 2840,
-        monthlyVisits: 12480,
-        todayVisits: 418,
-        pages: {
-          '/index.html': { name: 'Homepage (/)', views: 4820 },
-          '/services/lawn-mowing-maintenance.html': { name: 'Lawn Mowing & Care', views: 2640 },
-          '/services/landscape-design-bed-makeovers.html': { name: 'Landscape Makeovers', views: 1890 },
-          '/how-it-works.html': { name: 'Free Quote Calculator', views: 1420 },
-          '/reviews.html': { name: 'Customer Reviews', views: 980 },
-          '/portfolio.html': { name: 'Portfolio Gallery', views: 730 }
-        },
-        monthlyHistory: [
-          { month: 'Jan', views: 1640, unique: 1210, quotes: 14 },
-          { month: 'Feb', views: 1820, unique: 1390, quotes: 18 },
-          { month: 'Mar', views: 2150, unique: 1680, quotes: 22 },
-          { month: 'Apr', views: 2480, unique: 1950, quotes: 29 },
-          { month: 'May', views: 2210, unique: 1720, quotes: 25 },
-          { month: 'Jun', views: 2540, unique: 2010, quotes: 31 },
-          { month: 'Jul', views: 2790, unique: 2240, quotes: 35 },
-          { month: 'Aug', views: 3120, unique: 2490, quotes: 42 },
-          { month: 'Sep', views: 2650, unique: 2120, quotes: 33 },
-          { month: 'Oct', views: 2340, unique: 1850, quotes: 28 },
-          { month: 'Nov', views: 2180, unique: 1710, quotes: 24 },
-          { month: 'Dec', views: 2410, unique: 1910, quotes: 30 }
-        ]
-      };
-    },
-
-    getActiveSessions() {
-      try {
-        const raw = localStorage.getItem('fla_active_sessions');
-        if (!raw) return [];
-        const now = Date.now();
-        return JSON.parse(raw).filter(s => now - s.ts < 45000);
-      } catch (e) {
-        return [];
+    getStats() {
+      if (window.FLA_Analytics && typeof window.FLA_Analytics.getStats === 'function') {
+        return window.FLA_Analytics.getStats();
       }
+      return null;
     },
 
     render() {
-      const data = this.getData();
-      const sessions = this.getActiveSessions();
+      const stats = this.getStats();
+      if (!stats) return;
 
-      // Realtime Online Users: active tabs + baseline
+      // Realtime Online Users: genuine live active sessions
       const onlineEl = $id('live-online-users');
       if (onlineEl) {
-        const count = Math.max(3, sessions.length + (Math.floor(Date.now() / 8000) % 3));
-        onlineEl.textContent = count;
+        onlineEl.textContent = stats.onlineNow || 1;
       }
 
-      // This Week & Per Month Visits
+      // This Week & Nov 2026 Visits
       const weekEl = $id('stat-weekly-visits');
-      if (weekEl) weekEl.textContent = Number(data.weeklyVisits || 2840).toLocaleString();
+      if (weekEl) weekEl.textContent = Number(stats.weeklyVisits || 0).toLocaleString();
 
       const monthEl = $id('stat-monthly-visits');
-      if (monthEl) monthEl.textContent = Number(data.monthlyVisits || 12480).toLocaleString();
+      if (monthEl) monthEl.textContent = Number(stats.monthlyVisits || 0).toLocaleString();
 
       // Which Pages Are Being Visited Right Now
       const pagesList = $id('active-pages-list');
-      if (pagesList) {
-        const pagesMap = data.pages || {};
-        const pageKeys = Object.keys(pagesMap);
-
-        // Map active sessions to pages
-        const activeByPage = {};
-        sessions.forEach(s => {
-          activeByPage[s.path] = (activeByPage[s.path] || 0) + 1;
-        });
-
-        // Ensure homepage always shows online activity
-        if (!activeByPage['/index.html'] && !activeByPage['/']) {
-          activeByPage['/index.html'] = 2;
+      const countBadge = $id('active-pages-count');
+      if (pagesList && stats.pages) {
+        const topPages = stats.pages.slice(0, 6);
+        const activeCount = topPages.filter(p => p.activeNow > 0).length;
+        if (countBadge) {
+          countBadge.textContent = activeCount > 0 ? `${activeCount} Live Active` : 'All Pages Tracked';
         }
 
-        const items = pageKeys.slice(0, 6).map(key => {
-          const p = pagesMap[key];
-          const activeCount = activeByPage[key] || 0;
-          const badgeHtml = activeCount > 0
-            ? `<span class="page-viewers-badge" style="color:#16a34a;font-weight:700;">🟢 ${activeCount} online</span>`
-            : `<span class="page-viewers-badge">${Number(p.views || 0).toLocaleString()} views</span>`;
-
+        pagesList.innerHTML = topPages.map(p => {
+          const isLive = p.activeNow > 0;
           return `
             <div class="active-page-item">
               <div class="page-item-info">
-                <span class="page-dot" style="${activeCount > 0 ? 'background:#16a34a;box-shadow:0 0 6px #16a34a;' : 'background:#94a3b8;'}"></span>
+                <span class="page-dot" style="${isLive ? 'background:#16a34a;box-shadow:0 0 8px #16a34a;' : 'background:#94a3b8;'}"></span>
                 <span class="page-name" title="${esc(p.name)}">${esc(p.name)}</span>
               </div>
-              ${badgeHtml}
+              <span class="page-viewers-badge" style="${isLive ? 'color:#16a34a;font-weight:700;' : ''}">
+                ${isLive ? `🟢 ${p.activeNow} online` : `${Number(p.views || 0).toLocaleString()} views`}
+              </span>
             </div>
           `;
-        });
-
-        pagesList.innerHTML = items.join('');
+        }).join('');
       }
 
       // Update Chart headline and bars based on active metric
-      this.updateChart(data);
+      this.updateChart(stats);
     },
 
-    updateChart(data) {
-      if (!data) data = this.getData();
+    updateChart(stats) {
+      if (!stats) stats = this.getStats();
+      if (!stats) return;
+
       const metric = this.currentMetric;
-      const history = data.monthlyHistory || [];
+      const history = stats.monthlyHistory || [];
 
       const headlineEl = $id('chart-traffic-headline');
+      const subEl = $id('chart-headline-sub');
       const tooltipEl = $id('peak-bar-tooltip');
+      const tfLabel = $id('traffic-timeframe-label');
+
+      if (tfLabel) tfLabel.textContent = '2026';
+
+      const currentMonthData = history[stats.currentMonth] || history[10] || {};
 
       if (metric === 'views') {
-        if (headlineEl) headlineEl.textContent = Number(data.monthlyVisits || 12480).toLocaleString();
-        if (tooltipEl) tooltipEl.textContent = '3,120 Visits';
+        if (headlineEl) headlineEl.textContent = Number(stats.totalVisits2026 || 0).toLocaleString();
+        if (subEl) subEl.textContent = 'Total Page Views in 2026';
+        if (tooltipEl) tooltipEl.textContent = `${Number(currentMonthData.views || 0).toLocaleString()} Views`;
       } else if (metric === 'unique') {
-        if (headlineEl) headlineEl.textContent = '9,420';
-        if (tooltipEl) tooltipEl.textContent = '2,490 Uniques';
+        if (headlineEl) headlineEl.textContent = Number(stats.totalUnique2026 || 0).toLocaleString();
+        if (subEl) subEl.textContent = 'Unique Visitors in 2026';
+        if (tooltipEl) tooltipEl.textContent = `${Number(currentMonthData.unique || 0).toLocaleString()} Uniques`;
       } else if (metric === 'quotes') {
-        if (headlineEl) headlineEl.textContent = '148';
-        if (tooltipEl) tooltipEl.textContent = '42 Inquiries';
+        if (headlineEl) headlineEl.textContent = Number(stats.totalQuotes2026 || 0).toLocaleString();
+        if (subEl) subEl.textContent = 'Quote Inquiries in 2026';
+        if (tooltipEl) tooltipEl.textContent = `${Number(currentMonthData.quotes || 0).toLocaleString()} Inquiries`;
       }
 
-      // Find max value to scale bar heights
-      const vals = history.map(h => (metric === 'views' ? h.views : metric === 'unique' ? (h.unique || h.views * 0.8) : (h.quotes || 25)));
+      // Scale bar heights accurately to max month in 2026
+      const vals = history.map(h => (metric === 'views' ? h.views : metric === 'unique' ? h.unique : h.quotes));
       const max = Math.max(...vals, 1);
 
       const container = $id('traffic-bars-container');
       if (container) {
         const barCols = $all('.bar-col', container);
         barCols.forEach((col, idx) => {
-          const val = vals[idx] || (max * 0.5);
+          const val = vals[idx] !== undefined ? vals[idx] : 0;
           const pct = Math.round((val / max) * 88);
           const fill = col.querySelector('.bar-fill');
-          if (fill) fill.style.height = Math.max(20, pct) + '%';
+          if (fill) fill.style.height = Math.max(12, pct) + '%';
         });
       }
     },
@@ -2118,17 +2447,17 @@
       }
 
       window.addEventListener('storage', (e) => {
-        if (e.key === 'fla_analytics' || e.key === 'fla_active_sessions') {
+        if (e.key === 'fla_traffic_events' || e.key === 'fla_active_sessions' || e.key === 'fla_page_counts') {
           this.render();
         }
       });
 
-      // Periodic poller (every 3 seconds for live visitors pulse)
+      // Periodic poller (every 2 seconds for continuous live visitors pulse)
       setInterval(() => {
         if (Nav.current === 'dashboard') {
           this.render();
         }
-      }, 3000);
+      }, 2000);
     }
   };
 

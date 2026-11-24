@@ -3,14 +3,20 @@
  * Automatically syncs the public website with changes made in /admin:
  *  1. Live CSS Variable Injection (Colors & Branding)
  *  2. Page Headline & Subheadline Overrides from CMS
- *  3. Dynamic Approval Review Stream (Pending reviews held until approved in /admin)
- *  4. 4-Step Form Real-time Lead Dispatcher to /admin
+ *  3. Dynamic Approval Review Stream (Pending reviews held until approved; strict ordering support)
+ *  4. Portfolio Realtime Showcase & Ordering Sync
+ *  5. 4-Step Form Real-time Lead Dispatcher to /admin
  */
 
 (function () {
     'use strict';
 
     const STORAGE_KEY = 'fla_site_data';
+
+    function esc(s) {
+        if (!s) return '';
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
 
     function getSiteData() {
         try {
@@ -39,7 +45,6 @@
     // 1. APPLY DYNAMIC BRAND COLORS (DEFERS TO fla_theme_colors)
     // ─────────────────────────────────────────────────────────────────
     function applyBrandColors(colors) {
-        // If master dynamic theme is active, let theme.js manage colors
         if (localStorage.getItem('fla_theme_colors')) return;
         if (!colors) return;
         const root = document.documentElement;
@@ -70,15 +75,12 @@
         const page = pageTexts ? pageTexts[slug] : null;
 
         if (page) {
-            // Apply H1 if customized
             if (page.h1) {
                 const h1 = document.querySelector('h1');
                 if (h1 && !h1.hasAttribute('data-no-sync')) {
                     h1.textContent = page.h1;
                 }
             }
-
-            // Apply Hero Subheadline if customized
             if (page.subheadline) {
                 const subheadline = document.querySelector('.hero__subtext, .about-hero__subtext, .services-hero__subtext, .faq-hero__subtext, .reviews-hero__subtext');
                 if (subheadline && !subheadline.hasAttribute('data-no-sync')) {
@@ -87,7 +89,6 @@
             }
         }
 
-        // Apply global phone & hours
         if (contact && contact.phone) {
             const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
             phoneLinks.forEach(link => {
@@ -99,49 +100,53 @@
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // 3. SYNC APPROVED REVIEWS ONTO REVIEWS PAGE & HOMEPAGE
+    // 3. SYNC APPROVED REVIEWS ONTO REVIEWS PAGE & HOMEPAGE (STRICT ORDER)
     // ─────────────────────────────────────────────────────────────────
-    function syncApprovedReviews(reviews) {
-        if (!reviews || !Array.isArray(reviews)) return;
-        const approved = reviews.filter(r => r.status === 'approved');
+    function syncApprovedReviews(siteReviews) {
+        let list = [];
+        try {
+            const rawCustom = localStorage.getItem('fla_customer_reviews');
+            if (rawCustom) list = JSON.parse(rawCustom);
+        } catch (e) {}
+
+        if (!list || !list.length) {
+            list = siteReviews || [];
+        }
+
+        if (!list || !Array.isArray(list)) return;
+        const approved = list.filter(r => r.approved === true || r.status === 'approved');
         const reviewsGrid = document.getElementById('reviewsGrid');
 
-        // If on reviews.html and reviewsGrid exists, inject approved reviews seamlessly
         if (reviewsGrid && approved.length > 0) {
-            // Find existing cards to prevent duplicates
-            const existingTexts = new Set(
-                Array.from(reviewsGrid.querySelectorAll('.review-card__body'))
-                    .map(el => el.textContent.trim().replace(/^["“]|["”]$/g, ''))
-            );
+            reviewsGrid.innerHTML = approved.map((rev, idx) => {
+                const cleanText = (rev.message || rev.text || '').trim();
+                let starsHtml = '';
+                for (let i = 1; i <= 5; i++) {
+                    starsHtml += i <= (rev.rating || 5) ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
+                }
+                const name = rev.name || 'Anonymous';
+                const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'FL';
+                const city = rev.city || 'Central Florida';
+                const role = rev.role || rev.propertyType || 'Residential Client';
+                const service = rev.service || 'Lawn Maintenance';
 
-            approved.forEach(rev => {
-                const cleanText = (rev.text || '').trim();
-                if (!existingTexts.has(cleanText)) {
-                    const card = document.createElement('article');
-                    card.className = 'review-card review-card--approved-sync';
-                    card.setAttribute('data-service', rev.service || 'Lawn Mowing & Edging');
-                    card.setAttribute('data-city', rev.city || 'Lakeland');
-                    card.setAttribute('data-property', rev.propertyType || 'Residential Homeowner');
-
-                    let starsHtml = '';
-                    for (let i = 1; i <= 5; i++) {
-                        starsHtml += i <= (rev.rating || 5) ? '<i class="fas fa-star"></i>' : '<i class="far fa-star"></i>';
-                    }
-
-                    const initials = rev.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'FL';
-
-                    card.innerHTML = `
+                return `
+                    <article class="review-card review-card--approved-sync" data-service="${esc(service)}" data-city="${esc(city)}" data-property="${esc(role)}">
                         <div class="review-card__header">
                             <div class="review-card__user">
                                 <div class="review-card__avatar">
-                                    ${rev.avatarUrl ? `<img src="${rev.avatarUrl}" alt="${rev.name}" class="review-card__avatar-img">` : `<span class="review-card__avatar-text">${initials}</span>`}
+                                    ${rev.avatarUrl ? `<img src="${rev.avatarUrl}" alt="${esc(name)}" class="review-card__avatar-img">` : `<span class="review-card__avatar-text">${initials}</span>`}
                                 </div>
                                 <div class="review-card__user-info">
-                                    <h3 class="review-card__name">${rev.name}</h3>
-                                    <p class="review-card__location">
-                                        <i class="fas fa-map-marker-alt"></i> ${rev.city}, FL
-                                        <span class="review-card__verified" title="Verified Customer"><i class="fas fa-check-circle"></i></span>
-                                    </p>
+                                    <h3 class="review-card__name">
+                                        ${esc(name)}
+                                        <span class="review-card__verified-badge" title="Verified Client"><i class="fas fa-check-circle"></i> Verified Client</span>
+                                    </h3>
+                                    <div class="review-card__meta-tags">
+                                        <span class="review-card__city"><i class="fas fa-map-marker-alt"></i> ${esc(city)}, FL</span>
+                                        <span>&bull;</span>
+                                        <span>${esc(role)}</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="review-card__rating">
@@ -152,22 +157,74 @@
                             </div>
                         </div>
                         <p class="review-card__body">
-                            &ldquo;${rev.text}&rdquo;
+                            &ldquo;${esc(cleanText)}&rdquo;
                         </p>
                         <div class="review-card__footer">
-                            <span class="review-card__service-tag"><i class="fas fa-tag"></i> ${rev.service || 'Lawn Maintenance'}</span>
+                            <span class="review-card__service-tag"><i class="fas fa-tag"></i> ${esc(service)}</span>
                         </div>
-                    `;
-
-                    reviewsGrid.insertBefore(card, reviewsGrid.firstChild);
-                    existingTexts.add(cleanText);
-                }
-            });
+                    </article>
+                `;
+            }).join('');
         }
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // 4. INTERCEPT QUOTE FORM SUBMISSIONS -> SYNC TO /admin LEADS
+    // 4. SYNC PORTFOLIO GALLERY ONTO PORTFOLIO PAGE
+    // ─────────────────────────────────────────────────────────────────
+    function syncPortfolio() {
+        const bentoGallery = document.getElementById('bentoGallery');
+        if (!bentoGallery) return;
+
+        let list = [];
+        try {
+            const raw = localStorage.getItem('fla_portfolio');
+            if (raw) list = JSON.parse(raw);
+        } catch (e) {}
+
+        if (!list || !list.length) return;
+
+        bentoGallery.innerHTML = list.map((item, idx) => {
+            const isFeatured = idx === 0;
+            const spanClass = isFeatured ? 'bento-card--span-8' : 'bento-card--span-4';
+            const img = (item.images && item.images[0]) || 'assets/images/landscape-bed-makeover.webp';
+            const cat = item.category || 'Landscape';
+            const loc = item.location || 'Central Florida';
+
+            return `
+                <article class="bento-card ${spanClass}" data-category="${esc(cat.toLowerCase())}" 
+                    data-title="${esc(item.title)}" 
+                    data-location="${esc(loc)}" 
+                    data-service="${esc(cat)}" 
+                    data-type="Residential" 
+                    data-turnaround="1 Day"
+                    data-image="${esc(img)}"
+                    data-desc="${esc(item.description)}">
+                    <div class="bento-card__img-wrap">
+                        <img src="${esc(img)}" alt="${esc(item.title)}" class="bento-card__img" width="800" height="500" loading="lazy">
+                        <div class="bento-card__overlay"></div>
+                    </div>
+                    <div class="bento-card__top">
+                        <span class="bento-badge-city"><i class="fas fa-map-marker-alt"></i> ${esc(loc)}</span>
+                        <span class="bento-badge-cat"><i class="fas fa-star"></i> ${esc(cat)}</span>
+                    </div>
+                    <div class="bento-card__content">
+                        <div class="bento-card__meta-bar">
+                            <span class="bento-card__meta-item"><i class="fas fa-home"></i> Residential</span>
+                            <span class="bento-card__meta-item"><i class="fas fa-calendar-day"></i> ${esc(item.date || '2026')}</span>
+                        </div>
+                        <h3 class="bento-card__title">${esc(item.title)}</h3>
+                        <p class="bento-card__desc">${esc(item.description)}</p>
+                        <span class="bento-card__cta-btn">
+                            Quick View Project <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </article>
+            `;
+        }).join('');
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+    // 5. INTERCEPT QUOTE FORM SUBMISSIONS -> SYNC TO /admin LEADS
     // ─────────────────────────────────────────────────────────────────
     function initQuoteFormSync() {
         const quoteFormEl = document.getElementById('multiStepQuoteForm');
@@ -220,7 +277,7 @@
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // 5. INTERCEPT REVIEW SUBMISSION -> MARK AS PENDING FOR MODERATION
+    // 6. INTERCEPT REVIEW SUBMISSION -> MARK AS PENDING FOR MODERATION
     // ─────────────────────────────────────────────────────────────────
     function initReviewFormSync() {
         const reviewForm = document.getElementById('customerReviewForm');
@@ -238,41 +295,41 @@
             const text = messageInput.value.trim();
 
             if (name && text) {
-                const siteData = getSiteData();
-                if (siteData && siteData.reviews) {
-                    const pendingRev = {
-                        id: 'rev_' + Date.now(),
-                        name: name,
-                        city: cityInput ? cityInput.value : 'Lakeland',
-                        propertyType: propertyTypeInput ? propertyTypeInput.value : 'Residential Homeowner',
-                        service: serviceInput ? serviceInput.value : 'Lawn Mowing & Edging',
-                        rating: 5,
-                        text: text,
-                        avatarUrl: '',
-                        status: 'pending', // Held for moderation!
-                        createdAt: new Date().toISOString()
-                    };
-                    siteData.reviews.unshift(pendingRev);
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(siteData));
-                }
+                const pendingRev = {
+                    id: 'rev_' + Date.now(),
+                    name: name,
+                    city: cityInput ? cityInput.value : 'Lakeland',
+                    role: propertyTypeInput ? propertyTypeInput.value : 'Residential Homeowner',
+                    service: serviceInput ? serviceInput.value : 'Lawn Mowing & Edging',
+                    rating: 5,
+                    message: text,
+                    avatarUrl: '',
+                    approved: false, // Held for moderation in /admin
+                    createdAt: new Date().toISOString()
+                };
+
+                let reviewsList = [];
+                try {
+                    const raw = localStorage.getItem('fla_customer_reviews');
+                    if (raw) reviewsList = JSON.parse(raw);
+                } catch (e) {}
+                reviewsList.unshift(pendingRev);
+                localStorage.setItem('fla_customer_reviews', JSON.stringify(reviewsList));
             }
         });
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // 6. INITIAL RUN & CROSS-TAB EVENT LISTENER
+    // 7. INITIAL RUN & CROSS-TAB EVENT LISTENER
     // ─────────────────────────────────────────────────────────────────
     function runSync() {
         const data = getSiteData();
-        if (!data) return;
-
-        if (data.site_settings) {
+        if (data && data.site_settings) {
             applyBrandColors(data.site_settings.colors);
             applyPageTexts(data.site_settings.page_texts, data.site_settings.contact);
         }
-        if (data.reviews) {
-            syncApprovedReviews(data.reviews);
-        }
+        syncApprovedReviews(data ? data.reviews : null);
+        syncPortfolio();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -292,9 +349,19 @@
 
     // Cross-tab sync
     window.addEventListener('storage', (e) => {
-        if (!e.key || e.key === STORAGE_KEY) {
+        if (!e.key || e.key === STORAGE_KEY || e.key === 'fla_customer_reviews' || e.key === 'fla_portfolio' || e.key === 'fla_theme_colors') {
             runSync();
         }
     });
+
+    // Broadcast channel sync
+    if (window.BroadcastChannel) {
+        try {
+            const bc = new BroadcastChannel('fla_analytics_channel');
+            bc.onmessage = () => {
+                runSync();
+            };
+        } catch (e) {}
+    }
 
 })();

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,1011 +11,1051 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="admin.css">
 </head>
+
 <body>
 
-<!-- ══════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════════════
      LOGIN SCREEN
 ══════════════════════════════════════════════════════ -->
-<div id="login-screen">
-  <div class="login-bg-pattern"></div>
-  <div class="login-card">
-    <div class="login-logo-wrap">
-      <img src="../assets/images/logo.webp" alt="FLA Property Management" class="login-logo">
-    </div>
-    <div class="login-title-block">
-      <h1>Admin Portal</h1>
-      <p>FLA Property Maintenance LLC</p>
-    </div>
-    <form id="login-form" autocomplete="on" novalidate>
-      <div class="field-group">
-        <label for="login-username">Username</label>
-        <div class="field-wrap">
-          <i class="fa-regular fa-user field-icon"></i>
-          <input type="text" id="login-username" name="username" placeholder="Enter username" autocomplete="username" required>
-        </div>
+  <div id="login-screen">
+    <div class="login-bg-pattern"></div>
+    <div class="login-card">
+      <div class="login-logo-wrap">
+        <img src="../assets/images/logo.webp" alt="FLA Property Management" class="login-logo">
       </div>
-      <div class="field-group">
-        <label for="login-password">Password</label>
-        <div class="field-wrap">
-          <i class="fa-regular fa-lock field-icon"></i>
-          <input type="password" id="login-password" name="password" placeholder="Enter password" autocomplete="current-password" required>
-          <button type="button" class="field-btn-toggle" id="toggle-password" title="Show/hide password">
-            <i class="fa-regular fa-eye"></i>
-          </button>
-        </div>
+      <div class="login-title-block">
+        <h1>Admin Portal</h1>
+        <p>FLA Property Maintenance LLC</p>
       </div>
-      <p id="login-error" class="login-error" hidden></p>
-      <button type="submit" class="btn-login" id="login-submit-btn">
-        <span>Sign In</span>
-        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-      </button>
-    </form>
-    <p class="login-hint">Default: <code>admin</code> / <code>FLA@admin2024</code></p>
+      <form id="login-form" autocomplete="on" novalidate>
+        <div class="field-group">
+          <label for="login-username">Username</label>
+          <div class="field-wrap">
+            <i class="fa-regular fa-user field-icon"></i>
+            <input type="text" id="login-username" name="username" placeholder="Enter username" autocomplete="username"
+              required>
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="login-password">Password</label>
+          <div class="field-wrap">
+            <i class="fa-regular fa-lock field-icon"></i>
+            <input type="password" id="login-password" name="password" placeholder="Enter password"
+              autocomplete="current-password" required>
+            <button type="button" class="field-btn-toggle" id="toggle-password" title="Show/hide password">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <p id="login-error" class="login-error" hidden></p>
+        <button type="submit" class="btn-login" id="login-submit-btn">
+          <span>Sign In</span>
+          <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </button>
+      </form>
+      <p class="login-hint">Default: <code>admin</code> / <code>FLA@admin2026</code></p>
+    </div>
   </div>
-</div>
 
-<!-- ══════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════════════
      ADMIN APPLICATION
 ══════════════════════════════════════════════════════ -->
-<div id="admin-app" hidden>
+  <div id="admin-app" hidden>
 
-  <!-- SIDEBAR -->
-  <aside id="sidebar">
-    <div class="sidebar-brand">
-      <img src="../assets/images/logo-small.webp" alt="FLA" class="sidebar-brand-img" onerror="this.style.display='none'">
-      <div class="sidebar-brand-text">
-        <span class="sidebar-brand-name">FLA Property</span>
-        <span class="sidebar-brand-sub">Admin Portal</span>
-      </div>
-    </div>
-
-    <nav class="sidebar-nav" id="sidebar-nav">
-      <div class="nav-group">
-        <span class="nav-group-label">Main</span>
-        <a href="#" class="nav-link active" data-section="dashboard">
-          <span class="nav-link-icon"><i class="fa-solid fa-gauge-high"></i></span>
-          <span class="nav-link-text">Dashboard</span>
-        </a>
-        <a href="#" class="nav-link" data-section="quotes">
-          <span class="nav-link-icon"><i class="fa-solid fa-clipboard-list"></i></span>
-          <span class="nav-link-text">Quote Requests</span>
-          <span class="nav-badge" id="badge-quotes" hidden>0</span>
-        </a>
-        <a href="#" class="nav-link" data-section="reviews">
-          <span class="nav-link-icon"><i class="fa-solid fa-star"></i></span>
-          <span class="nav-link-text">Reviews</span>
-          <span class="nav-badge nav-badge--alert" id="badge-reviews" hidden>0</span>
-        </a>
-        <a href="#" class="nav-link" data-section="portfolio">
-          <span class="nav-link-icon"><i class="fa-solid fa-images"></i></span>
-          <span class="nav-link-text">Portfolio</span>
-        </a>
-      </div>
-      <div class="nav-group">
-        <span class="nav-group-label">Configuration</span>
-        <a href="#" class="nav-link" data-section="settings">
-          <span class="nav-link-icon"><i class="fa-solid fa-sliders"></i></span>
-          <span class="nav-link-text">Site Settings</span>
-        </a>
-        <a href="#" class="nav-link" data-section="colors">
-          <span class="nav-link-icon"><i class="fa-solid fa-palette"></i></span>
-          <span class="nav-link-text">Theme & Colors</span>
-        </a>
-      </div>
-    </nav>
-
-    <div class="sidebar-footer">
-      <a href="../" target="_blank" class="sidebar-footer-link">
-        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-        <span>View Website</span>
-      </a>
-      <button id="logout-btn" class="sidebar-footer-btn" title="Logout">
-        <i class="fa-solid fa-right-from-bracket"></i>
-        <span>Log Out</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- MAIN CONTENT AREA -->
-  <div id="main-wrap">
-
-    <!-- TOP HEADER (MONETRA SEGMENTED PILL NAVIGATION) -->
-    <header id="top-header">
-      <div class="header-left">
-        <button id="sidebar-toggle" class="btn-icon-round" title="Toggle sidebar">
-          <i class="fa-solid fa-bars"></i>
-        </button>
-        <div class="monetra-brand-badge">
-          <div class="monetra-brand-icon">
-            <i class="fa-solid fa-seedling"></i>
-          </div>
-          <span class="monetra-brand-title">FLA Property</span>
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../assets/images/logo-small.webp" alt="FLA" class="sidebar-brand-img"
+          onerror="this.style.display='none'">
+        <div class="sidebar-brand-text">
+          <span class="sidebar-brand-name">FLA Property</span>
+          <span class="sidebar-brand-sub">Admin Portal</span>
         </div>
       </div>
 
-      <!-- Monetra Center Pill Segmented Nav -->
-      <nav class="monetra-top-nav" id="top-nav-tabs">
-        <button type="button" class="top-nav-tab active" data-section="dashboard">Dashboard</button>
-        <button type="button" class="top-nav-tab" data-section="quotes">Quotes</button>
-        <button type="button" class="top-nav-tab" data-section="reviews">Reviews</button>
-        <button type="button" class="top-nav-tab" data-section="portfolio">Portfolio</button>
-        <button type="button" class="top-nav-tab" data-section="colors">Colors</button>
-        <button type="button" class="top-nav-tab" data-section="settings">Settings</button>
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <div class="nav-group">
+          <span class="nav-group-label">Main</span>
+          <a href="#" class="nav-link active" data-section="dashboard">
+            <span class="nav-link-icon"><i class="fa-solid fa-gauge-high"></i></span>
+            <span class="nav-link-text">Dashboard</span>
+          </a>
+          <a href="#" class="nav-link" data-section="quotes">
+            <span class="nav-link-icon"><i class="fa-solid fa-clipboard-list"></i></span>
+            <span class="nav-link-text">Quote Requests</span>
+            <span class="nav-badge" id="badge-quotes" hidden>0</span>
+          </a>
+          <a href="#" class="nav-link" data-section="reviews">
+            <span class="nav-link-icon"><i class="fa-solid fa-star"></i></span>
+            <span class="nav-link-text">Reviews</span>
+            <span class="nav-badge nav-badge--alert" id="badge-reviews" hidden>0</span>
+          </a>
+          <a href="#" class="nav-link" data-section="portfolio">
+            <span class="nav-link-icon"><i class="fa-solid fa-images"></i></span>
+            <span class="nav-link-text">Portfolio</span>
+          </a>
+        </div>
+        <div class="nav-group">
+          <span class="nav-group-label">Configuration</span>
+          <a href="#" class="nav-link" data-section="settings">
+            <span class="nav-link-icon"><i class="fa-solid fa-sliders"></i></span>
+            <span class="nav-link-text">Site Settings</span>
+          </a>
+          <a href="#" class="nav-link" data-section="colors">
+            <span class="nav-link-icon"><i class="fa-solid fa-palette"></i></span>
+            <span class="nav-link-text">Theme & Colors</span>
+          </a>
+        </div>
       </nav>
 
-      <div class="header-right">
-        <div class="live-indicator" id="live-indicator" title="Connected to realtime updates">
-          <span class="live-indicator-dot"></span>
-          <span id="live-indicator-text">Realtime Active</span>
-        </div>
-        <div class="lang-switcher" id="lang-switcher" title="Switch Language / Cambiar Idioma">
-          <button type="button" class="lang-btn active" data-lang="en">EN</button>
-          <button type="button" class="lang-btn" data-lang="es">ES</button>
-        </div>
-        <button type="button" class="btn-icon-round" id="refresh-data-btn" title="Refresh data">
-          <i class="fa-solid fa-arrows-rotate"></i>
+      <div class="sidebar-footer">
+        <a href="../" target="_blank" class="sidebar-footer-link">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>View Website</span>
+        </a>
+        <button id="logout-btn" class="sidebar-footer-btn" title="Logout">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Log Out</span>
         </button>
-        <button type="button" class="btn-icon-round" data-section="settings" title="Settings">
-          <i class="fa-solid fa-gear"></i>
-        </button>
-        <div class="header-user" title="Administrator">
-          <div class="user-avatar">A</div>
-          <span class="user-name">Admin</span>
-        </div>
       </div>
-    </header>
+    </aside>
 
-    <!-- CONTENT SECTIONS -->
-    <main id="content-area">
+    <!-- MAIN CONTENT AREA -->
+    <div id="main-wrap">
 
-      <!-- ── DASHBOARD (MONETRA FRESH MINIMAL DESIGN) ──────────────── -->
-      <section id="section-dashboard" class="admin-section active">
-        <!-- Monetra Hero Greeting -->
-        <div class="monetra-hero-bar">
-          <div class="monetra-hero-text">
-            <h2>Good morning, Admin 👋</h2>
-            <p>Stay on top of your tasks, monitor progress, and track status.</p>
-          </div>
-          <div class="monetra-search-box">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="monetra-quick-search" placeholder="Search leads, reviews, projects...">
+      <!-- TOP HEADER (MONETRA SEGMENTED PILL NAVIGATION) -->
+      <header id="top-header">
+        <div class="header-left">
+          <button id="sidebar-toggle" class="btn-icon-round" title="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="monetra-brand-badge">
+            <div class="monetra-brand-icon">
+              <i class="fa-solid fa-seedling"></i>
+            </div>
+            <span class="monetra-brand-title">FLA Property</span>
           </div>
         </div>
 
-        <!-- Monetra Dual-Wing Dashboard Layout -->
-        <div class="monetra-dash-layout">
-          <!-- LEFT / MAIN WORKSPACE -->
-          <div class="monetra-main-col">
-            
-            <!-- Top Row: Smart Wallet + 2x2 Mini KPI Cards -->
-            <div class="monetra-metrics-row">
-              <!-- Smart Pipeline Card (Monetra Smart Wallet Style) -->
-              <div class="monetra-wallet-card">
-                <div class="wallet-head">
-                  <div class="wallet-title-wrap">
-                    <h3>Smart Pipeline</h3>
-                    <p>Effortless service leads</p>
+        <!-- Monetra Center Pill Segmented Nav -->
+        <nav class="monetra-top-nav" id="top-nav-tabs">
+          <button type="button" class="top-nav-tab active" data-section="dashboard">Dashboard</button>
+          <button type="button" class="top-nav-tab" data-section="quotes">Quotes</button>
+          <button type="button" class="top-nav-tab" data-section="reviews">Reviews</button>
+          <button type="button" class="top-nav-tab" data-section="portfolio">Portfolio</button>
+          <button type="button" class="top-nav-tab" data-section="colors">Colors</button>
+          <button type="button" class="top-nav-tab" data-section="settings">Settings</button>
+        </nav>
+
+        <div class="header-right">
+          <div class="live-indicator" id="live-indicator" title="Connected to realtime updates">
+            <span class="live-indicator-dot"></span>
+            <span id="live-indicator-text">Realtime Active</span>
+          </div>
+          <div class="lang-switcher" id="lang-switcher" title="Switch Language / Cambiar Idioma">
+            <button type="button" class="lang-btn active" data-lang="en">EN</button>
+            <button type="button" class="lang-btn" data-lang="es">ES</button>
+          </div>
+          <button type="button" class="btn-icon-round" id="refresh-data-btn" title="Refresh data">
+            <i class="fa-solid fa-arrows-rotate"></i>
+          </button>
+          <button type="button" class="btn-icon-round" data-section="settings" title="Settings">
+            <i class="fa-solid fa-gear"></i>
+          </button>
+          <div class="header-user" title="Administrator">
+            <div class="user-avatar">A</div>
+            <span class="user-name">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- CONTENT SECTIONS -->
+      <main id="content-area">
+
+        <!-- ── DASHBOARD (MONETRA FRESH MINIMAL DESIGN) ──────────────── -->
+        <section id="section-dashboard" class="admin-section active">
+          <!-- Monetra Hero Greeting -->
+          <div class="monetra-hero-bar">
+            <div class="monetra-hero-text">
+              <h2>Good morning, Admin 👋</h2>
+              <p>Stay on top of your tasks, monitor progress, and track status.</p>
+            </div>
+            <div class="monetra-search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="monetra-quick-search" placeholder="Search leads, reviews, projects...">
+            </div>
+          </div>
+
+          <!-- Monetra Dual-Wing Dashboard Layout -->
+          <div class="monetra-dash-layout">
+            <!-- LEFT / MAIN WORKSPACE -->
+            <div class="monetra-main-col">
+
+              <!-- Top Row: Smart Wallet + 2x2 Mini KPI Cards -->
+              <div class="monetra-metrics-row">
+                <!-- Smart Pipeline Card (Monetra Smart Wallet Style) -->
+                <div class="monetra-wallet-card">
+                  <div class="wallet-head">
+                    <div class="wallet-title-wrap">
+                      <h3>Smart Pipeline</h3>
+                      <p>Effortless service leads</p>
+                    </div>
+                    <button type="button" class="btn-lime-pill" data-section="quotes" id="btn-quick-new-quote">
+                      Add New +
+                    </button>
                   </div>
-                  <button type="button" class="btn-lime-pill" data-section="quotes" id="btn-quick-new-quote">
-                    Add New +
+                  <div class="wallet-value-block">
+                    <span class="wallet-value" id="wallet-leads-total">24 Leads</span>
+                    <span class="wallet-currency">Active Inquiries</span>
+                  </div>
+                  <div class="wallet-tags-row">
+                    <div class="wallet-tag" data-section="quotes">
+                      <i class="fa-solid fa-scissors"></i>
+                      <span>Lawn Care</span>
+                    </div>
+                    <div class="wallet-tag" data-section="quotes">
+                      <i class="fa-solid fa-tree"></i>
+                      <span>Landscape</span>
+                    </div>
+                    <div class="wallet-tag" data-section="quotes">
+                      <i class="fa-solid fa-broom"></i>
+                      <span>Cleanups</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2x2 Mini KPI Metric Cards -->
+                <div class="monetra-mini-kpis">
+                  <div class="mini-kpi-card" data-section="quotes">
+                    <div class="mini-kpi-head">
+                      <div class="mini-kpi-icon icon--blue"><i class="fa-solid fa-file-invoice"></i></div>
+                      <span class="mini-kpi-label">Active Quotes</span>
+                      <button type="button" class="mini-kpi-dots">•••</button>
+                    </div>
+                    <div class="mini-kpi-value-row">
+                      <span class="mini-kpi-val" id="stat-total-quotes">0</span>
+                      <span class="mini-kpi-badge badge--green">↗ +14.5%</span>
+                    </div>
+                  </div>
+
+                  <div class="mini-kpi-card" data-section="reviews">
+                    <div class="mini-kpi-head">
+                      <div class="mini-kpi-icon icon--purple"><i class="fa-solid fa-star"></i></div>
+                      <span class="mini-kpi-label">Live Reviews</span>
+                      <button type="button" class="mini-kpi-dots">•••</button>
+                    </div>
+                    <div class="mini-kpi-value-row">
+                      <span class="mini-kpi-val" id="stat-approved-reviews">0</span>
+                      <span class="mini-kpi-badge badge--green">↗ +12.0%</span>
+                    </div>
+                  </div>
+
+                  <div class="mini-kpi-card" data-section="reviews">
+                    <div class="mini-kpi-head">
+                      <div class="mini-kpi-icon icon--amber"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                      <span class="mini-kpi-label">Pending Reviews</span>
+                      <button type="button" class="mini-kpi-dots">•••</button>
+                    </div>
+                    <div class="mini-kpi-value-row">
+                      <span class="mini-kpi-val" id="stat-pending-reviews">0</span>
+                      <span class="mini-kpi-badge badge--amber" id="badge-pending-rev-trend">Action Req</span>
+                    </div>
+                  </div>
+
+                  <div class="mini-kpi-card" data-section="portfolio">
+                    <div class="mini-kpi-head">
+                      <div class="mini-kpi-icon icon--emerald"><i class="fa-solid fa-images"></i></div>
+                      <span class="mini-kpi-label">Portfolio Items</span>
+                      <button type="button" class="mini-kpi-dots">•••</button>
+                    </div>
+                    <div class="mini-kpi-value-row">
+                      <span class="mini-kpi-val" id="stat-portfolio-count">0</span>
+                      <span class="mini-kpi-badge badge--green">Live</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Website Traffic & Page Visits Bar Chart -->
+              <div class="monetra-chart-card">
+                <div class="chart-header">
+                  <div class="chart-header-left">
+                    <span class="chart-sub-label">Website Traffic & Analytics</span>
+                    <div class="chart-headline">
+                      <h2 id="chart-traffic-headline">0</h2>
+                      <span class="chart-headline-tag" id="chart-headline-sub">Total Page Visits in 2026</span>
+                    </div>
+                    <div class="chart-pill-tabs" id="traffic-chart-tabs">
+                      <button type="button" class="chart-pill-tab active" data-metric="views">Page Views</button>
+                      <button type="button" class="chart-pill-tab" data-metric="unique">Unique Visitors</button>
+                      <button type="button" class="chart-pill-tab" data-metric="quotes">Quote Inquiries</button>
+                    </div>
+                  </div>
+                  <div class="chart-header-right">
+                    <div class="chart-select-pill" id="traffic-timeframe-btn" title="Year 2026 Analytics">
+                      <i class="fa-solid fa-calendar-day" style="color:var(--a-primary);"></i>
+                      <span id="traffic-timeframe-label" style="font-weight:700;">2026</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2026 Minimalist Monthly Bars with Live Month Highlight -->
+                <div class="monetra-bars-wrapper" id="traffic-bars-container">
+                  <div class="bar-col" data-month="0">
+                    <div class="bar-fill" style="height: 42%;"></div><span class="bar-label">Jan</span>
+                  </div>
+                  <div class="bar-col" data-month="1">
+                    <div class="bar-fill" style="height: 48%;"></div><span class="bar-label">Feb</span>
+                  </div>
+                  <div class="bar-col" data-month="2">
+                    <div class="bar-fill" style="height: 58%;"></div><span class="bar-label">Mar</span>
+                  </div>
+                  <div class="bar-col" data-month="3">
+                    <div class="bar-fill" style="height: 72%;"></div><span class="bar-label">Apr</span>
+                  </div>
+                  <div class="bar-col" data-month="4">
+                    <div class="bar-fill" style="height: 64%;"></div><span class="bar-label">May</span>
+                  </div>
+                  <div class="bar-col" data-month="5">
+                    <div class="bar-fill" style="height: 76%;"></div><span class="bar-label">Jun</span>
+                  </div>
+                  <div class="bar-col" data-month="6">
+                    <div class="bar-fill" style="height: 86%;"></div><span class="bar-label">Jul</span>
+                  </div>
+                  <div class="bar-col" data-month="7">
+                    <div class="bar-fill" style="height: 92%;"></div><span class="bar-label">Aug</span>
+                  </div>
+                  <div class="bar-col" data-month="8">
+                    <div class="bar-fill" style="height: 82%;"></div><span class="bar-label">Sep</span>
+                  </div>
+                  <div class="bar-col" data-month="9">
+                    <div class="bar-fill" style="height: 75%;"></div><span class="bar-label">Oct</span>
+                  </div>
+                  <!-- Active Month in 2026: November -->
+                  <div class="bar-col bar-col--highlight" data-month="10">
+                    <div class="bar-tooltip-pill">
+                      <span id="peak-bar-tooltip">0 Visits</span>
+                    </div>
+                    <div class="bar-fill bar-fill--highlight" style="height: 88%;"></div>
+                    <span class="bar-label">Nov</span>
+                  </div>
+                  <div class="bar-col" data-month="11">
+                    <div class="bar-fill" style="height: 15%;"></div><span class="bar-label">Dec</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent Inquiries Table Preview -->
+              <div class="card" style="margin-top: 20px; border-radius: 24px;">
+                <div class="card-head">
+                  <h3><i class="fa-solid fa-clipboard-list"></i> Recent Quote Submissions</h3>
+                  <a href="#" class="btn-text-link" data-section="quotes">View all quotes →</a>
+                </div>
+                <div class="card-body" id="dash-recent-quotes">
+                  <div class="empty-state"><i class="fa-regular fa-folder-open"></i>
+                    <p>No quote requests yet</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RIGHT / SIDE PANEL COLUMN -->
+            <div class="monetra-side-col">
+              <!-- Quick Send / Recent Client Leads -->
+              <div class="monetra-side-card">
+                <div class="side-card-head">
+                  <h4>Quick Send</h4>
+                  <p class="side-card-sub">Recent client submissions</p>
+                </div>
+                <div class="quick-avatars-row" id="quick-avatars-row">
+                  <div class="quick-avatar-item" title="Sarah Jenkins - Davenport">
+                    <span>SJ</span>
+                  </div>
+                  <div class="quick-avatar-item" title="Marcus Vance - Kissimmee">
+                    <span>MV</span>
+                  </div>
+                  <div class="quick-avatar-item" title="Elena Rodriguez - Haines City">
+                    <span>ER</span>
+                  </div>
+                  <div class="quick-avatar-item" title="David Miller - Clermont">
+                    <span>DM</span>
+                  </div>
+                  <div class="quick-avatar-item" title="Patricia Adams - Davenport">
+                    <span>PA</span>
+                  </div>
+                  <div class="quick-avatar-item quick-avatar-add" data-section="quotes" title="View all quotes">
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- REALTIME WEBSITE TRAFFIC & ONLINE USERS CARD (REPLACES CREDIT CARD) -->
+              <div class="monetra-analytics-live-card">
+                <div class="analytics-live-header">
+                  <div class="live-pulse-badge">
+                    <span class="live-pulse-dot"></span>
+                    <span class="live-pulse-text">REALTIME TRAFFIC</span>
+                  </div>
+                  <span class="live-updated-tag" id="analytics-live-time">Live now</span>
+                </div>
+
+                <!-- Big Realtime Online Visitors Counter -->
+                <div class="analytics-online-box">
+                  <div class="online-number-wrap">
+                    <span class="online-huge-num" id="live-online-users">3</span>
+                    <div class="online-label-wrap">
+                      <span class="online-main-label">Users Online Now</span>
+                      <span class="online-sub-label">Browsing site in real time</span>
+                    </div>
+                  </div>
+                  <div class="live-wave-bars">
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                    <span class="wave-bar"></span>
+                  </div>
+                </div>
+
+                <!-- This Week & Per Month Traffic Metrics -->
+                <div class="analytics-stat-pills">
+                  <div class="traffic-mini-pill">
+                    <div class="traffic-pill-label"><i class="fa-solid fa-calendar-week"></i> This Week</div>
+                    <div class="traffic-pill-val" id="stat-weekly-visits">0</div>
+                    <div class="traffic-pill-trend trend--up">↗ Realtime</div>
+                  </div>
+                  <div class="traffic-mini-pill">
+                    <div class="traffic-pill-label"><i class="fa-solid fa-chart-line"></i> Nov 2026</div>
+                    <div class="traffic-pill-val" id="stat-monthly-visits">0</div>
+                    <div class="traffic-pill-trend trend--up">Active Month</div>
+                  </div>
+                </div>
+
+                <!-- Which Pages Are Being Visited Right Now -->
+                <div class="active-pages-block">
+                  <div class="active-pages-title">
+                    <span>Pages Visited Right Now</span>
+                    <span class="active-pages-badge" id="active-pages-count">5 Active</span>
+                  </div>
+                  <div class="active-pages-list" id="active-pages-list">
+                    <div class="active-page-item">
+                      <div class="page-item-info">
+                        <span class="page-dot"></span>
+                        <span class="page-name">Homepage (/)</span>
+                      </div>
+                      <span class="page-viewers-badge">🟢 2 online</span>
+                    </div>
+                    <div class="active-page-item">
+                      <div class="page-item-info">
+                        <span class="page-dot"></span>
+                        <span class="page-name">Lawn Mowing & Care</span>
+                      </div>
+                      <span class="page-viewers-badge">🟢 1 online</span>
+                    </div>
+                    <div class="active-page-item">
+                      <div class="page-item-info">
+                        <span class="page-dot"></span>
+                        <span class="page-name">Landscape Makeovers</span>
+                      </div>
+                      <span class="page-viewers-badge">1,890 views</span>
+                    </div>
+                    <div class="active-page-item">
+                      <div class="page-item-info">
+                        <span class="page-dot"></span>
+                        <span class="page-name">Free Quote Calculator</span>
+                      </div>
+                      <span class="page-viewers-badge">1,420 views</span>
+                    </div>
+                    <div class="active-page-item">
+                      <div class="page-item-info">
+                        <span class="page-dot"></span>
+                        <span class="page-name">Customer Reviews</span>
+                      </div>
+                      <span class="page-viewers-badge">980 views</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Quick Site Buttons -->
+                <div class="analytics-card-actions">
+                  <a href="../" target="_blank" class="btn-lime-full"
+                    style="display:flex;align-items:center;justify-content:center;gap:8px;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Live Website
+                  </a>
+                </div>
+              </div>
+
+              <!-- Quick Actions 3-Column -->
+              <div class="monetra-side-card" style="margin-top: 18px;">
+                <div class="side-card-head">
+                  <h4>Quick Actions</h4>
+                </div>
+                <div class="quick-actions-3col">
+                  <button type="button" class="qa-btn" data-section="reviews">
+                    <div class="qa-icon"><i class="fa-solid fa-star"></i></div>
+                    <span>Add Review</span>
+                  </button>
+                  <button type="button" class="qa-btn" data-section="portfolio">
+                    <div class="qa-icon"><i class="fa-solid fa-plus"></i></div>
+                    <span>Add Project</span>
+                  </button>
+                  <button type="button" class="qa-btn" data-section="colors">
+                    <div class="qa-icon"><i class="fa-solid fa-palette"></i></div>
+                    <span>Colors</span>
                   </button>
                 </div>
-                <div class="wallet-value-block">
-                  <span class="wallet-value" id="wallet-leads-total">24 Leads</span>
-                  <span class="wallet-currency">Active Inquiries</span>
-                </div>
-                <div class="wallet-tags-row">
-                  <div class="wallet-tag" data-section="quotes">
-                    <i class="fa-solid fa-scissors"></i>
-                    <span>Lawn Care</span>
-                  </div>
-                  <div class="wallet-tag" data-section="quotes">
-                    <i class="fa-solid fa-tree"></i>
-                    <span>Landscape</span>
-                  </div>
-                  <div class="wallet-tag" data-section="quotes">
-                    <i class="fa-solid fa-broom"></i>
-                    <span>Cleanups</span>
-                  </div>
-                </div>
               </div>
 
-              <!-- 2x2 Mini KPI Metric Cards -->
-              <div class="monetra-mini-kpis">
-                <div class="mini-kpi-card" data-section="quotes">
-                  <div class="mini-kpi-head">
-                    <div class="mini-kpi-icon icon--blue"><i class="fa-solid fa-file-invoice"></i></div>
-                    <span class="mini-kpi-label">Active Quotes</span>
-                    <button type="button" class="mini-kpi-dots">•••</button>
-                  </div>
-                  <div class="mini-kpi-value-row">
-                    <span class="mini-kpi-val" id="stat-total-quotes">0</span>
-                    <span class="mini-kpi-badge badge--green">↗ +14.5%</span>
-                  </div>
-                </div>
+              <!-- Starter Plan / System Status (Monetra Style) -->
+              <div class="monetra-starter-plan-card">
+                <h4>FLA Realtime Engine</h4>
+                <p>Dual-Engine: Node.js API + Cloudflare Pages static fallback active.</p>
+                <button type="button" class="btn-lime-full" data-section="colors">
+                  Customize Theme Colors
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                <div class="mini-kpi-card" data-section="reviews">
-                  <div class="mini-kpi-head">
-                    <div class="mini-kpi-icon icon--purple"><i class="fa-solid fa-star"></i></div>
-                    <span class="mini-kpi-label">Live Reviews</span>
-                    <button type="button" class="mini-kpi-dots">•••</button>
-                  </div>
-                  <div class="mini-kpi-value-row">
-                    <span class="mini-kpi-val" id="stat-approved-reviews">0</span>
-                    <span class="mini-kpi-badge badge--green">↗ +12.0%</span>
-                  </div>
+        <!-- ── QUOTE REQUESTS ──────────────────────────── -->
+        <section id="section-quotes" class="admin-section" hidden>
+          <div class="section-header">
+            <h2>Quote Requests</h2>
+            <p>All submitted free estimate requests from your website form.</p>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-head-left">
+                <div class="search-bar">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" id="quotes-search" placeholder="Search by name, city, service…">
                 </div>
+                <select id="quotes-status-filter" class="select-sm">
+                  <option value="all">All Status</option>
+                  <option value="new">New</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="quoted">Quoted</option>
+                  <option value="won">Won</option>
+                  <option value="lost">Lost</option>
+                </select>
+              </div>
+              <div class="card-head-right">
+                <button class="btn-secondary btn-sm" id="export-quotes-btn">
+                  <i class="fa-solid fa-file-csv"></i> Export CSV
+                </button>
+              </div>
+            </div>
+            <div class="card-body card-body--flush">
+              <div class="table-scroll">
+                <table class="admin-table" id="quotes-table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Date</th>
+                      <th>Name</th>
+                      <th>Phone</th>
+                      <th>Email</th>
+                      <th>Service(s)</th>
+                      <th>City / Location</th>
+                      <th>Property Type</th>
+                      <th>Frequency</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="quotes-tbody">
+                    <tr>
+                      <td colspan="11">
+                        <div class="empty-state"><i class="fa-regular fa-folder-open"></i>
+                          <p>No quote requests yet</p>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
 
-                <div class="mini-kpi-card" data-section="reviews">
-                  <div class="mini-kpi-head">
-                    <div class="mini-kpi-icon icon--amber"><i class="fa-solid fa-clock-rotate-left"></i></div>
-                    <span class="mini-kpi-label">Pending Reviews</span>
-                    <button type="button" class="mini-kpi-dots">•••</button>
-                  </div>
-                  <div class="mini-kpi-value-row">
-                    <span class="mini-kpi-val" id="stat-pending-reviews">0</span>
-                    <span class="mini-kpi-badge badge--amber" id="badge-pending-rev-trend">Action Req</span>
-                  </div>
-                </div>
+          <!-- Quote Detail Modal -->
+          <div id="modal-quote" class="modal" hidden>
+            <div class="modal-backdrop"></div>
+            <div class="modal-box modal-box--lg">
+              <div class="modal-head">
+                <h3>Quote Details</h3>
+                <button class="btn-icon-round modal-close" data-modal="modal-quote"><i
+                    class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="modal-body" id="modal-quote-body"></div>
+            </div>
+          </div>
+        </section>
 
-                <div class="mini-kpi-card" data-section="portfolio">
-                  <div class="mini-kpi-head">
-                    <div class="mini-kpi-icon icon--emerald"><i class="fa-solid fa-images"></i></div>
-                    <span class="mini-kpi-label">Portfolio Items</span>
-                    <button type="button" class="mini-kpi-dots">•••</button>
-                  </div>
-                  <div class="mini-kpi-value-row">
-                    <span class="mini-kpi-val" id="stat-portfolio-count">0</span>
-                    <span class="mini-kpi-badge badge--green">Live</span>
-                  </div>
+        <!-- ── REVIEWS ─────────────────────────────────── -->
+        <section id="section-reviews" class="admin-section" hidden>
+          <div class="section-header">
+            <h2>Reviews Management</h2>
+            <p>Approve, edit, or add customer reviews shown on your website.</p>
+          </div>
+
+          <div class="tabs-nav">
+            <button class="tab-btn active" data-tab="tab-reviews-pending">
+              Pending <span class="tab-pill" id="count-pending">0</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-reviews-approved">
+              Approved <span class="tab-pill tab-pill--green" id="count-approved">0</span>
+            </button>
+            <button class="tab-btn" data-tab="tab-reviews-add">
+              <i class="fa-solid fa-plus"></i> Add Review
+            </button>
+          </div>
+
+          <!-- Pending Reviews Tab -->
+          <div id="tab-reviews-pending" class="tab-panel active">
+            <div class="card">
+              <div class="card-body" id="pending-reviews-list">
+                <div class="empty-state"><i class="fa-regular fa-clock"></i>
+                  <p>No pending reviews</p>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Website Traffic & Page Visits Bar Chart -->
-            <div class="monetra-chart-card">
-              <div class="chart-header">
-                <div class="chart-header-left">
-                  <span class="chart-sub-label">Website Traffic & Analytics</span>
-                  <div class="chart-headline">
-                    <h2 id="chart-traffic-headline">12,480</h2>
-                    <span class="chart-headline-tag">Total Page Visits This Month (+24.8% ↗)</span>
-                  </div>
-                  <div class="chart-pill-tabs" id="traffic-chart-tabs">
-                    <button type="button" class="chart-pill-tab active" data-metric="views">Page Views</button>
-                    <button type="button" class="chart-pill-tab" data-metric="unique">Unique Visitors</button>
-                    <button type="button" class="chart-pill-tab" data-metric="quotes">Quote Inquiries</button>
-                  </div>
-                </div>
-                <div class="chart-header-right">
-                  <div class="chart-select-pill" id="traffic-timeframe-btn">
-                    <span id="traffic-timeframe-label">Year 2024 / 2025</span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Monetra Minimalist Bars with Peak Month Tooltip -->
-              <div class="monetra-bars-wrapper" id="traffic-bars-container">
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 38%;"></div>
-                  <span class="bar-label">Jan</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 48%;"></div>
-                  <span class="bar-label">Feb</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 58%;"></div>
-                  <span class="bar-label">Mar</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 72%;"></div>
-                  <span class="bar-label">Apr</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 54%;"></div>
-                  <span class="bar-label">May</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 66%;"></div>
-                  <span class="bar-label">Jun</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 78%;"></div>
-                  <span class="bar-label">Jul</span>
-                </div>
-                <!-- Highlighted Peak Bar with Monetra Floating Pill Tooltip -->
-                <div class="bar-col bar-col--highlight">
-                  <div class="bar-tooltip-pill">
-                    <span id="peak-bar-tooltip">3,120 Visits</span>
-                  </div>
-                  <div class="bar-fill bar-fill--highlight" style="height: 88%;"></div>
-                  <span class="bar-label">Aug</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 68%;"></div>
-                  <span class="bar-label">Sep</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 58%;"></div>
-                  <span class="bar-label">Oct</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 50%;"></div>
-                  <span class="bar-label">Nov</span>
-                </div>
-                <div class="bar-col">
-                  <div class="bar-fill" style="height: 64%;"></div>
-                  <span class="bar-label">Dec</span>
+          <!-- Approved Reviews Tab -->
+          <div id="tab-reviews-approved" class="tab-panel" hidden>
+            <div class="card">
+              <div class="card-body" id="approved-reviews-list">
+                <div class="empty-state"><i class="fa-solid fa-check-circle" style="color:var(--a-success)"></i>
+                  <p>No approved reviews yet</p>
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- Recent Inquiries Table Preview -->
-            <div class="card" style="margin-top: 20px; border-radius: 24px;">
+          <!-- Add Review Tab -->
+          <div id="tab-reviews-add" class="tab-panel" hidden>
+            <div class="card card--form">
               <div class="card-head">
-                <h3><i class="fa-solid fa-clipboard-list"></i> Recent Quote Submissions</h3>
-                <a href="#" class="btn-text-link" data-section="quotes">View all quotes →</a>
+                <h3>Add New Review</h3>
               </div>
-              <div class="card-body" id="dash-recent-quotes">
-                <div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>No quote requests yet</p></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- RIGHT / SIDE PANEL COLUMN -->
-          <div class="monetra-side-col">
-            <!-- Quick Send / Recent Client Leads -->
-            <div class="monetra-side-card">
-              <div class="side-card-head">
-                <h4>Quick Send</h4>
-                <p class="side-card-sub">Recent client submissions</p>
-              </div>
-              <div class="quick-avatars-row" id="quick-avatars-row">
-                <div class="quick-avatar-item" title="Sarah Jenkins - Davenport">
-                  <span>SJ</span>
-                </div>
-                <div class="quick-avatar-item" title="Marcus Vance - Kissimmee">
-                  <span>MV</span>
-                </div>
-                <div class="quick-avatar-item" title="Elena Rodriguez - Haines City">
-                  <span>ER</span>
-                </div>
-                <div class="quick-avatar-item" title="David Miller - Clermont">
-                  <span>DM</span>
-                </div>
-                <div class="quick-avatar-item" title="Patricia Adams - Davenport">
-                  <span>PA</span>
-                </div>
-                <div class="quick-avatar-item quick-avatar-add" data-section="quotes" title="View all quotes">
-                  <i class="fa-solid fa-arrow-right"></i>
-                </div>
-              </div>
-            </div>
-
-            <!-- REALTIME WEBSITE TRAFFIC & ONLINE USERS CARD (REPLACES CREDIT CARD) -->
-            <div class="monetra-analytics-live-card">
-              <div class="analytics-live-header">
-                <div class="live-pulse-badge">
-                  <span class="live-pulse-dot"></span>
-                  <span class="live-pulse-text">REALTIME TRAFFIC</span>
-                </div>
-                <span class="live-updated-tag" id="analytics-live-time">Live now</span>
-              </div>
-
-              <!-- Big Realtime Online Visitors Counter -->
-              <div class="analytics-online-box">
-                <div class="online-number-wrap">
-                  <span class="online-huge-num" id="live-online-users">3</span>
-                  <div class="online-label-wrap">
-                    <span class="online-main-label">Users Online Now</span>
-                    <span class="online-sub-label">Browsing site in real time</span>
-                  </div>
-                </div>
-                <div class="live-wave-bars">
-                  <span class="wave-bar"></span>
-                  <span class="wave-bar"></span>
-                  <span class="wave-bar"></span>
-                  <span class="wave-bar"></span>
-                </div>
-              </div>
-
-              <!-- This Week & Per Month Traffic Metrics -->
-              <div class="analytics-stat-pills">
-                <div class="traffic-mini-pill">
-                  <div class="traffic-pill-label"><i class="fa-solid fa-calendar-week"></i> This Week</div>
-                  <div class="traffic-pill-val" id="stat-weekly-visits">2,840</div>
-                  <div class="traffic-pill-trend trend--up">↗ +18.4%</div>
-                </div>
-                <div class="traffic-mini-pill">
-                  <div class="traffic-pill-label"><i class="fa-solid fa-chart-line"></i> Per Month</div>
-                  <div class="traffic-pill-val" id="stat-monthly-visits">12,480</div>
-                  <div class="traffic-pill-trend trend--up">↗ +24.8%</div>
-                </div>
-              </div>
-
-              <!-- Which Pages Are Being Visited Right Now -->
-              <div class="active-pages-block">
-                <div class="active-pages-title">
-                  <span>Pages Visited Right Now</span>
-                  <span class="active-pages-badge" id="active-pages-count">5 Active</span>
-                </div>
-                <div class="active-pages-list" id="active-pages-list">
-                  <div class="active-page-item">
-                    <div class="page-item-info">
-                      <span class="page-dot"></span>
-                      <span class="page-name">Homepage (/)</span>
+              <div class="card-body">
+                <form id="form-add-review" novalidate>
+                  <div class="field-row">
+                    <div class="field-group">
+                      <label>Reviewer Name <span class="req">*</span></label>
+                      <input type="text" name="name" required placeholder="e.g. Sarah Johnson">
                     </div>
-                    <span class="page-viewers-badge">🟢 2 online</span>
-                  </div>
-                  <div class="active-page-item">
-                    <div class="page-item-info">
-                      <span class="page-dot"></span>
-                      <span class="page-name">Lawn Mowing & Care</span>
+                    <div class="field-group">
+                      <label>Location</label>
+                      <input type="text" name="city" placeholder="e.g. Davenport, FL">
                     </div>
-                    <span class="page-viewers-badge">🟢 1 online</span>
                   </div>
-                  <div class="active-page-item">
-                    <div class="page-item-info">
-                      <span class="page-dot"></span>
-                      <span class="page-name">Landscape Makeovers</span>
+                  <div class="field-row">
+                    <div class="field-group">
+                      <label>Role / Title</label>
+                      <input type="text" name="role" placeholder="e.g. Homeowner">
                     </div>
-                    <span class="page-viewers-badge">1,890 views</span>
-                  </div>
-                  <div class="active-page-item">
-                    <div class="page-item-info">
-                      <span class="page-dot"></span>
-                      <span class="page-name">Free Quote Calculator</span>
+                    <div class="field-group">
+                      <label>Service</label>
+                      <select name="service">
+                        <option value="Lawn Mowing & Edging">Lawn Mowing & Edging</option>
+                        <option value="Landscape Design">Landscape Design</option>
+                        <option value="Mulch & Rock Installation">Mulch & Rock Installation</option>
+                        <option value="Bush, Hedge & Tree Care">Bush, Hedge & Tree Care</option>
+                        <option value="Irrigation & Turf Care">Irrigation & Turf Care</option>
+                        <option value="Seasonal Yard Cleanups">Seasonal Yard Cleanups</option>
+                        <option value="One-Time Mow & Go">One-Time Mow & Go</option>
+                      </select>
                     </div>
-                    <span class="page-viewers-badge">1,420 views</span>
-                  </div>
-                  <div class="active-page-item">
-                    <div class="page-item-info">
-                      <span class="page-dot"></span>
-                      <span class="page-name">Customer Reviews</span>
-                    </div>
-                    <span class="page-viewers-badge">980 views</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Quick Site Buttons -->
-              <div class="analytics-card-actions">
-                <a href="../" target="_blank" class="btn-lime-full" style="display:flex;align-items:center;justify-content:center;gap:8px;">
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Live Website
-                </a>
-              </div>
-            </div>
-
-            <!-- Quick Actions 3-Column -->
-            <div class="monetra-side-card" style="margin-top: 18px;">
-              <div class="side-card-head">
-                <h4>Quick Actions</h4>
-              </div>
-              <div class="quick-actions-3col">
-                <button type="button" class="qa-btn" data-section="reviews">
-                  <div class="qa-icon"><i class="fa-solid fa-star"></i></div>
-                  <span>Add Review</span>
-                </button>
-                <button type="button" class="qa-btn" data-section="portfolio">
-                  <div class="qa-icon"><i class="fa-solid fa-plus"></i></div>
-                  <span>Add Project</span>
-                </button>
-                <button type="button" class="qa-btn" data-section="colors">
-                  <div class="qa-icon"><i class="fa-solid fa-palette"></i></div>
-                  <span>Colors</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Starter Plan / System Status (Monetra Style) -->
-            <div class="monetra-starter-plan-card">
-              <h4>FLA Realtime Engine</h4>
-              <p>Dual-Engine: Node.js API + Cloudflare Pages static fallback active.</p>
-              <button type="button" class="btn-lime-full" data-section="colors">
-                Customize Theme Colors
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── QUOTE REQUESTS ──────────────────────────── -->
-      <section id="section-quotes" class="admin-section" hidden>
-        <div class="section-header">
-          <h2>Quote Requests</h2>
-          <p>All submitted free estimate requests from your website form.</p>
-        </div>
-        <div class="card">
-          <div class="card-head">
-            <div class="card-head-left">
-              <div class="search-bar">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="quotes-search" placeholder="Search by name, city, service…">
-              </div>
-              <select id="quotes-status-filter" class="select-sm">
-                <option value="all">All Status</option>
-                <option value="new">New</option>
-                <option value="contacted">Contacted</option>
-                <option value="quoted">Quoted</option>
-                <option value="won">Won</option>
-                <option value="lost">Lost</option>
-              </select>
-            </div>
-            <div class="card-head-right">
-              <button class="btn-secondary btn-sm" id="export-quotes-btn">
-                <i class="fa-solid fa-file-csv"></i> Export CSV
-              </button>
-            </div>
-          </div>
-          <div class="card-body card-body--flush">
-            <div class="table-scroll">
-              <table class="admin-table" id="quotes-table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Date</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Service(s)</th>
-                    <th>City / Location</th>
-                    <th>Property Type</th>
-                    <th>Frequency</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="quotes-tbody">
-                  <tr><td colspan="11"><div class="empty-state"><i class="fa-regular fa-folder-open"></i><p>No quote requests yet</p></div></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quote Detail Modal -->
-        <div id="modal-quote" class="modal" hidden>
-          <div class="modal-backdrop"></div>
-          <div class="modal-box modal-box--lg">
-            <div class="modal-head">
-              <h3>Quote Details</h3>
-              <button class="btn-icon-round modal-close" data-modal="modal-quote"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body" id="modal-quote-body"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── REVIEWS ─────────────────────────────────── -->
-      <section id="section-reviews" class="admin-section" hidden>
-        <div class="section-header">
-          <h2>Reviews Management</h2>
-          <p>Approve, edit, or add customer reviews shown on your website.</p>
-        </div>
-
-        <div class="tabs-nav">
-          <button class="tab-btn active" data-tab="tab-reviews-pending">
-            Pending <span class="tab-pill" id="count-pending">0</span>
-          </button>
-          <button class="tab-btn" data-tab="tab-reviews-approved">
-            Approved <span class="tab-pill tab-pill--green" id="count-approved">0</span>
-          </button>
-          <button class="tab-btn" data-tab="tab-reviews-add">
-            <i class="fa-solid fa-plus"></i> Add Review
-          </button>
-        </div>
-
-        <!-- Pending Reviews Tab -->
-        <div id="tab-reviews-pending" class="tab-panel active">
-          <div class="card">
-            <div class="card-body" id="pending-reviews-list">
-              <div class="empty-state"><i class="fa-regular fa-clock"></i><p>No pending reviews</p></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Approved Reviews Tab -->
-        <div id="tab-reviews-approved" class="tab-panel" hidden>
-          <div class="card">
-            <div class="card-body" id="approved-reviews-list">
-              <div class="empty-state"><i class="fa-solid fa-check-circle" style="color:var(--a-success)"></i><p>No approved reviews yet</p></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Add Review Tab -->
-        <div id="tab-reviews-add" class="tab-panel" hidden>
-          <div class="card card--form">
-            <div class="card-head"><h3>Add New Review</h3></div>
-            <div class="card-body">
-              <form id="form-add-review" novalidate>
-                <div class="field-row">
-                  <div class="field-group">
-                    <label>Reviewer Name <span class="req">*</span></label>
-                    <input type="text" name="name" required placeholder="e.g. Sarah Johnson">
                   </div>
                   <div class="field-group">
-                    <label>Location</label>
-                    <input type="text" name="city" placeholder="e.g. Davenport, FL">
-                  </div>
-                </div>
-                <div class="field-row">
-                  <div class="field-group">
-                    <label>Role / Title</label>
-                    <input type="text" name="role" placeholder="e.g. Homeowner">
-                  </div>
-                  <div class="field-group">
-                    <label>Service</label>
-                    <select name="service">
-                      <option value="Lawn Mowing & Edging">Lawn Mowing & Edging</option>
-                      <option value="Landscape Design">Landscape Design</option>
-                      <option value="Mulch & Rock Installation">Mulch & Rock Installation</option>
-                      <option value="Bush, Hedge & Tree Care">Bush, Hedge & Tree Care</option>
-                      <option value="Irrigation & Turf Care">Irrigation & Turf Care</option>
-                      <option value="Seasonal Yard Cleanups">Seasonal Yard Cleanups</option>
-                      <option value="One-Time Mow & Go">One-Time Mow & Go</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="field-group">
-                  <label>Rating <span class="req">*</span></label>
-                  <div class="star-rating-pick" id="add-star-picker">
-                    <button type="button" class="star-pick star-pick--on" data-v="1"><i class="fa-solid fa-star"></i></button>
-                    <button type="button" class="star-pick star-pick--on" data-v="2"><i class="fa-solid fa-star"></i></button>
-                    <button type="button" class="star-pick star-pick--on" data-v="3"><i class="fa-solid fa-star"></i></button>
-                    <button type="button" class="star-pick star-pick--on" data-v="4"><i class="fa-solid fa-star"></i></button>
-                    <button type="button" class="star-pick star-pick--on" data-v="5"><i class="fa-solid fa-star"></i></button>
-                  </div>
-                  <input type="hidden" name="rating" value="5">
-                </div>
-                <div class="field-group">
-                  <label>Review Text <span class="req">*</span></label>
-                  <textarea name="message" required rows="4" placeholder="Write the review content here…"></textarea>
-                </div>
-                <div class="field-group">
-                  <label class="toggle-row">
-                    <span>Auto-approve (show on website immediately)</span>
-                    <label class="toggle-switch">
-                      <input type="checkbox" name="approved" checked>
-                      <span class="toggle-track"></span>
-                    </label>
-                  </label>
-                </div>
-                <div class="form-actions">
-                  <button type="submit" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Review</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <!-- Edit Review Modal -->
-        <div id="modal-review-edit" class="modal" hidden>
-          <div class="modal-backdrop"></div>
-          <div class="modal-box">
-            <div class="modal-head">
-              <h3>Edit Review</h3>
-              <button class="btn-icon-round modal-close" data-modal="modal-review-edit"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-              <form id="form-edit-review" novalidate>
-                <input type="hidden" name="id">
-                <div class="field-row">
-                  <div class="field-group">
-                    <label>Name <span class="req">*</span></label>
-                    <input type="text" name="name" required>
-                  </div>
-                  <div class="field-group">
-                    <label>Location</label>
-                    <input type="text" name="city">
-                  </div>
-                </div>
-                <div class="field-row">
-                  <div class="field-group">
-                    <label>Role</label>
-                    <input type="text" name="role">
-                  </div>
-                  <div class="field-group">
-                    <label>Rating</label>
-                    <div class="star-rating-pick" id="edit-star-picker">
-                      <button type="button" class="star-pick star-pick--on" data-v="1"><i class="fa-solid fa-star"></i></button>
-                      <button type="button" class="star-pick star-pick--on" data-v="2"><i class="fa-solid fa-star"></i></button>
-                      <button type="button" class="star-pick star-pick--on" data-v="3"><i class="fa-solid fa-star"></i></button>
-                      <button type="button" class="star-pick star-pick--on" data-v="4"><i class="fa-solid fa-star"></i></button>
-                      <button type="button" class="star-pick star-pick--on" data-v="5"><i class="fa-solid fa-star"></i></button>
+                    <label>Rating <span class="req">*</span></label>
+                    <div class="star-rating-pick" id="add-star-picker">
+                      <button type="button" class="star-pick star-pick--on" data-v="1"><i
+                          class="fa-solid fa-star"></i></button>
+                      <button type="button" class="star-pick star-pick--on" data-v="2"><i
+                          class="fa-solid fa-star"></i></button>
+                      <button type="button" class="star-pick star-pick--on" data-v="3"><i
+                          class="fa-solid fa-star"></i></button>
+                      <button type="button" class="star-pick star-pick--on" data-v="4"><i
+                          class="fa-solid fa-star"></i></button>
+                      <button type="button" class="star-pick star-pick--on" data-v="5"><i
+                          class="fa-solid fa-star"></i></button>
                     </div>
                     <input type="hidden" name="rating" value="5">
                   </div>
-                </div>
-                <div class="field-group">
-                  <label>Review Text <span class="req">*</span></label>
-                  <textarea name="message" required rows="4"></textarea>
-                </div>
-                <div class="form-actions">
-                  <button type="button" class="btn-secondary modal-close" data-modal="modal-review-edit">Cancel</button>
-                  <button type="submit" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── PORTFOLIO ───────────────────────────────── -->
-      <section id="section-portfolio" class="admin-section" hidden>
-        <div class="section-header">
-          <h2>Portfolio</h2>
-          <p>Manage your before/after project showcase and photo gallery.</p>
-        </div>
-        <div class="card">
-          <div class="card-head">
-            <h3><i class="fa-solid fa-images"></i> Portfolio Items</h3>
-            <button class="btn-primary" id="add-portfolio-btn">
-              <i class="fa-solid fa-plus"></i> Add Item
-            </button>
-          </div>
-          <div class="card-body">
-            <div id="portfolio-grid" class="portfolio-admin-grid">
-              <div class="empty-state"><i class="fa-solid fa-images"></i><p>No portfolio items yet. Click "Add Item" to get started.</p></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Portfolio Add/Edit Modal -->
-        <div id="modal-portfolio" class="modal" hidden>
-          <div class="modal-backdrop"></div>
-          <div class="modal-box modal-box--lg">
-            <div class="modal-head">
-              <h3 id="portfolio-modal-title">Add Portfolio Item</h3>
-              <button class="btn-icon-round modal-close" data-modal="modal-portfolio"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-              <form id="form-portfolio" novalidate>
-                <input type="hidden" name="id">
-                <div class="field-row">
-                  <div class="field-group field-grow">
-                    <label>Title <span class="req">*</span></label>
-                    <input type="text" name="title" required placeholder="e.g. Riverside Lawn Transformation">
+                  <div class="field-group">
+                    <label>Review Text <span class="req">*</span></label>
+                    <textarea name="message" required rows="4" placeholder="Write the review content here…"></textarea>
                   </div>
                   <div class="field-group">
-                    <label>Category</label>
-                    <select name="category">
-                      <option value="Lawn Mowing">Lawn Mowing</option>
-                      <option value="Landscape Design">Landscape Design</option>
-                      <option value="Mulch & Rock">Mulch & Rock</option>
-                      <option value="Bush & Hedge">Bush & Hedge</option>
-                      <option value="Irrigation">Irrigation</option>
-                      <option value="Yard Cleanup">Yard Cleanup</option>
-                      <option value="One-Time Mow">One-Time Mow</option>
-                    </select>
+                    <label class="toggle-row">
+                      <span>Auto-approve (show on website immediately)</span>
+                      <label class="toggle-switch">
+                        <input type="checkbox" name="approved" checked>
+                        <span class="toggle-track"></span>
+                      </label>
+                    </label>
                   </div>
-                </div>
-                <div class="field-row">
-                  <div class="field-group field-grow">
-                    <label>Short Description <span class="req">*</span></label>
-                    <textarea name="description" required rows="3" placeholder="Briefly describe the project, services, and outcome…"></textarea>
+                  <div class="form-actions">
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Review</button>
                   </div>
-                </div>
-                <div class="field-row">
-                  <div class="field-group">
-                    <label>Location</label>
-                    <input type="text" name="location" placeholder="e.g. Davenport, FL">
-                  </div>
-                  <div class="field-group">
-                    <label>Project Date</label>
-                    <input type="month" name="date">
-                  </div>
-                </div>
-
-                <div class="field-group">
-                  <label>Images <span class="label-note">Up to 3 images · max 3 MB each · JPG, PNG, WebP</span></label>
-                  <div class="upload-drop-zone" id="img-drop-zone" data-type="images">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
-                    <p>Drag & drop images here, or <span class="upload-click-cta">click to browse</span></p>
-                    <span class="upload-note">JPG / PNG / WebP · max 3 MB each · up to 3 images</span>
-                    <input type="file" id="input-portfolio-images" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
-                  </div>
-                  <div id="preview-images" class="preview-images-wrap"></div>
-                </div>
-
-                <div class="field-group">
-                  <label>Video <span class="label-note">Optional · max 10 MB · MP4 / WebM</span></label>
-                  <div class="upload-drop-zone upload-drop-zone--video" id="vid-drop-zone" data-type="video">
-                    <i class="fa-solid fa-film"></i>
-                    <p>Drag & drop video here, or <span class="upload-click-cta">click to browse</span></p>
-                    <span class="upload-note">MP4 / WebM · max 10 MB</span>
-                    <input type="file" id="input-portfolio-video" accept="video/mp4,video/webm" hidden>
-                  </div>
-                  <div id="preview-video" class="preview-video-wrap"></div>
-                </div>
-
-                <div class="form-actions">
-                  <button type="button" class="btn-secondary modal-close" data-modal="modal-portfolio">Cancel</button>
-                  <button type="submit" class="btn-primary" id="portfolio-submit-btn">
-                    <i class="fa-solid fa-plus"></i> Add Portfolio Item
-                  </button>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <!-- ── SITE SETTINGS ───────────────────────────── -->
-      <section id="section-settings" class="admin-section" hidden>
-        <div class="section-header">
-          <h2>Site Settings</h2>
-          <p>Manage SEO meta tags, branding assets, and admin credentials.</p>
-        </div>
+          <!-- Edit Review Modal -->
+          <div id="modal-review-edit" class="modal" hidden>
+            <div class="modal-backdrop"></div>
+            <div class="modal-box">
+              <div class="modal-head">
+                <h3>Edit Review</h3>
+                <button class="btn-icon-round modal-close" data-modal="modal-review-edit"><i
+                    class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="modal-body">
+                <form id="form-edit-review" novalidate>
+                  <input type="hidden" name="id">
+                  <div class="field-row">
+                    <div class="field-group">
+                      <label>Name <span class="req">*</span></label>
+                      <input type="text" name="name" required>
+                    </div>
+                    <div class="field-group">
+                      <label>Location</label>
+                      <input type="text" name="city">
+                    </div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-group">
+                      <label>Role</label>
+                      <input type="text" name="role">
+                    </div>
+                    <div class="field-group">
+                      <label>Rating</label>
+                      <div class="star-rating-pick" id="edit-star-picker">
+                        <button type="button" class="star-pick star-pick--on" data-v="1"><i
+                            class="fa-solid fa-star"></i></button>
+                        <button type="button" class="star-pick star-pick--on" data-v="2"><i
+                            class="fa-solid fa-star"></i></button>
+                        <button type="button" class="star-pick star-pick--on" data-v="3"><i
+                            class="fa-solid fa-star"></i></button>
+                        <button type="button" class="star-pick star-pick--on" data-v="4"><i
+                            class="fa-solid fa-star"></i></button>
+                        <button type="button" class="star-pick star-pick--on" data-v="5"><i
+                            class="fa-solid fa-star"></i></button>
+                      </div>
+                      <input type="hidden" name="rating" value="5">
+                    </div>
+                  </div>
+                  <div class="field-group">
+                    <label>Review Text <span class="req">*</span></label>
+                    <textarea name="message" required rows="4"></textarea>
+                  </div>
+                  <div class="form-actions">
+                    <button type="button" class="btn-secondary modal-close"
+                      data-modal="modal-review-edit">Cancel</button>
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save
+                      Changes</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <div class="settings-two-col">
-          <!-- SEO -->
+        <!-- ── PORTFOLIO ───────────────────────────────── -->
+        <section id="section-portfolio" class="admin-section" hidden>
+          <div class="section-header">
+            <h2>Portfolio</h2>
+            <p>Manage your before/after project showcase and photo gallery.</p>
+          </div>
           <div class="card">
             <div class="card-head">
-              <h3><i class="fa-solid fa-code"></i> SEO & Meta Tags</h3>
-            </div>
-            <div class="card-body">
-              <form id="form-meta" novalidate>
-                <div class="field-group">
-                  <label>Page Title <span class="label-note">shown in browser tab & Google</span></label>
-                  <input type="text" name="siteTitle" placeholder="FLA Property Maintenance LLC — Lawn Care Davenport FL">
-                </div>
-                <div class="field-group">
-                  <label>Meta Description <span class="label-note">150–160 characters ideal</span></label>
-                  <textarea name="metaDesc" rows="3" placeholder="Professional lawn care, landscaping, and property maintenance services in Central Florida…"></textarea>
-                  <div class="char-count-wrap">
-                    <span id="meta-desc-chars">0</span>/160 characters
-                  </div>
-                </div>
-                <div class="field-group">
-                  <label>Meta Keywords <span class="label-note">comma-separated</span></label>
-                  <textarea name="metaKeywords" rows="2" placeholder="lawn care, landscaping, Davenport FL, Kissimmee lawn mowing…"></textarea>
-                </div>
-                <div class="field-group">
-                  <label>Social Share Image URL <span class="label-note">OG image for Facebook / WhatsApp</span></label>
-                  <input type="url" name="ogImage" placeholder="https://flapropertymaintenance.com/assets/images/hero-bg.webp">
-                </div>
-                <div class="form-actions">
-                  <button type="submit" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Meta</button>
-                  <span class="save-feedback" id="meta-save-msg" hidden>✓ Saved!</span>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <!-- Branding -->
-          <div class="card">
-            <div class="card-head">
-              <h3><i class="fa-solid fa-trademark"></i> Branding & Contact</h3>
-            </div>
-            <div class="card-body">
-              <div class="field-group">
-                <label>Current Logo</label>
-                <div class="asset-preview">
-                  <img src="../assets/images/logo.webp" alt="Logo" style="max-height:52px; max-width:160px;">
-                  <span>logo.webp</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <label>Upload New Logo <span class="label-note">WebP/PNG · max 500 KB</span></label>
-                <div class="upload-drop-zone upload-drop-zone--sm" id="logo-drop-zone">
-                  <i class="fa-solid fa-image"></i>
-                  <p>Click to upload logo</p>
-                  <input type="file" id="input-logo" accept="image/*" hidden>
-                </div>
-                <div id="logo-new-preview"></div>
-              </div>
-              <div class="field-group">
-                <label>Upload Favicon <span class="label-note">32×32 PNG or .ico</span></label>
-                <div class="upload-drop-zone upload-drop-zone--sm" id="favicon-drop-zone">
-                  <i class="fa-solid fa-star"></i>
-                  <p>Click to upload favicon</p>
-                  <input type="file" id="input-favicon" accept="image/*,.ico" hidden>
-                </div>
-                <div id="favicon-preview"></div>
-              </div>
-              <div class="field-row">
-                <div class="field-group">
-                  <label>Company Phone</label>
-                  <input type="tel" id="branding-phone" placeholder="(863) 712-8783">
-                </div>
-                <div class="field-group">
-                  <label>Company Email</label>
-                  <input type="email" id="branding-email" placeholder="info@flapropertymaintenance.com">
-                </div>
-              </div>
-              <div class="form-actions">
-                <button class="btn-primary" id="save-branding-btn"><i class="fa-solid fa-floppy-disk"></i> Save Branding</button>
-                <span class="save-feedback" id="branding-save-msg" hidden>✓ Saved!</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Change Password -->
-        <div class="card card--form" style="margin-top:24px;">
-          <div class="card-head"><h3><i class="fa-solid fa-lock"></i> Change Admin Password</h3></div>
-          <div class="card-body">
-            <form id="form-change-pass" novalidate>
-              <div class="field-row">
-                <div class="field-group">
-                  <label>Current Password</label>
-                  <input type="password" name="currentPass" required autocomplete="current-password">
-                </div>
-                <div class="field-group">
-                  <label>New Password <span class="label-note">min 6 chars</span></label>
-                  <input type="password" name="newPass" required minlength="6" autocomplete="new-password">
-                </div>
-                <div class="field-group">
-                  <label>Confirm New Password</label>
-                  <input type="password" name="confirmPass" required autocomplete="new-password">
-                </div>
-              </div>
-              <p id="pass-change-feedback" class="form-feedback" hidden></p>
-              <div class="form-actions">
-                <button type="submit" class="btn-primary">Update Password</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── THEME & COLORS ──────────────────────────── -->
-      <section id="section-colors" class="admin-section" hidden>
-        <div class="section-header">
-          <h2>Theme & Colors</h2>
-          <p>Choose a preset color theme or customize individual colors across your entire website.</p>
-        </div>
-
-        <!-- Preset Swatches -->
-        <div class="card">
-          <div class="card-head">
-            <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Color Presets</h3>
-            <p class="card-subtitle">Click any preset to apply it instantly</p>
-          </div>
-          <div class="card-body">
-            <div class="preset-swatches" id="preset-swatches"></div>
-          </div>
-        </div>
-
-        <!-- Custom Pickers -->
-        <div class="card" style="margin-top:24px;">
-          <div class="card-head">
-            <h3><i class="fa-solid fa-sliders"></i> Custom Colors</h3>
-            <button class="btn-secondary" id="reset-theme-btn"><i class="fa-solid fa-rotate-left"></i> Reset to Default</button>
-          </div>
-          <div class="card-body">
-            <div class="color-pickers-grid" id="color-pickers-grid"></div>
-
-            <!-- Live Preview -->
-            <div class="color-preview-panel" id="color-preview-panel">
-              <span class="color-preview-label">Live Preview</span>
-              <div class="color-preview-content">
-                <h3 id="preview-heading" style="margin:0 0 8px;">Professional Lawn Care Services</h3>
-                <p id="preview-body" style="margin:0 0 16px; font-size:14px;">We provide top-tier residential and commercial property maintenance across Central Florida.</p>
-                <button id="preview-button" class="preview-btn-demo">Get Your Free Quote →</button>
-              </div>
-            </div>
-
-            <div class="form-actions" style="margin-top:24px; align-items:center; gap:16px;">
-              <button class="btn-primary" id="apply-theme-btn">
-                <i class="fa-solid fa-check"></i> Apply to Website
+              <h3><i class="fa-solid fa-images"></i> Portfolio Items</h3>
+              <button class="btn-primary" id="add-portfolio-btn">
+                <i class="fa-solid fa-plus"></i> Add Item
               </button>
-              <span class="save-feedback" id="theme-save-msg" hidden>✓ Theme applied and saved!</span>
+            </div>
+            <div class="card-body">
+              <div id="portfolio-grid" class="portfolio-admin-grid">
+                <div class="empty-state"><i class="fa-solid fa-images"></i>
+                  <p>No portfolio items yet. Click "Add Item" to get started.</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-    </main><!-- /content-area -->
-  </div><!-- /main-wrap -->
-</div><!-- /admin-app -->
+          <!-- Portfolio Add/Edit Modal -->
+          <div id="modal-portfolio" class="modal" hidden>
+            <div class="modal-backdrop"></div>
+            <div class="modal-box modal-box--lg">
+              <div class="modal-head">
+                <h3 id="portfolio-modal-title">Add Portfolio Item</h3>
+                <button class="btn-icon-round modal-close" data-modal="modal-portfolio"><i
+                    class="fa-solid fa-xmark"></i></button>
+              </div>
+              <div class="modal-body">
+                <form id="form-portfolio" novalidate>
+                  <input type="hidden" name="id">
+                  <div class="field-row">
+                    <div class="field-group field-grow">
+                      <label>Title <span class="req">*</span></label>
+                      <input type="text" name="title" required placeholder="e.g. Riverside Lawn Transformation">
+                    </div>
+                    <div class="field-group">
+                      <label>Category</label>
+                      <select name="category">
+                        <option value="Lawn Mowing">Lawn Mowing</option>
+                        <option value="Landscape Design">Landscape Design</option>
+                        <option value="Mulch & Rock">Mulch & Rock</option>
+                        <option value="Bush & Hedge">Bush & Hedge</option>
+                        <option value="Irrigation">Irrigation</option>
+                        <option value="Yard Cleanup">Yard Cleanup</option>
+                        <option value="One-Time Mow">One-Time Mow</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-group field-grow">
+                      <label>Short Description <span class="req">*</span></label>
+                      <textarea name="description" required rows="3"
+                        placeholder="Briefly describe the project, services, and outcome…"></textarea>
+                    </div>
+                  </div>
+                  <div class="field-row">
+                    <div class="field-group">
+                      <label>Location</label>
+                      <input type="text" name="location" placeholder="e.g. Davenport, FL">
+                    </div>
+                    <div class="field-group">
+                      <label>Project Date</label>
+                      <input type="month" name="date">
+                    </div>
+                  </div>
 
-<!-- TOAST NOTIFICATIONS -->
-<div id="toast-container" aria-live="polite"></div>
+                  <div class="field-group">
+                    <label>Images <span class="label-note">Up to 3 images · max 3 MB each · JPG, PNG,
+                        WebP</span></label>
+                    <div class="upload-drop-zone" id="img-drop-zone" data-type="images">
+                      <i class="fa-solid fa-cloud-arrow-up"></i>
+                      <p>Drag & drop images here, or <span class="upload-click-cta">click to browse</span></p>
+                      <span class="upload-note">JPG / PNG / WebP · max 3 MB each · up to 3 images</span>
+                      <input type="file" id="input-portfolio-images" accept="image/jpeg,image/png,image/webp,image/gif"
+                        multiple hidden>
+                    </div>
+                    <div id="preview-images" class="preview-images-wrap"></div>
+                  </div>
 
-<script src="admin.js"></script>
+                  <div class="field-group">
+                    <label>Video <span class="label-note">Optional · max 10 MB · MP4 / WebM</span></label>
+                    <div class="upload-drop-zone upload-drop-zone--video" id="vid-drop-zone" data-type="video">
+                      <i class="fa-solid fa-film"></i>
+                      <p>Drag & drop video here, or <span class="upload-click-cta">click to browse</span></p>
+                      <span class="upload-note">MP4 / WebM · max 10 MB</span>
+                      <input type="file" id="input-portfolio-video" accept="video/mp4,video/webm" hidden>
+                    </div>
+                    <div id="preview-video" class="preview-video-wrap"></div>
+                  </div>
+
+                  <div class="form-actions">
+                    <button type="button" class="btn-secondary modal-close" data-modal="modal-portfolio">Cancel</button>
+                    <button type="submit" class="btn-primary" id="portfolio-submit-btn">
+                      <i class="fa-solid fa-plus"></i> Add Portfolio Item
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── SITE SETTINGS ───────────────────────────── -->
+        <section id="section-settings" class="admin-section" hidden>
+          <div class="section-header">
+            <h2>Site Settings</h2>
+            <p>Manage SEO meta tags, branding assets, and admin credentials.</p>
+          </div>
+
+          <div class="settings-two-col">
+            <!-- SEO -->
+            <div class="card">
+              <div class="card-head">
+                <h3><i class="fa-solid fa-code"></i> SEO & Meta Tags</h3>
+              </div>
+              <div class="card-body">
+                <form id="form-meta" novalidate>
+                  <div class="field-group">
+                    <label>Page Title <span class="label-note">shown in browser tab & Google</span></label>
+                    <input type="text" name="siteTitle"
+                      placeholder="FLA Property Maintenance LLC — Lawn Care Davenport FL">
+                  </div>
+                  <div class="field-group">
+                    <label>Meta Description <span class="label-note">150–160 characters ideal</span></label>
+                    <textarea name="metaDesc" rows="3"
+                      placeholder="Professional lawn care, landscaping, and property maintenance services in Central Florida…"></textarea>
+                    <div class="char-count-wrap">
+                      <span id="meta-desc-chars">0</span>/160 characters
+                    </div>
+                  </div>
+                  <div class="field-group">
+                    <label>Meta Keywords <span class="label-note">comma-separated</span></label>
+                    <textarea name="metaKeywords" rows="2"
+                      placeholder="lawn care, landscaping, Davenport FL, Kissimmee lawn mowing…"></textarea>
+                  </div>
+                  <div class="field-group">
+                    <label>Social Share Image URL <span class="label-note">OG image for Facebook /
+                        WhatsApp</span></label>
+                    <input type="url" name="ogImage"
+                      placeholder="https://flapropertymaintenance.com/assets/images/hero-bg.webp">
+                  </div>
+                  <div class="form-actions">
+                    <button type="submit" class="btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save Meta</button>
+                    <span class="save-feedback" id="meta-save-msg" hidden>✓ Saved!</span>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Branding -->
+            <div class="card">
+              <div class="card-head">
+                <h3><i class="fa-solid fa-trademark"></i> Branding & Contact</h3>
+              </div>
+              <div class="card-body">
+                <div class="field-group">
+                  <label>Current Logo</label>
+                  <div class="asset-preview">
+                    <img src="../assets/images/logo.webp" alt="Logo" style="max-height:52px; max-width:160px;">
+                    <span>logo.webp</span>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label>Upload New Logo <span class="label-note">WebP/PNG · max 500 KB</span></label>
+                  <div class="upload-drop-zone upload-drop-zone--sm" id="logo-drop-zone">
+                    <i class="fa-solid fa-image"></i>
+                    <p>Click to upload logo</p>
+                    <input type="file" id="input-logo" accept="image/*" hidden>
+                  </div>
+                  <div id="logo-new-preview"></div>
+                </div>
+                <div class="field-group">
+                  <label>Upload Favicon <span class="label-note">32×32 PNG or .ico</span></label>
+                  <div class="upload-drop-zone upload-drop-zone--sm" id="favicon-drop-zone">
+                    <i class="fa-solid fa-star"></i>
+                    <p>Click to upload favicon</p>
+                    <input type="file" id="input-favicon" accept="image/*,.ico" hidden>
+                  </div>
+                  <div id="favicon-preview"></div>
+                </div>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label>Company Phone</label>
+                    <input type="tel" id="branding-phone" placeholder="(863) 712-8783">
+                  </div>
+                  <div class="field-group">
+                    <label>Company Email</label>
+                    <input type="email" id="branding-email" placeholder="info@flapropertymaintenance.com">
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button class="btn-primary" id="save-branding-btn"><i class="fa-solid fa-floppy-disk"></i> Save
+                    Branding</button>
+                  <span class="save-feedback" id="branding-save-msg" hidden>✓ Saved!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Change Password -->
+          <div class="card card--form" style="margin-top:24px;">
+            <div class="card-head">
+              <h3><i class="fa-solid fa-lock"></i> Change Admin Password</h3>
+            </div>
+            <div class="card-body">
+              <form id="form-change-pass" novalidate>
+                <div class="field-row">
+                  <div class="field-group">
+                    <label>Current Password</label>
+                    <input type="password" name="currentPass" required autocomplete="current-password">
+                  </div>
+                  <div class="field-group">
+                    <label>New Password <span class="label-note">min 6 chars</span></label>
+                    <input type="password" name="newPass" required minlength="6" autocomplete="new-password">
+                  </div>
+                  <div class="field-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" name="confirmPass" required autocomplete="new-password">
+                  </div>
+                </div>
+                <p id="pass-change-feedback" class="form-feedback" hidden></p>
+                <div class="form-actions">
+                  <button type="submit" class="btn-primary">Update Password</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── THEME & COLORS ──────────────────────────── -->
+        <section id="section-colors" class="admin-section" hidden>
+          <div class="section-header">
+            <h2>Theme & Colors</h2>
+            <p>Choose a preset color theme or customize individual colors across your entire website.</p>
+          </div>
+
+          <!-- Preset Swatches -->
+          <div class="card">
+            <div class="card-head">
+              <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Color Presets</h3>
+              <p class="card-subtitle">Click any preset to apply it instantly</p>
+            </div>
+            <div class="card-body">
+              <div class="preset-swatches" id="preset-swatches"></div>
+            </div>
+          </div>
+
+          <!-- Custom Pickers -->
+          <div class="card" style="margin-top:24px;">
+            <div class="card-head">
+              <h3><i class="fa-solid fa-sliders"></i> Custom Colors</h3>
+              <button class="btn-secondary" id="reset-theme-btn"><i class="fa-solid fa-rotate-left"></i> Reset to
+                Default</button>
+            </div>
+            <div class="card-body">
+              <div class="color-pickers-grid" id="color-pickers-grid"></div>
+
+              <!-- Live Preview -->
+              <div class="color-preview-panel" id="color-preview-panel">
+                <span class="color-preview-label">Live Preview</span>
+                <div class="color-preview-content">
+                  <h3 id="preview-heading" style="margin:0 0 8px;">Professional Lawn Care Services</h3>
+                  <p id="preview-body" style="margin:0 0 16px; font-size:14px;">We provide top-tier residential and
+                    commercial property maintenance across Central Florida.</p>
+                  <button id="preview-button" class="preview-btn-demo">Get Your Free Quote →</button>
+                </div>
+              </div>
+
+              <div class="form-actions" style="margin-top:24px; align-items:center; gap:16px;">
+                <button class="btn-primary" id="apply-theme-btn">
+                  <i class="fa-solid fa-check"></i> Apply to Website
+                </button>
+                <span class="save-feedback" id="theme-save-msg" hidden>✓ Theme applied and saved!</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main><!-- /content-area -->
+    </div><!-- /main-wrap -->
+  </div><!-- /admin-app -->
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <script src="../js/analytics.js"></script>
+  <script src="admin.js"></script>
 </body>
+
 </html>

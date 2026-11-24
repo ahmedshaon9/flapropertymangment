@@ -1,24 +1,106 @@
 [
   {
-    "id": "port_201",
-    "title": "ChampionsGate Lawn Precision Striping",
-    "category": "Lawn Mowing",
-    "description": "Weekly commercial-grade turf cutting and clean perimeter mechanical edging with zero-turn Scag mower in ChampionsGate residential estate.",
+    "id": "port_1",
+    "title": "Front Yard Curb Appeal Makeover",
+    "category": "Landscape Bed Makeovers",
     "location": "Davenport, FL",
-    "date": "2026-11",
-    "images": ["assets/images/residential-lawn-striping.webp"],
+    "description": "Complete front yard landscape renovation featuring heavy-duty commercial weed barrier, vibrant red mulch, tropical hibiscus, crotons, and razor-sharp border edging.",
+    "images": [
+      "assets/images/landscape-bed-makeover.webp"
+    ],
     "video": null,
-    "createdAt": "2026-11-15T12:00:00.000Z"
+    "order": 1,
+    "date": "2026-08-15"
   },
   {
-    "id": "port_202",
-    "title": "Front Yard Flower Bed & Mulch Transformation",
-    "category": "Landscape Design",
-    "description": "Removed dying turf, cut deep spade bed trenches, laid commercial-grade weed fabric, and installed triple-shredded dark chocolate mulch around tropical palms.",
-    "location": "Kissimmee, FL",
-    "date": "2026-11",
-    "images": ["assets/images/landscape-bed-makeover.webp"],
+    "id": "port_2",
+    "title": "Full Acre Turf Striping",
+    "category": "Lawn Mowing & Edging",
+    "location": "Winter Haven, FL",
+    "description": "Commercial zero-turn mower turf striping with diamond pattern on a 1.2-acre residential estate. Weekly cut height maintained at 3.75 inches for optimal root health.",
+    "images": [
+      "assets/images/residential-lawn-striping.webp"
+    ],
     "video": null,
-    "createdAt": "2026-11-12T15:30:00.000Z"
+    "order": 2,
+    "date": "2026-08-10"
+  },
+  {
+    "id": "port_3",
+    "title": "Black Mulch & Tropical Palms",
+    "category": "Mulch & Rock Installation",
+    "location": "Haines City, FL",
+    "description": "Premium double-shredded black mulch installation around mature Washingtonian palms and stone retaining borders, creating rich color contrast against emerald sod.",
+    "images": [
+      "assets/images/tropical-landscaping.webp"
+    ],
+    "video": null,
+    "order": 3,
+    "date": "2026-07-28"
+  },
+  {
+    "id": "port_4",
+    "title": "Overgrown Rental Property Rescue",
+    "category": "Seasonal Cleanups",
+    "location": "Lakeland, FL",
+    "description": "Comprehensive property reset for a rental turnover with waist-high overgrowth. Performed brush clearing, heavy mulching cut, weed abatement, and curb line trenching.",
+    "images": [
+      "assets/images/scag-mower-backyard.webp"
+    ],
+    "video": null,
+    "order": 4,
+    "date": "2026-07-14"
+  },
+  {
+    "id": "port_5",
+    "title": "HOA Entrance Refresh",
+    "category": "Commercial Maintenance",
+    "location": "Auburndale, FL",
+    "description": "Multi-phase entrance beautification for a 200-home community. Trimmed 40+ ornamental hedges, freshened seasonal annuals, and power-edged 800 linear feet of curb.",
+    "images": [
+      "assets/images/commercial-mower-landscaping.webp"
+    ],
+    "video": null,
+    "order": 5,
+    "date": "2026-06-30"
+  },
+  {
+    "id": "port_6",
+    "title": "Stone Border & Palm Tree Rings",
+    "category": "Landscape Design",
+    "location": "Clermont, FL",
+    "description": "Custom stacked stone landscape edging around 6 Sylvester palms, filled with polished Mexican beach pebble and low-voltage accent lighting.",
+    "images": [
+      "assets/images/sunset-curb-appeal.webp"
+    ],
+    "video": null,
+    "order": 6,
+    "date": "2026-06-18"
+  },
+  {
+    "id": "port_7",
+    "title": "Canopy Lift & Privacy Hedge Leveling",
+    "category": "Bush & Tree Care",
+    "location": "Kissimmee, FL",
+    "description": "Precision hedging on a 60-foot Viburnum hedge leveled to a uniform 8-foot height, paired with a 10-foot canopy lift on front oak trees for clear street clearance.",
+    "images": [
+      "assets/images/precision-lawn-mowing.webp"
+    ],
+    "video": null,
+    "order": 7,
+    "date": "2026-05-22"
+  },
+  {
+    "id": "port_8",
+    "title": "Spring Storm Cleanup & Property Reset",
+    "category": "Seasonal Cleanups",
+    "location": "Plant City, FL",
+    "description": "Post-storm branch removal, fallen debris shredding, turf aeration, and full estate detail cleanup across a 2-acre wooded lot.",
+    "images": [
+      "assets/images/hero-lawn-mowing.webp"
+    ],
+    "video": null,
+    "order": 8,
+    "date": "2026-04-12"
   }
 ]
