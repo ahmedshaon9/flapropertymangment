@@ -250,6 +250,59 @@ h1,h2,h3,h4,h5 { font-weight: 600; line-height: 1.3; color: var(--a-text-h); }
   line-height: 1.4;
 }
 
+/* Sidebar Close Button on Mobile Drawer */
+.sidebar-close-btn {
+  display: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--a-border);
+  background: var(--a-bg);
+  color: var(--a-text);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.sidebar-close-btn:hover {
+  background: #fee2e2;
+  color: #ef4444;
+  border-color: #fca5a5;
+}
+
+/* Mobile Sidebar Backdrop Overlay */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1040;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.sidebar-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mobile Table Swipe Hint */
+.mobile-table-hint {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #f1f5f9;
+  border-bottom: 1px solid var(--a-border);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748b;
+}
+
 .sidebar-nav { flex: 1; padding: 12px 10px; overflow-y: auto; }
 .nav-group { margin-bottom: 20px; }
 .nav-group-label {
@@ -2454,21 +2507,565 @@ body.modal-open {
 ::-webkit-scrollbar-thumb:hover { background: #c0c8d4; }
 
 /* ══════════════════════════════════════════════════════════════
-   RESPONSIVE
+   ADVANCED MOBILE & RESPONSIVE ENGINE (PIXEL-PERFECT UI)
 ══════════════════════════════════════════════════════════════ */
-@media (max-width: 768px) {
-  #sidebar { width: 240px; transform: translateX(-240px); }
-  #sidebar.mobile-open { transform: translateX(0); box-shadow: var(--a-shadow-lg); }
-  #main-wrap { margin-left: 0; }
-  #content-area { padding: 16px; }
-  .stats-grid { grid-template-columns: 1fr 1fr; }
-  .dash-grid { grid-template-columns: 1fr; }
-  .settings-two-col { grid-template-columns: 1fr; }
-  .color-pickers-grid { grid-template-columns: 1fr; }
-  .tabs-nav { flex-wrap: wrap; width: 100%; }
-  .modal-box { margin: 0; border-radius: var(--a-radius-lg); }
+
+/* --- TABLET & LAPTOP ADAPTATION (<= 1120px) --- */
+@media (max-width: 1120px) {
+  .monetra-dash-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .monetra-side-col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .monetra-side-card {
+    margin-top: 0 !important;
+  }
 }
+
+/* --- TABLET COMPACT (<= 992px) --- */
+@media (max-width: 992px) {
+  #top-header {
+    height: auto;
+    min-height: 56px;
+    flex-wrap: wrap;
+    padding: 10px 16px 8px;
+    gap: 10px;
+  }
+  .header-left {
+    flex: 1;
+  }
+  .header-right {
+    gap: 8px;
+  }
+  .monetra-top-nav {
+    order: 3;
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 5px;
+    background: #eef2f7;
+    border-radius: 9999px;
+    gap: 4px;
+  }
+  .monetra-top-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .top-nav-tab {
+    padding: 6px 14px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .admin-reviews-list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .portfolio-admin-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .presets-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --- MOBILE & TABLET PORTRAIT (<= 768px) --- */
+@media (max-width: 768px) {
+  /* Prevent horizontal screen jiggle */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  /* App Shell & Sidebar Drawer */
+  #sidebar {
+    width: min(290px, 82vw);
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    z-index: 1050;
+    transform: translateX(-100%);
+    box-shadow: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+  #sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  }
+  .sidebar-close-btn {
+    display: flex;
+  }
+
+  #main-wrap {
+    margin-left: 0 !important;
+    width: 100%;
+    max-width: 100vw;
+    min-width: 0;
+  }
+  .monetra-main-col,
+  .monetra-side-col,
+  .card,
+  .monetra-chart-card,
+  .monetra-analytics-live-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Top Header Adjustments */
+  #top-header {
+    padding: 8px 12px 8px;
+    gap: 8px;
+  }
+  .monetra-brand-badge {
+    padding: 3px 8px 3px 4px;
+    gap: 6px;
+  }
+  .monetra-brand-title {
+    font-size: 13px;
+  }
+  .live-indicator {
+    padding: 3px 8px;
+    font-size: 10.5px;
+  }
+  .header-user {
+    padding: 3px 8px 3px 4px;
+  }
+  .user-name {
+    display: none;
+  }
+  .header-clock {
+    display: none;
+  }
+
+  /* Content padding */
+  #content-area {
+    padding: 14px 12px;
+  }
+
+  /* Monetra Hero Greeting */
+  .monetra-hero-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px 14px;
+    border-radius: 18px;
+    margin-bottom: 16px;
+  }
+  .monetra-hero-text h2 {
+    font-size: 20px;
+    line-height: 1.25;
+  }
+  .monetra-hero-text p {
+    font-size: 12.5px;
+  }
+  .monetra-search-box {
+    width: 100%;
+    height: 42px;
+    border-radius: 12px;
+  }
+
+  /* Metrics Row */
+  .monetra-metrics-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .monetra-wallet-card {
+    padding: 18px 16px;
+    border-radius: 20px;
+  }
+  .wallet-value {
+    font-size: 24px;
+  }
+  .wallet-tags-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .wallet-tag {
+    padding: 5px 10px;
+    font-size: 11px;
+    border-radius: 10px;
+  }
+  .monetra-mini-kpis {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .mini-kpi-card {
+    padding: 12px 10px;
+    border-radius: 16px;
+  }
+  .mini-kpi-val {
+    font-size: 20px;
+  }
+  .mini-kpi-label {
+    font-size: 11.5px;
+  }
+
+  /* Activity Bar Chart */
+  .monetra-chart-card {
+    padding: 16px 14px;
+    border-radius: 20px;
+  }
+  .chart-header {
+    margin-bottom: 16px;
+    gap: 8px;
+  }
+  .chart-headline h2 {
+    font-size: 22px;
+  }
+  .chart-pill-tabs {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .chart-pill-tab {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+  .monetra-bars-wrapper {
+    height: 150px;
+    padding-top: 26px;
+    gap: 4px;
+  }
+  .bar-fill {
+    max-width: 22px;
+    min-width: 10px;
+    border-radius: 6px 6px 0 0;
+  }
+  .bar-label {
+    font-size: 10px;
+    margin-top: 4px;
+  }
+  .chart-tooltip {
+    font-size: 10px;
+    padding: 3px 6px;
+    top: -24px;
+  }
+
+  /* Live Traffic Analytics Card */
+  .monetra-analytics-live-card {
+    padding: 16px 14px;
+    border-radius: 20px;
+    gap: 14px;
+  }
+  .analytics-online-box {
+    padding: 16px 14px;
+    border-radius: 16px;
+  }
+  .online-huge-num {
+    font-size: 30px;
+  }
+  .online-main-label {
+    font-size: 12.5px;
+  }
+  .analytics-stat-pills {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .traffic-mini-pill {
+    padding: 10px 12px;
+    border-radius: 14px;
+  }
+  .traffic-pill-val {
+    font-size: 16px;
+  }
+
+  /* Reviews 1 Column on Mobile */
+  .admin-reviews-list {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+  .review-botanical-card {
+    padding: 18px 16px;
+    border-radius: 20px;
+  }
+  .rb-card-top {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .rb-user-info {
+    min-width: 140px;
+    gap: 10px;
+  }
+  .rb-avatar {
+    width: 46px;
+    height: 46px;
+  }
+  .rb-name-val {
+    font-size: 17px;
+  }
+  .rb-top-controls {
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-left: auto;
+  }
+  .rb-place-text {
+    font-size: 13.5px;
+  }
+  .rb-arrow-btn, .rb-icon-action {
+    width: 34px;
+    height: 34px;
+    font-size: 13px;
+  }
+  .rb-card-quote {
+    font-size: 13.5px;
+    line-height: 1.55;
+    margin: 14px 0;
+  }
+  .rb-card-bottom {
+    padding-top: 12px;
+    gap: 8px;
+  }
+  .rb-meta-box {
+    font-size: 12px;
+  }
+  .rb-stars-box {
+    font-size: 15px;
+    gap: 3px;
+  }
+
+  /* Portfolio 1 Column on Mobile */
+  .portfolio-admin-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+  .pf-3col-card {
+    border-radius: 18px;
+  }
+  .pf-img-wrap {
+    height: 200px;
+  }
+  .pf-content-wrap {
+    padding: 14px 14px 16px;
+  }
+  .pf-title {
+    font-size: 16px;
+  }
+  .pf-desc {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .pf-actions-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .btn-pf-primary, .btn-pf-danger {
+    flex: 1;
+    min-width: calc(50% - 4px);
+    min-height: 42px;
+    justify-content: center;
+    font-size: 13px;
+  }
+  .btn-pf-first {
+    width: 100%;
+    min-height: 40px;
+    justify-content: center;
+    font-size: 12.5px;
+  }
+
+  /* Quotes Table Mobile Experience */
+  .mobile-table-hint {
+    display: flex;
+  }
+  .card-head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px 14px;
+  }
+  .card-head-left {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  .card-head-right {
+    width: 100%;
+  }
+  .search-bar {
+    width: 100%;
+  }
+  .search-bar input {
+    width: 100%;
+    font-size: 14px;
+    height: 42px;
+  }
+  #quotes-status-filter {
+    width: 100%;
+    height: 42px;
+    font-size: 14px;
+  }
+  #export-quotes-btn {
+    width: 100%;
+    height: 42px;
+    justify-content: center;
+  }
+  .admin-table th, .admin-table td {
+    padding: 10px 10px;
+    font-size: 12px;
+  }
+  .table-actions .btn-tbl {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  /* Tabs Nav */
+  .tabs-nav {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100%;
+    gap: 6px;
+    padding-bottom: 2px;
+  }
+  .tabs-nav::-webkit-scrollbar {
+    display: none;
+  }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+
+  /* Forms on Mobile */
+  .field-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .field-group {
+    margin-bottom: 14px;
+  }
+  .field-group input,
+  .field-group select,
+  .field-group textarea {
+    font-size: 16px !important; /* Critical: prevents iOS Safari auto-zoom */
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: 10px;
+  }
+  .field-group textarea {
+    min-height: 80px;
+  }
+  .avatar-upload-box {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: 14px 12px;
+  }
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+    width: 100%;
+  }
+  .form-actions button {
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  /* Modals Mobile Adaptation */
+  .modal {
+    padding: 8px;
+    align-items: flex-end; /* Slide up bottom sheet style on mobile */
+  }
+  .modal-box {
+    max-width: 100% !important;
+    width: 100%;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+    margin: 0;
+  }
+  .modal-head {
+    padding: 14px 16px;
+  }
+  .modal-body {
+    padding: 14px 16px 24px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Settings & Theme on Mobile */
+  .settings-two-col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .presets-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .color-pickers-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* --- ULTRA-COMPACT SMARTPHONES (<= 480px) --- */
 @media (max-width: 480px) {
-  .stats-grid { grid-template-columns: 1fr; }
-  .header-clock, .user-name { display: none; }
+  #top-header {
+    padding: 8px 10px;
+  }
+  .monetra-brand-title {
+    display: none;
+  }
+  .live-indicator-text {
+    display: none;
+  }
+  .live-indicator {
+    padding: 6px;
+  }
+  .lang-switcher .lang-btn {
+    padding: 4px 7px;
+    font-size: 11px;
+  }
+  .btn-icon-round {
+    width: 34px;
+    height: 34px;
+    font-size: 12.5px;
+  }
+  .analytics-stat-pills {
+    grid-template-columns: 1fr;
+  }
+  .monetra-mini-kpis {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .mini-kpi-card {
+    padding: 10px 8px;
+  }
+  .mini-kpi-val {
+    font-size: 18px;
+  }
+  .mini-kpi-head {
+    gap: 4px;
+  }
+  .mini-kpi-label {
+    font-size: 10.5px;
+  }
+  .rb-card-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .rb-top-controls {
+    width: 100%;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+  .login-card {
+    width: calc(100% - 24px);
+    padding: 28px 16px 20px;
+    margin: 12px;
+    border-radius: 18px;
+  }
 }

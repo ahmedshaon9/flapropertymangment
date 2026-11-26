@@ -14,11 +14,11 @@
   'use strict';
 
   const STORAGE = {
-    EVENTS:   'fla_traffic_events',
+    EVENTS: 'fla_traffic_events',
     SESSIONS: 'fla_active_sessions',
-    PAGES:    'fla_page_counts',
-    CHANNEL:  'fla_analytics_channel',
-    VERSION:  'fla_analytics_version'
+    PAGES: 'fla_page_counts',
+    CHANNEL: 'fla_analytics_channel',
+    VERSION: 'fla_analytics_version'
   };
 
   const DATA_VERSION = 'v4_authentic_2026';
@@ -155,7 +155,7 @@
   function saveActiveSessions(list) {
     try {
       localStorage.setItem(STORAGE.SESSIONS, JSON.stringify(list));
-    } catch (e) {}
+    } catch (e) { }
   }
 
   function getCurrentPageInfo() {
@@ -227,7 +227,7 @@
       if (rawCounts) pageCounts = JSON.parse(rawCounts);
       pageCounts[path] = (pageCounts[path] || 0) + 1;
       localStorage.setItem(STORAGE.PAGES, JSON.stringify(pageCounts));
-    } catch (e) {}
+    } catch (e) { }
 
     sendHeartbeat();
   }
@@ -239,7 +239,7 @@
         bc.postMessage({ type: 'ANALYTICS_UPDATE', ts: Date.now() });
         bc.close();
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // Compute authentic aggregated stats strictly for year 2026
@@ -249,7 +249,7 @@
     try {
       const raw = localStorage.getItem(STORAGE.EVENTS);
       if (raw) events = JSON.parse(raw);
-    } catch (e) {}
+    } catch (e) { }
 
     const now = Date.now();
     const nowDate = new Date(now);
@@ -276,13 +276,13 @@
 
     // 4. Monthly Breakdown across 12 months of 2026
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
+
     // Read actual quote inquiries
     let allQuotes = [];
     try {
       const rawQuotes = localStorage.getItem('fla_quote_leads') || localStorage.getItem('fla_quotes');
       if (rawQuotes) allQuotes = JSON.parse(rawQuotes);
-    } catch (e) {}
+    } catch (e) { }
 
     const monthlyHistory = months.map((monthName, mIdx) => {
       const mEvents = events2026.filter(e => new Date(e.ts).getMonth() === mIdx);
@@ -328,7 +328,7 @@
     try {
       const rawCounts = localStorage.getItem(STORAGE.PAGES);
       if (rawCounts) pageCounts = JSON.parse(rawCounts);
-    } catch (e) {}
+    } catch (e) { }
 
     // Deduplicate and map tracked pages
     const uniquePaths = [

@@ -71,6 +71,9 @@
           <span class="sidebar-brand-name">FLA Property</span>
           <span class="sidebar-brand-sub">Admin Portal</span>
         </div>
+        <button type="button" class="sidebar-close-btn" id="sidebar-close" title="Close navigation menu">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
       <nav class="sidebar-nav" id="sidebar-nav">
@@ -119,6 +122,9 @@
         </button>
       </div>
     </aside>
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" title="Tap to close sidebar"></div>
 
     <!-- MAIN CONTENT AREA -->
     <div id="main-wrap">
@@ -551,6 +557,10 @@
               </div>
             </div>
             <div class="card-body card-body--flush">
+              <div class="mobile-table-hint">
+                <i class="fa-solid fa-arrows-left-right"></i>
+                <span>Swipe table horizontally to view full details</span>
+              </div>
               <div class="table-scroll">
                 <table class="admin-table" id="quotes-table">
                   <thead>

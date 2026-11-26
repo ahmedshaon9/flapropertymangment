@@ -90,6 +90,9 @@
       .craft-cta-card h2, .craft-cta-card h3,
       .cta-section h2, .cta-section h3,
       .cta-banner h2, .cta-banner h3,
+      .bottom-cta-banner h2, .bottom-cta-banner h3, .bottom-cta__heading,
+      .faq-cta-banner h2, .faq-cta-banner h3, .faq-cta-banner__title,
+      [class*="cta-banner"] h2, [class*="cta-banner"] h3,
       .cta-full h2, .cta-full h3,
       .footer h1, .footer h2, .footer h3, .footer h4, .footer-heading,
       .site-footer h1, .site-footer h2, .site-footer h3, .site-footer h4, .site-footer .footer-heading,
@@ -102,7 +105,7 @@
 
       .hero p, .hero .hero__subheading, .hero .hero-subtitle,
       [class*="-hero"] p, [class*="-hero"] .hero-subtitle,
-      .cta-section p, .cta-banner p, .craft-cta-card p,
+      .cta-section p, .cta-banner p, .bottom-cta-banner p, .faq-cta-banner p, [class*="cta-banner"] p, .craft-cta-card p,
       .footer p, .footer-blurb, .site-footer p {
         color: rgba(255, 255, 255, 0.90) !important;
       }
@@ -112,12 +115,12 @@
         color: ${c.body || '#1b4332'};
       }
 
-      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h1,
-      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h2,
-      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h3,
-      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h4,
-      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h5,
-      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h6,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not([class*="cta-banner"]):not(.footer):not(.site-footer) h1,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not([class*="cta-banner"]):not(.footer):not(.site-footer) h2,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not([class*="cta-banner"]):not(.footer):not(.site-footer) h3,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not([class*="cta-banner"]):not(.footer):not(.site-footer) h4,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not([class*="cta-banner"]):not(.footer):not(.site-footer) h5,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not([class*="cta-banner"]):not(.footer):not(.site-footer) h6,
       .section-title, .section-heading,
       .service-card h3, .service-card__title,
       .review-card h4, .review-card__name,
@@ -165,13 +168,16 @@
       /* ── FORM SELECTIONS, CARDS & PILLS ── */
       .select-card.is-selected,
       .prop-select-card.is-selected,
+      .select-pill.is-selected,
       .service-select-pill.is-selected,
       .freq-select-card.is-selected,
       .cond-select-card.is-selected,
       .gate-select-card.is-selected,
       .pref-option-pill.is-selected {
         border-color: ${c.primary} !important;
-        background-color: color-mix(in srgb, ${c.primary} 9%, transparent) !important;
+        background-color: color-mix(in srgb, ${c.primary} 14%, #ffffff) !important;
+        color: #081c15 !important;
+        font-weight: 600 !important;
       }
 
       .select-card.is-selected .option-letter,
