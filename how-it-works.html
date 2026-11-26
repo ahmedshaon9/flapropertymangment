@@ -95,6 +95,7 @@
     }
     </script>
 <script src="./js/theme.js"></script>
+    <link rel="stylesheet" href="css/multi-step-form.css">
 </head>
 <body>
 
@@ -1144,5 +1145,443 @@
     <!-- Main Navigation Scripts & How It Works Interactive Logic -->
     <script src="js/main.js"></script>
     <script src="js/how-it-works.js"></script>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!-- DYNAMIC FULLSCREEN 4-STEP ESTIMATE MODAL -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="quote-modal" id="quoteModal" role="dialog" aria-modal="true" aria-label="Request Free Estimate Modal">
+        <div class="quote-modal__backdrop" id="quoteModalBackdrop"></div>
+        <div class="quote-modal__wrap">
+            <button type="button" class="quote-modal__close" id="quoteModalClose" aria-label="Close quote form">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="quote-modal__content" id="quoteModalContent">
+<div class="multi-quote-card" id="multiStepQuoteWrap">
+
+                        <!-- Form Card Header with Animated Progress Pill -->
+                        <div class="quote-card-header">
+                            <div>
+                                <h3 class="quote-card-title">Request Your Free Estimate</h3>
+                                <p class="quote-card-subtitle">Fast 4-step quote &bull; No obligation &bull; Under 45
+                                    seconds</p>
+                            </div>
+                            <div class="quote-step-counter-badge" id="quoteStepBadge">
+                                Step 1 of 4
+                            </div>
+                        </div>
+
+                        <!-- Live Progress Bar -->
+                        <div class="quote-progress-track" aria-label="Form Progress">
+                            <div class="quote-progress-fill" id="quoteProgressBar" style="width: 25%;"></div>
+                        </div>
+
+                        <!-- Connected 4-Circle Stepper -->
+                        <div class="wireframe-stepper" aria-label="Quote Form Progress">
+                            <div class="wireframe-stepper__line" aria-hidden="true"></div>
+                            <div class="wireframe-stepper__steps">
+                                <div class="wireframe-stepper__item is-active" data-step-indicator="1">
+                                    <div class="wireframe-stepper__circle">1</div>
+                                </div>
+                                <div class="wireframe-stepper__item" data-step-indicator="2">
+                                    <div class="wireframe-stepper__circle">2</div>
+                                </div>
+                                <div class="wireframe-stepper__item" data-step-indicator="3">
+                                    <div class="wireframe-stepper__circle">3</div>
+                                </div>
+                                <div class="wireframe-stepper__item" data-step-indicator="4">
+                                    <div class="wireframe-stepper__circle">4</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Body -->
+                        <form class="multi-quote-body" id="multiStepQuoteForm" novalidate>
+
+                            <!-- ═══ STEP 1: PROPERTY & SERVICES (ZERO TYPING) ═══ -->
+                            <div class="form-step is-active" data-step="1">
+                                <div class="step-heading-wrap">
+                                    <h3 class="step-title">What can we help you with?</h3>
+                                    <p class="step-intro">Select your property type and all services you'd like
+                                        estimated.</p>
+                                </div>
+
+                                <label class="wireframe-field-label">Select your property type</label>
+                                <div class="prop-cards-grid" role="radiogroup" aria-label="Property Type">
+                                    <div class="select-card prop-select-card is-selected" data-value="Residential Home"
+                                        role="radio" aria-checked="true" tabindex="0">
+                                        <span class="option-letter">A</span>
+                                        <span class="select-card__title">Residential Home</span>
+                                    </div>
+                                    <div class="select-card prop-select-card" data-value="Commercial Property"
+                                        role="radio" aria-checked="false" tabindex="0">
+                                        <span class="option-letter">B</span>
+                                        <span class="select-card__title">Commercial Property</span>
+                                    </div>
+                                    <div class="select-card prop-select-card" data-value="HOA Community" role="radio"
+                                        aria-checked="false" tabindex="0">
+                                        <span class="option-letter">C</span>
+                                        <span class="select-card__title">HOA Community</span>
+                                    </div>
+                                    <div class="select-card prop-select-card" data-value="Apartment Complex"
+                                        role="radio" aria-checked="false" tabindex="0">
+                                        <span class="option-letter">D</span>
+                                        <span class="select-card__title">Apartment Complex</span>
+                                    </div>
+                                </div>
+
+                                <label class="wireframe-field-label">Select all services you need</label>
+                                <div class="service-pills-grid" role="group" aria-label="Services Needed">
+                                    <div class="select-pill service-select-pill is-selected"
+                                        data-value="Lawn Mowing & Edging" tabindex="0">
+                                        Lawn Mowing &amp; Edging
+                                    </div>
+                                    <div class="select-pill service-select-pill" data-value="One-Time Mow & Go"
+                                        tabindex="0">
+                                        One-Time "Mow &amp; Go"
+                                    </div>
+                                    <div class="select-pill service-select-pill" data-value="Landscape Bed Makeover"
+                                        tabindex="0">
+                                        Landscape Bed Makeover
+                                    </div>
+                                    <div class="select-pill service-select-pill" data-value="Mulch & Rock Installation"
+                                        tabindex="0">
+                                        Mulch &amp; Rock Installation
+                                    </div>
+                                    <div class="select-pill service-select-pill" data-value="Bush, Hedge & Tree Care"
+                                        tabindex="0">
+                                        Bush, Hedge &amp; Tree Care
+                                    </div>
+                                    <div class="select-pill service-select-pill" data-value="Irrigation & Turf Care"
+                                        tabindex="0">
+                                        Irrigation &amp; Turf Care
+                                    </div>
+                                    <div class="select-pill service-select-pill" data-value="Overgrown Yard Cleanup"
+                                        tabindex="0">
+                                        Overgrown Yard Cleanup
+                                    </div>
+                                </div>
+
+                                <div class="form-actions-bar">
+                                    <button type="button" class="btn-form-nav btn-nav-next">
+                                        Next: Yard &amp; Schedule &rarr;
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ═══ STEP 2: YARD DETAILS & SCHEDULE ═══ -->
+                            <div class="form-step" data-step="2">
+                                <div class="step-heading-wrap">
+                                    <h3 class="step-title">Tell us about your yard &amp; schedule</h3>
+                                    <p class="step-intro">Helps our crew determine accurate crew size, commercial Scag
+                                        deck clearance, and route schedule.</p>
+                                </div>
+
+                                <label class="wireframe-field-label">How often do you need service?</label>
+                                <div class="frequency-pills-wrap" role="radiogroup" aria-label="Service Frequency">
+                                    <div class="select-pill freq-select-pill" data-value="One-Time Service" role="radio"
+                                        tabindex="0">
+                                        One-Time Service
+                                    </div>
+                                    <div class="select-pill freq-select-pill" data-value="Weekly Maintenance"
+                                        role="radio" tabindex="0">
+                                        Weekly Maintenance
+                                    </div>
+                                    <div class="select-pill freq-select-pill is-selected"
+                                        data-value="Bi-Weekly Maintenance" role="radio" tabindex="0">
+                                        Bi-Weekly Maintenance
+                                    </div>
+                                    <div class="select-pill freq-select-pill" data-value="Custom Landscape Project"
+                                        role="radio" tabindex="0">
+                                        Custom Project
+                                    </div>
+                                </div>
+
+                                <label class="wireframe-field-label">Current yard condition</label>
+                                <div class="condition-cards-grid" role="radiogroup" aria-label="Yard Condition">
+                                    <div class="condition-card cond-select-card is-selected"
+                                        data-value="Maintained / Normal Height" role="radio" tabindex="0">
+                                        <h4 class="condition-card__title">Maintained / Normal</h4>
+                                        <p class="condition-card__desc">Standard routine cut, grass under 6–8 inches
+                                            tall.</p>
+                                    </div>
+                                    <div class="condition-card cond-select-card" data-value="Tall / Overgrown Grass"
+                                        role="radio" tabindex="0">
+                                        <h4 class="condition-card__title">Tall / Overgrown</h4>
+                                        <p class="condition-card__desc">Over 8–12+ inches, needs heavy knockdown pass.
+                                        </p>
+                                    </div>
+                                    <div class="condition-card cond-select-card"
+                                        data-value="Heavy Debris / Needs Yard Cleanup" role="radio" tabindex="0">
+                                        <h4 class="condition-card__title">Heavy Debris / Branches</h4>
+                                        <p class="condition-card__desc">Includes Yard Cleanup (we're here to mow, not
+                                            pick up).</p>
+                                    </div>
+                                </div>
+
+                                <label class="wireframe-field-label">Backyard fence &amp; gate access</label>
+                                <div class="gate-pills-wrap" role="radiogroup" aria-label="Backyard Gate Clearance">
+                                    <div class="select-pill gate-select-pill" data-value="No Fence (Open Yard)"
+                                        role="radio" tabindex="0">
+                                        No Fence (Open Yard)
+                                    </div>
+                                    <div class="select-pill gate-select-pill is-selected"
+                                        data-value="Wide Gate (Fits Scag)" role="radio" tabindex="0">
+                                        Wide Gate (Fits Scag Mower)
+                                    </div>
+                                    <div class="select-pill gate-select-pill" data-value="Standard Walk-Gate Only"
+                                        role="radio" tabindex="0">
+                                        Standard Walk-Gate Only
+                                    </div>
+                                    <div class="select-pill gate-select-pill" data-value="Front Yard Only" role="radio"
+                                        tabindex="0">
+                                        Front Yard Only
+                                    </div>
+                                </div>
+
+                                <div class="form-actions-bar">
+                                    <button type="button" class="btn-form-nav btn-nav-back">
+                                        &larr; Back
+                                    </button>
+                                    <button type="button" class="btn-form-nav btn-nav-next">
+                                        Next: Location &amp; Photos &rarr;
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ═══ STEP 3: PROPERTY LOCATION & OPTIONAL PHOTOS ═══ -->
+                            <div class="form-step" data-step="3">
+                                <div class="step-heading-wrap">
+                                    <h3 class="step-title">Property address &amp; optional photos</h3>
+                                    <p class="step-intro">We look up your property on Google satellite view to calculate
+                                        exact turf square footage remotely.</p>
+                                </div>
+
+                                <div class="address-grid">
+                                    <div class="multi-input-group">
+                                        <label for="quoteStreetAddress" class="wireframe-field-label">
+                                            Street Address <span style="color: #dc2626;">*</span>
+                                        </label>
+                                        <input type="text" id="quoteStreetAddress" class="multi-input"
+                                            placeholder="e.g. 1420 S Florida Ave" required
+                                            autocomplete="street-address">
+                                        <span class="field-helper-text">Used to measure your lawn via satellite for
+                                            accurate pricing</span>
+                                    </div>
+
+                                    <div class="multi-input-group">
+                                        <label for="quoteCitySelect" class="wireframe-field-label">
+                                            City (Polk County, FL) <span style="color: #dc2626;">*</span>
+                                        </label>
+                                        <select id="quoteCitySelect" class="multi-select" required>
+                                            <option value="Lakeland" selected>Lakeland, FL</option>
+                                            <option value="Winter Haven">Winter Haven, FL</option>
+                                            <option value="Auburndale">Auburndale, FL</option>
+                                            <option value="Davenport">Davenport, FL</option>
+                                            <option value="Haines City">Haines City, FL</option>
+                                            <option value="Bartow">Bartow, FL</option>
+                                            <option value="Lake Wales">Lake Wales, FL</option>
+                                            <option value="Dundee">Dundee, FL</option>
+                                            <option value="Polk City">Polk City, FL</option>
+                                            <option value="Plant City">Plant City, FL</option>
+                                            <option value="Mulberry">Mulberry, FL</option>
+                                            <option value="Zephyrhills">Zephyrhills, FL</option>
+                                            <option value="Dade City">Dade City, FL</option>
+                                            <option value="Lake Hamilton">Lake Hamilton, FL</option>
+                                            <option value="Frostproof">Frostproof, FL</option>
+                                            <option value="Avon Park">Avon Park, FL</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Photo Upload Zone -->
+                                <div class="photo-upload-zone" id="photoDropZone">
+                                    <input type="file" id="photoFileInput" multiple accept="image/*"
+                                        style="display: none;">
+                                    <i class="fas fa-camera photo-upload-zone__icon" aria-hidden="true"></i>
+                                    <p class="photo-upload-zone__text">Upload 1–3 Yard Photos (Optional &bull; Speeds Up
+                                        Quote)</p>
+                                    <p class="photo-upload-zone__sub">Tap to select or drag &amp; drop photos of your
+                                        lawn or landscape beds</p>
+                                    <div class="photo-previews-grid" id="photoPreviews"></div>
+                                </div>
+
+                                <div class="multi-input-group" style="margin-bottom: 22px;">
+                                    <label for="quoteSpecialNotes" class="wireframe-field-label">
+                                        Special Notes / Gate Code / Landscaping Ideas (Optional)
+                                    </label>
+                                    <input type="text" id="quoteSpecialNotes" class="multi-input"
+                                        placeholder="Gate codes, dogs in yard, target start date, or specific landscaping ideas...">
+                                </div>
+
+                                <div class="form-actions-bar">
+                                    <button type="button" class="btn-form-nav btn-nav-back">
+                                        &larr; Back
+                                    </button>
+                                    <button type="button" class="btn-form-nav btn-nav-next">
+                                        Final Step: Your Contact Info &rarr;
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- ═══ STEP 4: CONTACT & DYNAMIC SUMMARY (FINAL STEP) ═══ -->
+                            <div class="form-step" data-step="4">
+                                <div class="step-heading-wrap">
+                                    <h3 class="step-title">Where should we send your free estimate?</h3>
+                                    <p class="step-intro">We'll review your satellite lot size and text, email, or call
+                                        your custom quote in under 30 minutes.</p>
+                                </div>
+
+                                <!-- Dynamic Summary Recap Strip -->
+                                <div class="summary-recap-strip" aria-label="Selected Estimate Details Summary">
+                                    <div class="summary-recap-strip__left">
+                                        <i class="fas fa-clipboard-check"></i> Estimate Package:
+                                    </div>
+                                    <div class="summary-pills-list" id="summaryPillsList">
+                                        <span class="summary-pill"><i class="fas fa-home"></i> Residential Home</span>
+                                        <span class="summary-pill"><i class="fas fa-leaf"></i> Lawn Mowing</span>
+                                        <span class="summary-pill"><i class="fas fa-map-marker-alt"></i> Lakeland,
+                                            FL</span>
+                                    </div>
+                                </div>
+
+                                <div class="contact-inputs-grid">
+                                    <!-- Full Name -->
+                                    <div class="multi-input-group">
+                                        <label for="quoteFullName" class="wireframe-field-label">
+                                            Full Name <span style="color: #dc2626;">*</span>
+                                        </label>
+                                        <input type="text" id="quoteFullName" class="multi-input"
+                                            placeholder="Enter your full name" required autocomplete="name">
+                                    </div>
+
+                                    <!-- Email Address (REQUIRED) -->
+                                    <div class="multi-input-group">
+                                        <label for="quoteEmail" class="wireframe-field-label">
+                                            Email Address <span style="color: #dc2626;">*</span>
+                                        </label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-envelope input-left-icon"></i>
+                                            <input type="email" id="quoteEmail" class="multi-input multi-input--icon"
+                                                placeholder="you@example.com" required autocomplete="email">
+                                        </div>
+                                        <span class="field-helper-text">We will send a copy of your written estimate
+                                            here</span>
+                                    </div>
+
+                                    <!-- Cell Phone Number (REQUIRED) -->
+                                    <div class="multi-input-group">
+                                        <label for="quotePhone" class="wireframe-field-label">
+                                            Cell Phone Number <span style="color: #dc2626;">*</span>
+                                        </label>
+                                        <div class="input-with-icon">
+                                            <i class="fas fa-phone-alt input-left-icon"></i>
+                                            <input type="tel" id="quotePhone" class="multi-input multi-input--icon"
+                                                placeholder="(863) 555-0199" required autocomplete="tel">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Preferred Contact Method Toggle -->
+                                <div class="pref-toggle-wrap">
+                                    <span class="wireframe-field-label">Preferred Quote Delivery:</span>
+                                    <div class="pref-options-row">
+                                        <div class="pref-option-pill is-selected" data-value="Text Message"
+                                            tabindex="0">
+                                            <input type="radio" name="contactPref" id="prefText" value="Text Message"
+                                                checked>
+                                            <label for="prefText" style="cursor: pointer;">
+                                                <i class="fas fa-comment-dots text-emerald-600"></i> Text Message
+                                                (Fastest)
+                                            </label>
+                                        </div>
+                                        <div class="pref-option-pill" data-value="Email Quote" tabindex="0">
+                                            <input type="radio" name="contactPref" id="prefEmail" value="Email Quote">
+                                            <label for="prefEmail" style="cursor: pointer;">
+                                                <i class="fas fa-envelope text-blue-600"></i> Email Quote
+                                            </label>
+                                        </div>
+                                        <div class="pref-option-pill" data-value="Phone Call" tabindex="0">
+                                            <input type="radio" name="contactPref" id="prefCall" value="Phone Call">
+                                            <label for="prefCall" style="cursor: pointer;">
+                                                <i class="fas fa-phone-alt text-amber-600"></i> Phone Call
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions-bar">
+                                    <button type="button" class="btn-form-nav btn-nav-back">
+                                        &larr; Back
+                                    </button>
+                                    <button type="submit" class="btn-form-nav btn-nav-submit" id="btnFinalSubmit">
+                                        Get My Free Estimate Now &#10003;
+                                    </button>
+                                </div>
+
+                                <!-- Trust Guarantee Strip -->
+                                <div class="multi-quote-trust-strip">
+                                    <span class="trust-check-item">
+                                        <i class="fas fa-check-circle"></i> 100% Free Estimate &bull; No Contracts
+                                    </span>
+                                    <span class="trust-check-item">
+                                        <i class="fas fa-check-circle"></i> We accept Zelle, Cash App, Cash &amp; Check
+                                    </span>
+                                    <span class="trust-check-item">
+                                        <a href="sms:8637128783" class="trust-text-link">
+                                            <i class="fas fa-comment-dots"></i> Questions? Text 863-712-8783
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </form>
+
+                        <!-- ═══ CELEBRATORY CONFIRMATION SCREEN ═══ -->
+                        <div class="form-confirmation-screen" id="quoteConfirmationScreen" aria-live="polite">
+                            <div class="conf-check-wrap">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <h3 class="conf-title">Estimate Request Received!</h3>
+                            <p class="conf-desc">
+                                Thanks, <strong id="confLeadName">there</strong>! We've received your property details
+                                and are pulling up satellite lot measurements. We'll send your custom quote in under 30
+                                minutes!
+                            </p>
+
+                            <div class="conf-summary-box">
+                                <div class="conf-summary-row">
+                                    <span class="conf-summary-label">Property:</span>
+                                    <span class="conf-summary-val" id="confLeadProperty">Residential Home</span>
+                                </div>
+                                <div class="conf-summary-row">
+                                    <span class="conf-summary-label">Services:</span>
+                                    <span class="conf-summary-val" id="confLeadServices">Lawn Mowing &amp; Edging</span>
+                                </div>
+                                <div class="conf-summary-row">
+                                    <span class="conf-summary-label">Address:</span>
+                                    <span class="conf-summary-val" id="confLeadAddress">Lakeland, FL</span>
+                                </div>
+                                <div class="conf-summary-row">
+                                    <span class="conf-summary-label">Contact Dispatch:</span>
+                                    <span class="conf-summary-val" id="confLeadContact">Text Message</span>
+                                </div>
+                            </div>
+
+                            <div class="conf-actions">
+                                <a href="sms:8637128783" class="btn btn--primary btn--pill" id="confSmsBtn"
+                                    style="padding: 14px 30px; font-size: 14.5px;">
+                                    <i class="fas fa-comment-dots"></i> Text Photos Now for Fastest Pricing
+                                </a>
+                                <button type="button" class="btn btn--secondary btn--pill" id="resetQuoteBtn"
+                                    style="padding: 14px 26px;">
+                                    <i class="fas fa-redo"></i> Submit Another Request
+                                </button>
+                            </div>
+                        </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/multi-step-form.js" defer></script>
 </body>
 </html>

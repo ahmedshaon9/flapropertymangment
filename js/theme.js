@@ -11,15 +11,15 @@
   var KEY_THEME = 'fla_theme_colors';
 
   var DEFAULTS = {
-    primary:   '#007f5f',
-    primaryH:  '#00664c',
-    secondary: '#80b918',
-    heading:   '#0f172a',
-    body:      '#374151',
+    primary:   '#40916c', // Sea Green
+    primaryH:  '#2d6a4f', // Hunter Green
+    secondary: '#52b788', // Mint Leaf
+    heading:   '#081c15', // Carbon Black
+    body:      '#1b4332', // Pine Teal / Charcoal
     btnText:   '#ffffff',
     navBg:     '#ffffff',
-    navText:   '#374151',
-    heroBg:    '#f8fafc'
+    navText:   '#081c15',
+    heroBg:    '#d8f3dc'  // Frosted Mint
   };
 
   function darken(hex, amount) {
@@ -78,9 +78,55 @@
         --fla-hero-bg: ${c.heroBg};
       }
 
-      /* ── HEADINGS & TEXT ── */
-      h1, h2, h3, h4, h5, h6, .hero__heading, .quote-main-heading {
-        color: ${c.heading} !important;
+      /* ── WEB DESIGN CONTRAST RULES ── */
+      /* 1. DARK BACKGROUND SECTIONS: Always pure white headings and readable light text */
+      .hero h1, .hero h2, .hero h3, .hero h4, .hero__heading,
+      [class*="-hero"] h1, [class*="-hero"] h2, [class*="-hero"] h3,
+      .portfolio-hero h1, .portfolio-hero h2, .portfolio-hero h3,
+      .about-hero h1, .about-hero h2, .about-hero h3,
+      .services-hero h1, .services-hero h2, .services-hero h3,
+      .reviews-hero h1, .reviews-hero h2, .reviews-hero h3,
+      .faq-hero h1, .faq-hero h2, .faq-hero h3,
+      .craft-cta-card h2, .craft-cta-card h3,
+      .cta-section h2, .cta-section h3,
+      .cta-banner h2, .cta-banner h3,
+      .cta-full h2, .cta-full h3,
+      .footer h1, .footer h2, .footer h3, .footer h4, .footer-heading,
+      .site-footer h1, .site-footer h2, .site-footer h3, .site-footer h4, .site-footer .footer-heading,
+      .footer-col h4,
+      [class*="--dark"] h1, [class*="--dark"] h2, [class*="--dark"] h3,
+      .bg-dark h1, .bg-dark h2, .bg-dark h3,
+      .bento-card--dark h2, .bento-card--dark h3, .bento-card--dark .bento-card__title {
+        color: #ffffff !important;
+      }
+
+      .hero p, .hero .hero__subheading, .hero .hero-subtitle,
+      [class*="-hero"] p, [class*="-hero"] .hero-subtitle,
+      .cta-section p, .cta-banner p, .craft-cta-card p,
+      .footer p, .footer-blurb, .site-footer p {
+        color: rgba(255, 255, 255, 0.90) !important;
+      }
+
+      /* 2. LIGHT BACKGROUND SECTIONS: Carbon Black headings and high-contrast body text */
+      body {
+        color: ${c.body || '#1b4332'};
+      }
+
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h1,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h2,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h3,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h4,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h5,
+      section:not(.hero):not([class*="-hero"]):not([class*="--dark"]):not(.bg-dark):not(.cta-section):not(.cta-banner):not(.footer):not(.site-footer) h6,
+      .section-title, .section-heading,
+      .service-card h3, .service-card__title,
+      .review-card h4, .review-card__name,
+      .faq-card__question, .faq-item__question,
+      .step-card h3, .step-title,
+      .bento-card:not(.bento-card--dark) .bento-card__title,
+      .quote-split-card h2, .quote-split-card h3,
+      .quote-step h4, .step-title-text {
+        color: ${c.heading || '#081c15'} !important;
       }
 
       /* ── ALL PRIMARY BUTTONS ACROSS THE ENTIRE WEBSITE ── */

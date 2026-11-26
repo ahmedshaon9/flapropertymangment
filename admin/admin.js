@@ -222,42 +222,90 @@
   ];
 
   const DEFAULT_THEME = {
-    primary:    '#007f5f',
-    primaryH:   '#00664c',
-    secondary:  '#80b918',
-    heading:    '#0f172a',
-    body:       '#374151',
+    primary:    '#40916c',
+    primaryH:   '#2d6a4f',
+    secondary:  '#52b788',
+    heading:    '#081c15',
+    body:       '#1b4332',
     btnText:    '#ffffff',
     navBg:      '#ffffff',
-    navText:    '#374151',
-    heroBg:     '#f0f9f6'
+    navText:    '#081c15',
+    heroBg:     '#d8f3dc'
   };
+
+  const BOTANICAL_SHADES = [
+    {
+      name: 'Frosted Mint',
+      hex: '#d8f3dc',
+      desc: 'Soft, leafy tint with a crisp touch, conjuring memories of spring growth and nature’s quiet rejuvenation.'
+    },
+    {
+      name: 'Celadon Dew',
+      hex: '#b7e4c7',
+      desc: 'Soft pastel green reminiscent of dew on spring leaves, radiating gentleness, optimism, and soothing uplift.'
+    },
+    {
+      name: 'Celadon Spring',
+      hex: '#95d5b2',
+      desc: 'Soft pastel green reminiscent of dew on spring leaves, radiating gentleness, optimism, and soothing uplift.'
+    },
+    {
+      name: 'Mint Leaf Breeze',
+      hex: '#74c69d',
+      desc: 'Refreshing mint hue sparkles with crispness, evoking cool breezes, clean spaces, and rejuvenating modernity.'
+    },
+    {
+      name: 'Mint Leaf Modern',
+      hex: '#52b788',
+      desc: 'Refreshing mint hue sparkles with crispness, evoking cool breezes, clean spaces, and rejuvenating modernity.'
+    },
+    {
+      name: 'Sea Green',
+      hex: '#40916c',
+      desc: 'Rich forest green radiates resilience and organic harmony, conjuring images of flourishing, dew-covered leaves.'
+    },
+    {
+      name: 'Hunter Green',
+      hex: '#2d6a4f',
+      desc: 'Evokes rugged wilderness, rich forest canopies, and an earthy strength that embodies resilience and endurance.'
+    },
+    {
+      name: 'Pine Teal',
+      hex: '#1b4332',
+      desc: 'Cool teal whispers of pine needles and mountain rivers, infusing spaces with fresh energy and serene harmony.'
+    },
+    {
+      name: 'Carbon Black',
+      hex: '#081c15',
+      desc: 'Matte intensity of black with a hint of graphite, portraying modern minimalism, absolute boldness and unwavering depth.'
+    }
+  ];
 
   const COLOR_PRESETS = [
     {
-      name: 'Forest Green',
-      nameEs: 'Verde Bosque',
-      colors: { primary:'#007f5f', primaryH:'#00664c', secondary:'#80b918', heading:'#0f172a', body:'#374151', btnText:'#ffffff', navBg:'#ffffff', navText:'#374151', heroBg:'#f0f9f6' }
+      name: 'Signature Botanical',
+      nameEs: 'Botánico Exclusivo',
+      colors: { primary:'#40916c', primaryH:'#2d6a4f', secondary:'#52b788', heading:'#081c15', body:'#1b4332', btnText:'#ffffff', navBg:'#ffffff', navText:'#081c15', heroBg:'#d8f3dc' }
     },
     {
-      name: 'Ocean Blue',
-      nameEs: 'Azul Océano',
-      colors: { primary:'#1d4ed8', primaryH:'#1e40af', secondary:'#0ea5e9', heading:'#0f172a', body:'#374151', btnText:'#ffffff', navBg:'#ffffff', navText:'#374151', heroBg:'#eff6ff' }
+      name: 'Hunter Wilderness',
+      nameEs: 'Bosque Cazador',
+      colors: { primary:'#2d6a4f', primaryH:'#1b4332', secondary:'#74c69d', heading:'#081c15', body:'#1b4332', btnText:'#ffffff', navBg:'#ffffff', navText:'#081c15', heroBg:'#d8f3dc' }
     },
     {
-      name: 'Sunset Coral',
-      nameEs: 'Coral Atardecer',
-      colors: { primary:'#ea580c', primaryH:'#c2410c', secondary:'#f59e0b', heading:'#1c1917', body:'#44403c', btnText:'#ffffff', navBg:'#ffffff', navText:'#44403c', heroBg:'#fff7ed' }
+      name: 'Pine Teal Modern',
+      nameEs: 'Teal Pino Moderno',
+      colors: { primary:'#1b4332', primaryH:'#081c15', secondary:'#95d5b2', heading:'#081c15', body:'#1b4332', btnText:'#ffffff', navBg:'#ffffff', navText:'#081c15', heroBg:'#b7e4c7' }
     },
     {
-      name: 'Royal Purple',
-      nameEs: 'Púrpura Real',
-      colors: { primary:'#7c3aed', primaryH:'#6d28d9', secondary:'#a78bfa', heading:'#1e1b4b', body:'#374151', btnText:'#ffffff', navBg:'#ffffff', navText:'#374151', heroBg:'#f5f3ff' }
+      name: 'Mint Leaf Refresh',
+      nameEs: 'Menta Fresca',
+      colors: { primary:'#52b788', primaryH:'#40916c', secondary:'#74c69d', heading:'#081c15', body:'#1b4332', btnText:'#ffffff', navBg:'#ffffff', navText:'#081c15', heroBg:'#d8f3dc' }
     },
     {
-      name: 'Midnight Slate',
-      nameEs: 'Pizarra Medianoche',
-      colors: { primary:'#0f172a', primaryH:'#1e293b', secondary:'#64748b', heading:'#0f172a', body:'#475569', btnText:'#ffffff', navBg:'#0f172a', navText:'#e2e8f0', heroBg:'#f8fafc' }
+      name: 'Celadon Spring',
+      nameEs: 'Celadón Primavera',
+      colors: { primary:'#74c69d', primaryH:'#40916c', secondary:'#b7e4c7', heading:'#081c15', body:'#1b4332', btnText:'#081c15', navBg:'#ffffff', navText:'#081c15', heroBg:'#d8f3dc' }
     }
   ];
 
@@ -1964,19 +2012,46 @@
 
     renderPresets() {
       const container = $id('preset-swatches');
-      if (!container) return;
-
-      container.innerHTML = COLOR_PRESETS.map((preset, i) => {
-        const isActive = this.current.primary === preset.colors.primary;
-        const displayName = currentLang === 'es' ? (preset.nameEs || preset.name) : preset.name;
-        return `
-          <div class="preset-swatch ${isActive ? 'active' : ''}" data-preset-idx="${i}" title="Apply ${esc(displayName)}">
-            <div class="preset-dots">
-              <div class="preset-dot" style="background:${preset.colors.primary}"></div>
-              <div class="preset-dot" style="background:${preset.colors.secondary}"></div>
-              <div class="preset-dot" style="background:${preset.colors.heading}"></div>
+      if (container) {
+        container.innerHTML = COLOR_PRESETS.map((preset, i) => {
+          const isActive = this.current.primary === preset.colors.primary;
+          const displayName = currentLang === 'es' ? (preset.nameEs || preset.name) : preset.name;
+          return `
+            <div class="preset-swatch ${isActive ? 'active' : ''}" data-preset-idx="${i}" title="Apply ${esc(displayName)}">
+              <div class="preset-dots">
+                <div class="preset-dot" style="background:${preset.colors.primary}"></div>
+                <div class="preset-dot" style="background:${preset.colors.secondary}"></div>
+                <div class="preset-dot" style="background:${preset.colors.heading}"></div>
+              </div>
+              <span class="preset-name">${esc(displayName)}</span>
             </div>
-            <span class="preset-name">${esc(displayName)}</span>
+          `;
+        }).join('');
+      }
+
+      this.renderBotanicalPalette();
+    },
+
+    renderBotanicalPalette() {
+      const bContainer = $id('botanical-palette-grid');
+      if (!bContainer) return;
+
+      bContainer.innerHTML = BOTANICAL_SHADES.map(shade => {
+        const isCurrentPrimary = (this.current.primary || '').toLowerCase() === shade.hex.toLowerCase();
+        return `
+          <div class="botanical-card ${isCurrentPrimary ? 'active-primary' : ''}" style="border:1px solid ${isCurrentPrimary ? 'var(--a-primary)' : 'rgba(0,0,0,0.08)'}; border-radius:10px; padding:12px; background:#ffffff; display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="display:inline-block; width:34px; height:34px; border-radius:8px; background:${shade.hex}; border:1px solid rgba(0,0,0,0.15); box-shadow:0 1px 3px rgba(0,0,0,0.1); flex-shrink:0;"></span>
+              <div>
+                <strong style="display:block; font-size:13.5px; color:#081c15;">${esc(shade.name)}</strong>
+                <code style="font-size:12px; color:#40916c; font-weight:700;">${shade.hex}</code>
+              </div>
+            </div>
+            <p style="font-size:11.5px; line-height:1.4; color:#2d6a4f; margin:0;">${esc(shade.desc)}</p>
+            <div style="display:flex; gap:6px; margin-top:4px;">
+              <button type="button" class="btn-shade-apply" data-role="primary" data-hex="${shade.hex}" style="flex:1; font-size:11px; padding:5px 6px; border:1px solid #40916c; background:#ffffff; color:#1b4332; border-radius:6px; cursor:pointer; font-weight:600;">Use as Primary</button>
+              <button type="button" class="btn-shade-apply" data-role="secondary" data-hex="${shade.hex}" style="flex:1; font-size:11px; padding:5px 6px; border:1px solid #74c69d; background:#ffffff; color:#1b4332; border-radius:6px; cursor:pointer; font-weight:600;">Use as Accent</button>
+            </div>
           </div>
         `;
       }).join('');
@@ -2066,6 +2141,36 @@
 
           this.updateLivePreview();
           await this.saveAndBroadcast(preset.colors);
+          this.renderPresets();
+        });
+      }
+
+      // Clicking Botanical Palette Quick Apply
+      const botanicalWrap = $id('botanical-palette-grid');
+      if (botanicalWrap) {
+        botanicalWrap.addEventListener('click', async (e) => {
+          const btn = e.target.closest('.btn-shade-apply');
+          if (!btn) return;
+          const role = btn.dataset.role;
+          const hex = btn.dataset.hex;
+          if (!hex) return;
+
+          const picker = $id('cp-' + role);
+          const hexInput = $id('cph-' + role);
+          if (picker) picker.value = hex;
+          if (hexInput) hexInput.value = hex;
+
+          if (role === 'primary') {
+            // Also adjust hover state
+            const hPicker = $id('cp-primaryH');
+            const hHex = $id('cph-primaryH');
+            if (hPicker) hPicker.value = hex;
+            if (hHex) hHex.value = hex;
+          }
+
+          this.updateLivePreview();
+          const currentCols = this.getCurrentFromPickers();
+          await this.saveAndBroadcast(currentCols);
           this.renderPresets();
         });
       }

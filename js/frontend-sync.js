@@ -3,6 +3,8 @@
  * Automatically syncs the public website with changes made in /admin:
  *  1. Live CSS Variable Injection (Colors & Branding)
  *  2. Page Headline & Subheadline Overrides from CMS
+ *  3. Dynamic Approval Review Stream (Pending reviews held until approved in /admin)
+ *  4. 4-Step Form Real-time Lead Dispatcher to /admin
  *  3. Dynamic Approval Review Stream (Pending reviews held until approved; strict ordering support)
  *  4. Portfolio Realtime Showcase & Ordering Sync
  *  5. 4-Step Form Real-time Lead Dispatcher to /admin
@@ -45,6 +47,7 @@
     // 1. APPLY DYNAMIC BRAND COLORS (DEFERS TO fla_theme_colors)
     // ─────────────────────────────────────────────────────────────────
     function applyBrandColors(colors) {
+        // If master dynamic theme is active, let theme.js manage colors
         if (localStorage.getItem('fla_theme_colors')) return;
         if (!colors) return;
         const root = document.documentElement;
@@ -75,12 +78,15 @@
         const page = pageTexts ? pageTexts[slug] : null;
 
         if (page) {
+            // Apply H1 if customized
             if (page.h1) {
                 const h1 = document.querySelector('h1');
                 if (h1 && !h1.hasAttribute('data-no-sync')) {
                     h1.textContent = page.h1;
                 }
             }
+
+            // Apply Hero Subheadline if customized
             if (page.subheadline) {
                 const subheadline = document.querySelector('.hero__subtext, .about-hero__subtext, .services-hero__subtext, .faq-hero__subtext, .reviews-hero__subtext');
                 if (subheadline && !subheadline.hasAttribute('data-no-sync')) {
@@ -89,6 +95,7 @@
             }
         }
 
+        // Apply global phone & hours
         if (contact && contact.phone) {
             const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
             phoneLinks.forEach(link => {
@@ -117,8 +124,9 @@
         const approved = list.filter(r => r.approved === true || r.status === 'approved');
         const reviewsGrid = document.getElementById('reviewsGrid');
 
+        // If on reviews.html and reviewsGrid exists, inject approved reviews seamlessly
         if (reviewsGrid && approved.length > 0) {
-            reviewsGrid.innerHTML = approved.map((rev, idx) => {
+            reviewsGrid.innerHTML = approved.map(rev => {
                 const cleanText = (rev.message || rev.text || '').trim();
                 let starsHtml = '';
                 for (let i = 1; i <= 5; i++) {
@@ -126,9 +134,9 @@
                 }
                 const name = rev.name || 'Anonymous';
                 const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'FL';
-                const city = rev.city || 'Central Florida';
+                const city = rev.city || 'Lakeland';
                 const role = rev.role || rev.propertyType || 'Residential Client';
-                const service = rev.service || 'Lawn Maintenance';
+                const service = rev.service || 'Lawn Mowing & Edging';
 
                 return `
                     <article class="review-card review-card--approved-sync" data-service="${esc(service)}" data-city="${esc(city)}" data-property="${esc(role)}">
@@ -169,6 +177,7 @@
     }
 
     // ─────────────────────────────────────────────────────────────────
+    // 4. INTERCEPT QUOTE FORM SUBMISSIONS -> SYNC TO /admin LEADS
     // 4. SYNC PORTFOLIO GALLERY ONTO PORTFOLIO PAGE
     // ─────────────────────────────────────────────────────────────────
     function syncPortfolio() {
@@ -277,6 +286,7 @@
     }
 
     // ─────────────────────────────────────────────────────────────────
+    // 5. INTERCEPT REVIEW SUBMISSION -> MARK AS PENDING FOR MODERATION
     // 6. INTERCEPT REVIEW SUBMISSION -> MARK AS PENDING FOR MODERATION
     // ─────────────────────────────────────────────────────────────────
     function initReviewFormSync() {
@@ -295,6 +305,23 @@
             const text = messageInput.value.trim();
 
             if (name && text) {
+                const siteData = getSiteData();
+                if (siteData && siteData.reviews) {
+                    const pendingRev = {
+                        id: 'rev_' + Date.now(),
+                        name: name,
+                        city: cityInput ? cityInput.value : 'Lakeland',
+                        propertyType: propertyTypeInput ? propertyTypeInput.value : 'Residential Homeowner',
+                        service: serviceInput ? serviceInput.value : 'Lawn Mowing & Edging',
+                        rating: 5,
+                        text: text,
+                        avatarUrl: '',
+                        status: 'pending', // Held for moderation!
+                        createdAt: new Date().toISOString()
+                    };
+                    siteData.reviews.unshift(pendingRev);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(siteData));
+                }
                 const pendingRev = {
                     id: 'rev_' + Date.now(),
                     name: name,
@@ -320,7 +347,7 @@
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // 7. INITIAL RUN & CROSS-TAB EVENT LISTENER
+    // 6. INITIAL RUN & CROSS-TAB EVENT LISTENER
     // ─────────────────────────────────────────────────────────────────
     function runSync() {
         const data = getSiteData();

@@ -310,14 +310,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openQuoteModal() {
-        if (!quoteModal || !multiQuoteCard || !quoteModalContent) return;
-        
-        // Move the 4-step quote form into the modal content container
-        quoteModalContent.appendChild(multiQuoteCard);
-        
-        quoteModal.classList.add('is-open');
+        const qm = document.getElementById('quoteModal');
+        const qmc = document.getElementById('quoteModalContent');
+        const mqc = document.querySelector('.multi-quote-card');
+
+        // Fallback if modal DOM is absent on page
+        if (!qm) {
+            window.location.href = 'index.html?openQuote=1#quote';
+            return;
+        }
+
+        // Relocate quote card into modal content if not already there
+        if (mqc && qmc && !qmc.contains(mqc)) {
+            quoteCardOriginalParent = mqc.parentElement;
+            quoteCardOriginalSibling = mqc.nextElementSibling;
+            qmc.appendChild(mqc);
+        }
+
+        qm.classList.add('is-open');
         document.body.classList.add('quote-modal-open');
-        
+
         // Close mobile drawer if open
         const mobileDrawer = document.getElementById('mobileDrawer');
         if (mobileDrawer && mobileDrawer.classList.contains('is-open')) {
@@ -327,30 +339,33 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Accessibility focus
-        const firstInput = multiQuoteCard.querySelector('input, button');
+        const firstInput = qm.querySelector('input, button');
         if (firstInput) setTimeout(() => firstInput.focus(), 150);
     }
 
     function closeQuoteModal() {
-        if (!quoteModal || !multiQuoteCard) return;
-        
-        quoteModal.classList.remove('is-open');
+        const qm = document.getElementById('quoteModal');
+        const qmc = document.getElementById('quoteModalContent');
+        const mqc = document.querySelector('.multi-quote-card');
+        if (!qm) return;
+
+        qm.classList.remove('is-open');
         document.body.classList.remove('quote-modal-open');
 
-        // Restore the 4-step quote form back to its original slot in .quote-split-grid
-        if (quoteCardOriginalParent) {
+        // Restore the 4-step quote form back to its original slot ONLY if it originated elsewhere
+        if (mqc && quoteCardOriginalParent && quoteCardOriginalParent !== qmc) {
             if (quoteCardOriginalSibling && quoteCardOriginalParent.contains(quoteCardOriginalSibling)) {
-                quoteCardOriginalParent.insertBefore(multiQuoteCard, quoteCardOriginalSibling);
+                quoteCardOriginalParent.insertBefore(mqc, quoteCardOriginalSibling);
             } else {
-                quoteCardOriginalParent.appendChild(multiQuoteCard);
+                quoteCardOriginalParent.appendChild(mqc);
             }
         }
     }
 
     // Attach open handler to Navbar quote buttons & triggers
-    const quoteTriggers = document.querySelectorAll('a[href="#quote"], .nav-btn--solid, .mobile-btn--solid, [data-open-quote]');
+    const quoteTriggers = document.querySelectorAll('a[href="#quote"], a[href="index.html#quote"], a[href*="#quote"], .nav-btn--solid, .mobile-btn--solid, [data-open-quote]');
     quoteTriggers.forEach(btn => {
-        // Only hook navbar / top triggers that shouldn't just anchor scroll
+        // Hook navbar buttons, mobile drawer buttons, or data-open-quote buttons
         if (btn.closest('.header__actions') || btn.closest('.mobile-drawer__footer') || btn.hasAttribute('data-open-quote')) {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -368,7 +383,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && quoteModal && quoteModal.classList.contains('is-open')) {
+        const qm = document.getElementById('quoteModal');
+        if (e.key === 'Escape' && qm && qm.classList.contains('is-open')) {
             closeQuoteModal();
         }
     });
