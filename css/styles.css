@@ -2161,6 +2161,18 @@ textarea {
     margin-top: 28px;
 }
 
+/* Ensure subpage hero buttons are always visible (never trapped at opacity: 0 by GSAP) */
+.about-hero__buttons .btn,
+.services-hero__buttons .btn,
+.hiw-hero__buttons .btn,
+.portfolio-hero__buttons .btn,
+.areas-hero__buttons .btn,
+.reviews-hero__buttons .btn,
+.faq-hero__buttons .btn {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 /* Subpage Hero Quick-Action Strip */
 .subpage-hero-actions {
     background: #f4f9f6;
