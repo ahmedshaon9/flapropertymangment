@@ -294,6 +294,99 @@ document.addEventListener('DOMContentLoaded', () => {
         startTestAuto();
     }
 
+    /* ─── 2c. HOMEPAGE PORTFOLIO 3-CARD SLIDER (1-BY-1 OVER 6 ITEMS) ─── */
+    const portfolioTrack = document.getElementById('portfolioTrack');
+    const portfolioPrevBtn = document.getElementById('portfolioPrevBtn');
+    const portfolioNextBtn = document.getElementById('portfolioNextBtn');
+    const portfolioDotsWrap = document.getElementById('portfolioDots');
+
+    if (portfolioTrack) {
+        const pfCards = Array.from(portfolioTrack.querySelectorAll('.portfolio-item'));
+        const totalPf = pfCards.length;
+        let pfIndex = 0;
+        let pfTimer = null;
+
+        function getVisiblePfCount() {
+            if (window.innerWidth <= 640) return 1;
+            if (window.innerWidth <= 992) return 2;
+            return 3;
+        }
+
+        function getMaxPfIndex() {
+            return Math.max(0, totalPf - getVisiblePfCount());
+        }
+
+        function buildPfDots() {
+            if (!portfolioDotsWrap) return;
+            const maxIdx = getMaxPfIndex();
+            portfolioDotsWrap.innerHTML = '';
+            for (let i = 0; i <= maxIdx; i++) {
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'portfolio-slider-dot' + (i === pfIndex ? ' is-active' : '');
+                dot.setAttribute('aria-label', `Show portfolio slide ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    goToPfSlide(i);
+                    startPfAuto();
+                });
+                portfolioDotsWrap.appendChild(dot);
+            }
+        }
+
+        function goToPfSlide(idx) {
+            const maxIdx = getMaxPfIndex();
+            if (idx > maxIdx) idx = 0;
+            if (idx < 0) idx = maxIdx;
+            pfIndex = idx;
+
+            const card = pfCards[0];
+            if (card) {
+                const gap = 20;
+                const stepWidth = card.getBoundingClientRect().width + gap;
+                portfolioTrack.style.transform = `translateX(-${pfIndex * stepWidth}px)`;
+            }
+
+            if (portfolioDotsWrap) {
+                const dots = portfolioDotsWrap.querySelectorAll('.portfolio-slider-dot');
+                dots.forEach((d, i) => d.classList.toggle('is-active', i === pfIndex));
+            }
+        }
+
+        function startPfAuto() {
+            if (pfTimer) clearInterval(pfTimer);
+            pfTimer = setInterval(() => goToPfSlide(pfIndex + 1), 4500);
+        }
+
+        function stopPfAuto() {
+            if (pfTimer) clearInterval(pfTimer);
+        }
+
+        if (portfolioNextBtn) {
+            portfolioNextBtn.addEventListener('click', () => {
+                goToPfSlide(pfIndex + 1);
+                startPfAuto();
+            });
+        }
+
+        if (portfolioPrevBtn) {
+            portfolioPrevBtn.addEventListener('click', () => {
+                goToPfSlide(pfIndex - 1);
+                startPfAuto();
+            });
+        }
+
+        portfolioTrack.addEventListener('mouseenter', stopPfAuto);
+        portfolioTrack.addEventListener('mouseleave', startPfAuto);
+        window.addEventListener('resize', () => {
+            buildPfDots();
+            goToPfSlide(Math.min(pfIndex, getMaxPfIndex()));
+        });
+
+        buildPfDots();
+        goToPfSlide(0);
+        startPfAuto();
+    }
+
     /* ─── 3. FULLSCREEN QUOTE FORM MODAL CONTROLLER ─────────────────── */
     const quoteModal = document.getElementById('quoteModal');
     const quoteModalContent = document.getElementById('quoteModalContent');

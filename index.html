@@ -1333,7 +1333,7 @@
         </section>
 
         <!-- ═══════════════════════════════════════════════════════════ -->
-        <!-- 7. PORTFOLIO SECTION (6-IMAGE GRID) -->
+        <!-- 7. PORTFOLIO SECTION (3-CARD SLIDER OF 6 PROJECTS)          -->
         <!-- ═══════════════════════════════════════════════════════════ -->
         <section class="portfolio-section section section--alt" id="portfolio">
             <div class="container">
@@ -1345,72 +1345,104 @@
                     <p class="section-subtitle">QUALITY YOU CAN SEE FROM THE STREET</p>
                 </div>
 
-                <div class="portfolio-grid">
-                    <!-- Item 1 -->
-                    <div class="portfolio-item">
-                        <img src="assets/images/hero-lawn-mowing.webp"
-                            alt="Precision Lawn Mowing & Edging in Lakeland, FL" width="600" height="400"
-                            loading="lazy">
-                        <div class="portfolio-item__overlay">
-                            <span class="portfolio-item__badge">LAKELAND, FL</span>
-                            <h4 class="portfolio-item__caption">Precision Lawn Mowing & Edging</h4>
+                <div class="portfolio-slider-wrap">
+                    <button type="button" class="portfolio-slider-btn portfolio-slider-btn--prev" id="portfolioPrevBtn" aria-label="Previous portfolio project">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+
+                    <div class="portfolio-slider-viewport" id="portfolioViewport">
+                        <div class="portfolio-slider-track" id="portfolioTrack">
+                            <!-- Item 1 -->
+                            <div class="portfolio-item">
+                                <div class="portfolio-item__media">
+                                    <img src="assets/images/hero-lawn-mowing.webp"
+                                        alt="Precision Lawn Mowing & Edging in Lakeland, FL" width="600" height="400"
+                                        loading="lazy">
+                                    <span class="portfolio-item__badge">LAKELAND, FL</span>
+                                </div>
+                                <div class="portfolio-item__body">
+                                    <h4 class="portfolio-item__caption">Precision Lawn Mowing &amp; Edging</h4>
+                                </div>
+                            </div>
+
+                            <!-- Item 2 -->
+                            <div class="portfolio-item">
+                                <div class="portfolio-item__media">
+                                    <img src="assets/images/scag-mower-backyard.webp"
+                                        alt="Commercial Scag Mower Striping & Backyard Maintenance in Polk County" width="600"
+                                        height="400" loading="lazy">
+                                    <span class="portfolio-item__badge">POLK COUNTY</span>
+                                </div>
+                                <div class="portfolio-item__body">
+                                    <h4 class="portfolio-item__caption">Commercial Scag Mower Striping</h4>
+                                </div>
+                            </div>
+
+                            <!-- Item 3 -->
+                            <div class="portfolio-item">
+                                <div class="portfolio-item__media">
+                                    <img src="assets/images/landscape-bed-makeover.webp"
+                                        alt="Front Yard Landscape Bed Makeover & Mulch Installation in Winter Haven, FL" width="600"
+                                        height="400" loading="lazy">
+                                    <span class="portfolio-item__badge">WINTER HAVEN, FL</span>
+                                </div>
+                                <div class="portfolio-item__body">
+                                    <h4 class="portfolio-item__caption">Front Yard Landscape Bed Makeover &amp; Mulch</h4>
+                                </div>
+                            </div>
+
+                            <!-- Item 4 -->
+                            <div class="portfolio-item">
+                                <div class="portfolio-item__media">
+                                    <img src="assets/images/residential-lawn-striping.webp"
+                                        alt="Bush & Hedge Trimming for Curb Appeal in Auburndale, FL" width="600" height="400"
+                                        loading="lazy">
+                                    <span class="portfolio-item__badge">AUBURNDALE, FL</span>
+                                </div>
+                                <div class="portfolio-item__body">
+                                    <h4 class="portfolio-item__caption">Bush &amp; Hedge Trimming for Curb Appeal</h4>
+                                </div>
+                            </div>
+
+                            <!-- Item 5 -->
+                            <div class="portfolio-item">
+                                <div class="portfolio-item__media">
+                                    <img src="assets/images/tropical-landscaping.webp"
+                                        alt="Rock & Tropical Plant Installation in Davenport, FL" width="600" height="400"
+                                        loading="lazy">
+                                    <span class="portfolio-item__badge">DAVENPORT, FL</span>
+                                </div>
+                                <div class="portfolio-item__body">
+                                    <h4 class="portfolio-item__caption">Rock &amp; Tropical Plant Installation</h4>
+                                </div>
+                            </div>
+
+                            <!-- Item 6 -->
+                            <div class="portfolio-item">
+                                <div class="portfolio-item__media">
+                                    <img src="assets/images/sunset-curb-appeal.webp"
+                                        alt="Overgrown Yard Cleanup & Tree Trimming in Bartow, FL" width="600" height="400"
+                                        loading="lazy">
+                                    <span class="portfolio-item__badge">BARTOW, FL</span>
+                                </div>
+                                <div class="portfolio-item__body">
+                                    <h4 class="portfolio-item__caption">Overgrown Yard Cleanup &amp; Tree Trimming</h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Item 2 -->
-                    <div class="portfolio-item">
-                        <img src="assets/images/scag-mower-backyard.webp"
-                            alt="Commercial Scag Mower Striping & Backyard Maintenance in Polk County" width="600"
-                            height="400" loading="lazy">
-                        <div class="portfolio-item__overlay">
-                            <span class="portfolio-item__badge">POLK COUNTY</span>
-                            <h4 class="portfolio-item__caption">Commercial Scag Mower Striping</h4>
-                        </div>
-                    </div>
+                    <button type="button" class="portfolio-slider-btn portfolio-slider-btn--next" id="portfolioNextBtn" aria-label="Next portfolio project">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
 
-                    <!-- Item 3 -->
-                    <div class="portfolio-item">
-                        <img src="assets/images/landscape-bed-makeover.webp"
-                            alt="Front Yard Landscape Bed Makeover & Mulch Installation in Winter Haven, FL" width="600"
-                            height="400" loading="lazy">
-                        <div class="portfolio-item__overlay">
-                            <span class="portfolio-item__badge">WINTER HAVEN, FL</span>
-                            <h4 class="portfolio-item__caption">Front Yard Landscape Bed Makeover & Mulch</h4>
-                        </div>
-                    </div>
+                <div class="portfolio-slider-dots" id="portfolioDots" aria-label="Portfolio slide pagination"></div>
 
-                    <!-- Item 4 -->
-                    <div class="portfolio-item">
-                        <img src="assets/images/residential-lawn-striping.webp"
-                            alt="Bush & Hedge Trimming for Curb Appeal in Auburndale, FL" width="600" height="400"
-                            loading="lazy">
-                        <div class="portfolio-item__overlay">
-                            <span class="portfolio-item__badge">AUBURNDALE, FL</span>
-                            <h4 class="portfolio-item__caption">Bush & Hedge Trimming for Curb Appeal</h4>
-                        </div>
-                    </div>
-
-                    <!-- Item 5 -->
-                    <div class="portfolio-item">
-                        <img src="assets/images/tropical-landscaping.webp"
-                            alt="Rock & Tropical Plant Installation in Davenport, FL" width="600" height="400"
-                            loading="lazy">
-                        <div class="portfolio-item__overlay">
-                            <span class="portfolio-item__badge">DAVENPORT, FL</span>
-                            <h4 class="portfolio-item__caption">Rock & Tropical Plant Installation</h4>
-                        </div>
-                    </div>
-
-                    <!-- Item 6 -->
-                    <div class="portfolio-item">
-                        <img src="assets/images/sunset-curb-appeal.webp"
-                            alt="Overgrown Yard Cleanup & Tree Trimming in Bartow, FL" width="600" height="400"
-                            loading="lazy">
-                        <div class="portfolio-item__overlay">
-                            <span class="portfolio-item__badge">BARTOW, FL</span>
-                            <h4 class="portfolio-item__caption">Overgrown Yard Cleanup & Tree Trimming</h4>
-                        </div>
-                    </div>
+                <div class="portfolio-footer-cta">
+                    <a href="portfolio.html" class="btn btn--primary btn--pill portfolio-view-works-btn">
+                        View Works <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </section>
