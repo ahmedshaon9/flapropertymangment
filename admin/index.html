@@ -645,6 +645,28 @@
               </div>
               <div class="card-body">
                 <form id="form-add-review" novalidate>
+                  <!-- Reviewer Profile Image Upload -->
+                  <div class="field-group avatar-upload-group" style="margin-bottom: 20px;">
+                    <label>Reviewer Profile Picture <span class="label-note">Upload customer portrait photo or enter image URL</span></label>
+                    <div class="avatar-upload-box" style="display:flex;align-items:center;gap:18px;padding:14px 18px;background:#f8fafc;border:1.5px dashed var(--a-border);border-radius:14px;">
+                      <div class="avatar-circle-wrap" style="position:relative;width:68px;height:68px;min-width:68px;border-radius:50%;overflow:hidden;border:3px solid #68b824;background:#e2e8f0;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,0.12);">
+                        <img id="add-review-avatar-preview" src="" alt="Avatar Preview" style="width:100%;height:100%;object-fit:cover;display:none;">
+                        <span id="add-review-avatar-initials" style="font-weight:700;font-size:22px;color:#64748b;"><i class="fa-solid fa-user"></i></span>
+                      </div>
+                      <div style="flex:1;min-width:0;">
+                        <div style="display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+                          <label for="add-review-avatar-file" class="btn-secondary btn-sm" style="margin:0;cursor:pointer;display:inline-flex;align-items:center;gap:7px;">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Upload Photo
+                          </label>
+                          <button type="button" class="btn-tbl btn-tbl--danger" id="add-review-avatar-clear-btn" title="Remove Photo" style="display:none;padding:5px 12px;font-size:12px;">
+                            <i class="fa-solid fa-trash"></i> Remove
+                          </button>
+                          <input type="file" id="add-review-avatar-file" accept="image/*" style="display:none;">
+                        </div>
+                        <input type="text" name="avatarUrl" id="add-review-avatar-url" placeholder="Or paste image URL (https://... or assets/images/...)" class="input-sm" style="width:100%;font-size:12.5px;">
+                      </div>
+                    </div>
+                  </div>
                   <div class="field-row">
                     <div class="field-group">
                       <label>Reviewer Name <span class="req">*</span></label>
@@ -722,6 +744,30 @@
               <div class="modal-body">
                 <form id="form-edit-review" novalidate>
                   <input type="hidden" name="id">
+
+                  <!-- Reviewer Profile Image Edit & Replace -->
+                  <div class="field-group avatar-upload-group" style="margin-bottom: 20px;">
+                    <label>Reviewer Profile Picture <span class="label-note">Upload new photo, change URL, or remove</span></label>
+                    <div class="avatar-upload-box" style="display:flex;align-items:center;gap:18px;padding:14px 18px;background:#f8fafc;border:1.5px dashed var(--a-border);border-radius:14px;">
+                      <div class="avatar-circle-wrap" style="position:relative;width:68px;height:68px;min-width:68px;border-radius:50%;overflow:hidden;border:3px solid #68b824;background:#e2e8f0;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,0.12);">
+                        <img id="edit-review-avatar-preview" src="" alt="Avatar Preview" style="width:100%;height:100%;object-fit:cover;display:none;">
+                        <span id="edit-review-avatar-initials" style="font-weight:700;font-size:22px;color:#64748b;"><i class="fa-solid fa-user"></i></span>
+                      </div>
+                      <div style="flex:1;min-width:0;">
+                        <div style="display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+                          <label for="edit-review-avatar-file" class="btn-secondary btn-sm" style="margin:0;cursor:pointer;display:inline-flex;align-items:center;gap:7px;">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Change Photo
+                          </label>
+                          <button type="button" class="btn-tbl btn-tbl--danger" id="edit-review-avatar-clear-btn" title="Remove Photo" style="padding:5px 12px;font-size:12px;">
+                            <i class="fa-solid fa-trash"></i> Remove
+                          </button>
+                          <input type="file" id="edit-review-avatar-file" accept="image/*" style="display:none;">
+                        </div>
+                        <input type="text" name="avatarUrl" id="edit-review-avatar-url" placeholder="Or paste image URL (https://... or data:...)" class="input-sm" style="width:100%;font-size:12.5px;">
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="field-row">
                     <div class="field-group">
                       <label>Name <span class="req">*</span></label>

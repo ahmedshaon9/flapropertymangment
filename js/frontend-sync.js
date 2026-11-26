@@ -143,7 +143,7 @@
                         <div class="review-card__header">
                             <div class="review-card__user">
                                 <div class="review-card__avatar">
-                                    ${rev.avatarUrl ? `<img src="${rev.avatarUrl}" alt="${esc(name)}" class="review-card__avatar-img">` : `<span class="review-card__avatar-text">${initials}</span>`}
+                                    ${rev.avatarUrl ? `<img src="${rev.avatarUrl}" alt="${esc(name)}" class="review-card__avatar-img" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='flex';"><span class="review-card__avatar-text" style="display:none;">${initials}</span>` : `<span class="review-card__avatar-text">${initials}</span>`}
                                 </div>
                                 <div class="review-card__user-info">
                                     <h3 class="review-card__name">

@@ -39,6 +39,7 @@
       city: "Lakeland",
       service: "Lawn Mowing & Edging",
       rating: 5,
+      avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&q=80",
       message: "The lawn striping patterns are phenomenal! My yard looks like a championship golf course every single Thursday after the crew wraps up. The clean edging along the concrete driveway and garden borders is razor-sharp. Best lawn care service in Polk County, hands down!",
       approved: true,
       order: 1,
@@ -51,6 +52,7 @@
       city: "Winter Haven",
       service: "Landscape Bed Makeovers",
       rating: 5,
+      avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=256&q=80",
       message: "FLA Property transformed our neglected flower beds into a tropical oasis. They removed 3 inches of weed-choked old dirt, installed heavy-duty weed barrier, planted gorgeous hibiscus and crotons, and finished with deep black mulch. Absolutely stunning curb appeal!",
       approved: true,
       order: 2,
@@ -63,6 +65,7 @@
       city: "Davenport",
       service: "One-Time Mow & Go",
       rating: 5,
+      avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=256&q=80",
       message: "Our riding mower broke down right in the middle of Florida rainy season. I called FLA Property for emergency one-time mowing and they arrived within 24 hours. The grass was nearly knee-high and they handled it effortlessly without leaving clumps. Saved my weekend!",
       approved: true,
       order: 3,
@@ -75,6 +78,7 @@
       city: "Auburndale",
       service: "Commercial Lawn Mowing",
       rating: 5,
+      avatarUrl: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=256&q=80",
       message: "Reliability was our HOA board's top priority after two consecutive lawn contractors flaked out mid-season. FLA Property Maintenance hasn't missed a single scheduled service day in 8 months. Consistent, professional, fully insured, and prompt billing.",
       approved: true,
       order: 4,
@@ -87,6 +91,7 @@
       city: "Haines City",
       service: "Mulch & Rock Installation",
       rating: 5,
+      avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&q=80",
       message: "We ordered 8 yards of river rock and refreshed the mulch around 14 palm trees. The crew arrived right on time at 8:00 AM with their dump trailer and commercial wheelbarrows. By 2:00 PM the entire property was pristine, blown clean, and sparkling.",
       approved: true,
       order: 5,
@@ -99,6 +104,7 @@
       city: "Bartow",
       service: "Bi-Weekly Lawn Maintenance",
       rating: 5,
+      avatarUrl: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=256&q=80",
       message: "Their bi-weekly mowing service keeps our half-acre property in peak condition all year long. What stands out most is the care they take around fence lines and flower beds — they never scar the sod or ding fence posts with string trimmers. True pros.",
       approved: true,
       order: 6,
@@ -111,6 +117,7 @@
       city: "Plant City",
       service: "Bush, Hedge & Tree Care",
       rating: 5,
+      avatarUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=256&q=80",
       message: "Our podocarpus hedge had grown out of control to over 12 feet tall. The FLA crew leveled it to a perfect 7-foot privacy screen with laser-straight lines. They hauled away every last branch and leaf clipping. Our backyard finally feels open and private again.",
       approved: true,
       order: 7,
@@ -123,6 +130,7 @@
       city: "Lake Wales",
       service: "Seasonal Yard Cleanups",
       rating: 5,
+      avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80",
       message: "Managing a 2-acre commercial yard requires reliable contractors who respect safety protocols and heavy equipment movement. FLA Property handles our routine mowing, retention pond trimming, and perimeter weed control without disrupting customer traffic.",
       approved: true,
       order: 8,
@@ -572,6 +580,13 @@
       }
       if (!list || !list.length) {
         list = JSON.parse(JSON.stringify(DEFAULT_REVIEWS));
+      } else {
+        // Backfill avatarUrl from DEFAULT_REVIEWS if missing
+        list.forEach((r, idx) => {
+          if (!r.avatarUrl && DEFAULT_REVIEWS[idx] && DEFAULT_REVIEWS[idx].avatarUrl) {
+            r.avatarUrl = DEFAULT_REVIEWS[idx].avatarUrl;
+          }
+        });
       }
       storage(KEY.REVIEWS, list);
       return list;
@@ -775,6 +790,24 @@
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
+  }
+
+  function resolveAssetUrl(url) {
+    if (!url) return '';
+    url = String(url).trim();
+    if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:')) {
+      return url;
+    }
+    const isInsideAdmin = window.location.pathname.toLowerCase().includes('/admin') ||
+                          window.location.href.toLowerCase().includes('/admin/');
+    if (isInsideAdmin) {
+      if (url.startsWith('../')) return url;
+      if (url.startsWith('/')) return '..' + url;
+      return '../' + url;
+    } else {
+      if (url.startsWith('../')) return url.substring(3);
+      return url;
+    }
   }
 
   function $id(id) { return document.getElementById(id); }
@@ -1454,55 +1487,95 @@
 
     cardHtml(r, type, index = 0, total = 1) {
       const city = r.city || 'Central Florida';
-      const role = r.role || r.propertyType || 'Homeowner';
+      const role = r.role || r.propertyType || 'Residential Homeowner';
       const isFirst = index === 0;
-      const isSecond = index === 1;
-      const rankBadge = type === 'approved'
-        ? `<span class="review-rank-badge ${isFirst ? 'rank--first' : isSecond ? 'rank--second' : ''}">
-             ${isFirst ? '⭐ #1 Show First' : isSecond ? '🥈 #2 Show Second' : '#' + (index + 1)}
-           </span>`
-        : `<span class="review-rank-badge">Pending</span>`;
+      const isLast = index === total - 1;
+
+      // Suffix calculation: 1st, 2nd, 3rd, 4th...
+      const n = index + 1;
+      const s = ['th', 'st', 'nd', 'rd'];
+      const v = n % 100;
+      const placeText = n + (s[(v - 20) % 10] || s[v] || s[0]);
+
+      // Format date like 'Apr 10, 2026'
+      let dateFormatted = 'Apr 10, 2026';
+      if (r.createdAt) {
+        try {
+          const d = new Date(r.createdAt);
+          if (!isNaN(d.getTime())) {
+            dateFormatted = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          }
+        } catch (e) {}
+      }
+
+      const avatarSrc = r.avatarUrl ? resolveAssetUrl(r.avatarUrl) : '';
+      const avatarHtml = avatarSrc
+        ? `<img src="${esc(avatarSrc)}" alt="${esc(r.name)}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><span style="display:none;width:100%;height:100%;font-weight:700;font-size:16px;color:#ffffff;align-items:center;justify-content:center;">${initials(r.name)}</span>`
+        : `<span style="display:flex;width:100%;height:100%;font-weight:700;font-size:16px;color:#ffffff;align-items:center;justify-content:center;">${initials(r.name)}</span>`;
 
       return `
-        <div class="review-admin-card" data-review-id="${esc(r.id)}">
-          <div class="review-admin-avatar">${initials(r.name)}</div>
-          <div class="review-admin-body">
-            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-              ${rankBadge}
-              <span class="review-admin-name">${esc(r.name || 'Anonymous')}</span>
+        <div class="review-botanical-card" data-review-id="${esc(r.id)}">
+          <!-- Top Row: Avatar + Name on left, Show Place + Controls on right -->
+          <div class="rb-card-top">
+            <div class="rb-user-info">
+              <div class="rb-avatar">
+                ${avatarHtml}
+              </div>
+              <div class="rb-name-box">
+                <span class="rb-label-name">Name</span>
+                <strong class="rb-name-val">${esc(r.name || 'Anonymous')}</strong>
+              </div>
             </div>
-            <div class="review-admin-meta">${esc(role)} · ${esc(city)}, FL · ${timeAgo(r.createdAt)}</div>
-            <div class="review-admin-stars">${this.starsHtml(r.rating || 5)}</div>
-            <div class="review-admin-text">"${esc(r.message || '')}"</div>
+
+            <div class="rb-top-controls">
+              <span class="rb-place-text">${type === 'approved' ? `Show Place ${placeText}` : 'Pending'}</span>
+              ${type === 'approved' ? `
+                <div class="rb-arrows">
+                  <button type="button" class="rb-arrow-btn" data-rv-up="${esc(r.id)}" title="Move 1 Position Up" ${isFirst ? 'disabled style="opacity:0.35;cursor:not-allowed;"' : ''}>
+                    <i class="fa-solid fa-chevron-up"></i>
+                  </button>
+                  <button type="button" class="rb-arrow-btn" data-rv-down="${esc(r.id)}" title="Move 1 Position Down" ${isLast ? 'disabled style="opacity:0.35;cursor:not-allowed;"' : ''}>
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </button>
+                </div>
+              ` : `
+                <button type="button" class="rb-icon-action" style="background:#22c55e;color:#fff;" data-rv-approve="${esc(r.id)}" title="Approve & Publish Live">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+              `}
+              <div class="rb-actions-group">
+                <button type="button" class="rb-icon-action" data-rv-edit="${esc(r.id)}" title="Edit Review">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button type="button" class="rb-icon-action rb-icon-action--del" data-rv-delete="${esc(r.id)}" title="Delete Review">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="review-admin-actions">
-            ${type === 'approved' ? `
-              <button type="button" class="btn-move-fast" title="Make this review #1 (Show First on Website)" data-rv-rank="1" data-rv-id="${esc(r.id)}">
-                <i class="fa-solid fa-star" style="color:#eab308;"></i> #1 First
-              </button>
-              <button type="button" class="btn-move-fast btn-move-fast--second" title="Make this review #2 (Show Second on Website)" data-rv-rank="2" data-rv-id="${esc(r.id)}">
-                <i class="fa-solid fa-medal" style="color:#2563eb;"></i> #2 Second
-              </button>
-              <button type="button" class="btn-tbl" title="Move 1 position up" data-rv-up="${esc(r.id)}" ${isFirst ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
-                <i class="fa-solid fa-arrow-up"></i>
-              </button>
-              <button type="button" class="btn-tbl" title="Move 1 position down" data-rv-down="${esc(r.id)}" ${index === total - 1 ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
-                <i class="fa-solid fa-arrow-down"></i>
-              </button>
-              <button type="button" class="btn-tbl" title="Move back to pending" data-rv-unapprove="${esc(r.id)}">
-                <i class="fa-solid fa-eye-slash"></i>
-              </button>
-            ` : `
-              <button type="button" class="btn-tbl btn-tbl--success" title="Approve & publish live" data-rv-approve="${esc(r.id)}">
-                <i class="fa-solid fa-check"></i> Approve
-              </button>
-            `}
-            <button type="button" class="btn-tbl" title="Edit review" data-rv-edit="${esc(r.id)}">
-              <i class="fa-solid fa-pen"></i> Edit
-            </button>
-            <button type="button" class="btn-tbl btn-tbl--danger" title="Delete review" data-rv-delete="${esc(r.id)}">
-              <i class="fa-solid fa-trash"></i> Delete
-            </button>
+
+          <!-- Middle Row: Quote Text -->
+          <div class="rb-card-quote">
+            &ldquo;${esc(r.message || '')}&rdquo;
+          </div>
+
+          <!-- Bottom Row: Meta (Role, Date, City) on left, 5 Golden Stars on right -->
+          <div class="rb-card-bottom">
+            <div class="rb-meta-box">
+              <div class="rb-role-line">${esc(role)} ·</div>
+              <div class="rb-location-line">
+                <i class="fa-regular fa-clock"></i> <span>${dateFormatted}</span>
+                <i class="fa-solid fa-location-dot" style="margin-left:6px;"></i> <span>${esc(city)}, FL ·</span>
+              </div>
+            </div>
+
+            <div class="rb-stars-box" aria-label="${r.rating || 5} Stars">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+            </div>
           </div>
         </div>
       `;
@@ -1522,6 +1595,24 @@
       form.querySelector('[name="role"]').value = r.role || r.propertyType || '';
       form.querySelector('[name="message"]').value = r.message || '';
       form.querySelector('[name="rating"]').value = r.rating || 5;
+
+      const avatarInput = form.querySelector('[name="avatarUrl"]');
+      if (avatarInput) avatarInput.value = r.avatarUrl || '';
+
+      const editPreview = $id('edit-review-avatar-preview');
+      const editInitials = $id('edit-review-avatar-initials');
+      if (editPreview && editInitials) {
+        if (r.avatarUrl) {
+          editPreview.src = resolveAssetUrl(r.avatarUrl);
+          editPreview.style.display = 'block';
+          editInitials.style.display = 'none';
+        } else {
+          editPreview.src = '';
+          editPreview.style.display = 'none';
+          editInitials.style.display = 'flex';
+          editInitials.innerHTML = `<span style="font-size:18px;font-weight:700;color:#64748b;">${initials(r.name || 'FL')}</span>`;
+        }
+      }
 
       StarPicker.set('edit-star-picker', r.rating || 5);
       Modals.open('modal-review-edit');
@@ -1574,6 +1665,136 @@
       const approvedWrap = $id('approved-reviews-list');
       if (approvedWrap) approvedWrap.addEventListener('click', handleListClick);
 
+      // Add Review Avatar handling
+      const addAvatarFile = $id('add-review-avatar-file');
+      const addAvatarUrl = $id('add-review-avatar-url');
+      const addAvatarClear = $id('add-review-avatar-clear-btn');
+      const addAvatarPreview = $id('add-review-avatar-preview');
+      const addAvatarInitials = $id('add-review-avatar-initials');
+
+      if (addAvatarFile) {
+        addAvatarFile.addEventListener('change', () => {
+          const file = addAvatarFile.files[0];
+          if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+              toast('Profile photo must be under 5 MB limit.', 'error');
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+              const dataUrl = reader.result;
+              if (addAvatarUrl) addAvatarUrl.value = dataUrl;
+              if (addAvatarPreview) {
+                addAvatarPreview.src = dataUrl;
+                addAvatarPreview.style.display = 'block';
+              }
+              if (addAvatarInitials) addAvatarInitials.style.display = 'none';
+              if (addAvatarClear) addAvatarClear.style.display = 'inline-flex';
+              toast('✓ Profile photo loaded', 'success');
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      if (addAvatarUrl) {
+        addAvatarUrl.addEventListener('input', () => {
+          const val = addAvatarUrl.value.trim();
+          if (val) {
+            if (addAvatarPreview) {
+              addAvatarPreview.src = resolveAssetUrl(val);
+              addAvatarPreview.style.display = 'block';
+            }
+            if (addAvatarInitials) addAvatarInitials.style.display = 'none';
+            if (addAvatarClear) addAvatarClear.style.display = 'inline-flex';
+          } else {
+            if (addAvatarPreview) {
+              addAvatarPreview.src = '';
+              addAvatarPreview.style.display = 'none';
+            }
+            if (addAvatarInitials) addAvatarInitials.style.display = 'flex';
+            if (addAvatarClear) addAvatarClear.style.display = 'none';
+          }
+        });
+      }
+
+      if (addAvatarClear) {
+        addAvatarClear.addEventListener('click', () => {
+          if (addAvatarUrl) addAvatarUrl.value = '';
+          if (addAvatarFile) addAvatarFile.value = '';
+          if (addAvatarPreview) {
+            addAvatarPreview.src = '';
+            addAvatarPreview.style.display = 'none';
+          }
+          if (addAvatarInitials) addAvatarInitials.style.display = 'flex';
+          addAvatarClear.style.display = 'none';
+          toast('Profile photo cleared', 'info');
+        });
+      }
+
+      // Edit Review Avatar handling
+      const editAvatarFile = $id('edit-review-avatar-file');
+      const editAvatarUrl = $id('edit-review-avatar-url');
+      const editAvatarClear = $id('edit-review-avatar-clear-btn');
+      const editAvatarPreview = $id('edit-review-avatar-preview');
+      const editAvatarInitials = $id('edit-review-avatar-initials');
+
+      if (editAvatarFile) {
+        editAvatarFile.addEventListener('change', () => {
+          const file = editAvatarFile.files[0];
+          if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+              toast('Profile photo must be under 5 MB limit.', 'error');
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+              const dataUrl = reader.result;
+              if (editAvatarUrl) editAvatarUrl.value = dataUrl;
+              if (editAvatarPreview) {
+                editAvatarPreview.src = dataUrl;
+                editAvatarPreview.style.display = 'block';
+              }
+              if (editAvatarInitials) editAvatarInitials.style.display = 'none';
+              toast('✓ New profile photo loaded', 'success');
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      if (editAvatarUrl) {
+        editAvatarUrl.addEventListener('input', () => {
+          const val = editAvatarUrl.value.trim();
+          if (val) {
+            if (editAvatarPreview) {
+              editAvatarPreview.src = resolveAssetUrl(val);
+              editAvatarPreview.style.display = 'block';
+            }
+            if (editAvatarInitials) editAvatarInitials.style.display = 'none';
+          } else {
+            if (editAvatarPreview) {
+              editAvatarPreview.src = '';
+              editAvatarPreview.style.display = 'none';
+            }
+            if (editAvatarInitials) editAvatarInitials.style.display = 'flex';
+          }
+        });
+      }
+
+      if (editAvatarClear) {
+        editAvatarClear.addEventListener('click', () => {
+          if (editAvatarUrl) editAvatarUrl.value = '';
+          if (editAvatarFile) editAvatarFile.value = '';
+          if (editAvatarPreview) {
+            editAvatarPreview.src = '';
+            editAvatarPreview.style.display = 'none';
+          }
+          if (editAvatarInitials) editAvatarInitials.style.display = 'flex';
+          toast('Profile photo removed', 'info');
+        });
+      }
+
       // Add Review form
       const formAdd = $id('form-add-review');
       if (formAdd) {
@@ -1596,12 +1817,16 @@
             service: fd.get('service') || 'Lawn Mowing & Edging',
             rating: parseInt(fd.get('rating')) || 5,
             message: fd.get('message'),
+            avatarUrl: (fd.get('avatarUrl') || '').trim(),
             approved: fd.get('approved') === 'on',
             createdAt: new Date().toISOString()
           };
 
           await API.saveReview(rev);
           formAdd.reset();
+          if (addAvatarPreview) { addAvatarPreview.src = ''; addAvatarPreview.style.display = 'none'; }
+          if (addAvatarInitials) addAvatarInitials.style.display = 'flex';
+          if (addAvatarClear) addAvatarClear.style.display = 'none';
           StarPicker.set('add-star-picker', 5);
           formAdd.querySelector('[name="rating"]').value = 5;
 
@@ -1624,7 +1849,8 @@
             city: fd.get('city'),
             role: fd.get('role'),
             message: fd.get('message'),
-            rating: parseInt(fd.get('rating')) || 5
+            rating: parseInt(fd.get('rating')) || 5,
+            avatarUrl: (fd.get('avatarUrl') || '').trim()
           };
 
           await API.updateReview(id, updates);
@@ -1695,37 +1921,53 @@
 
       grid.innerHTML = list.map((p, idx) => {
         const isFirst = idx === 0;
-        const thumb = (p.images && p.images[0])
-          ? `<img src="${esc(p.images[0])}" alt="${esc(p.title)}" class="portfolio-admin-thumb">`
-          : `<div class="portfolio-admin-thumb-placeholder"><i class="fa-solid fa-image"></i></div>`;
+        const isLast = idx === list.length - 1;
+        const rawImg = (p.images && p.images[0]) ? p.images[0] : 'assets/images/landscape-bed-makeover.webp';
+        const resolvedImg = resolveAssetUrl(rawImg);
+        const thumb = `<img src="${esc(resolvedImg)}" alt="${esc(p.title)}" class="pf-card-img" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='../assets/images/landscape-bed-makeover.webp';}">`;
 
         return `
-          <div class="portfolio-admin-card" data-portfolio-id="${esc(p.id)}">
-            ${thumb}
-            <div class="portfolio-admin-info">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-                <span class="portfolio-admin-category">${esc(p.category || 'Maintenance')}</span>
-                <span class="portfolio-rank-badge ${isFirst ? 'rank--featured' : ''}">
+          <div class="pf-3col-card" data-portfolio-id="${esc(p.id)}">
+            <div class="pf-img-wrap">
+              ${thumb}
+              <div class="pf-badge-strip">
+                <span class="pf-cat-tag">${esc(p.category || 'Maintenance')}</span>
+                <span class="pf-rank-tag ${isFirst ? 'rank--first' : ''}">
                   ${isFirst ? '⭐ #1 Featured' : '#' + (idx + 1)}
                 </span>
               </div>
-              <div class="portfolio-admin-title">${esc(p.title)}</div>
-              <div class="portfolio-admin-desc">${esc(p.description || '')}</div>
-              <div class="portfolio-admin-actions" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;">
-                <button type="button" class="btn-move-fast" title="Set this project as #1 (Featured First)" data-pf-rank="1" data-pf-id="${esc(p.id)}">
-                  <i class="fa-solid fa-star" style="color:#eab308;"></i> Show First
+            </div>
+
+            <div class="pf-content-wrap">
+              <div class="pf-title-row">
+                <h4 class="pf-title">${esc(p.title)}</h4>
+                <div class="pf-arrow-reorder">
+                  <button type="button" class="btn-pf-arrow" data-pf-up="${esc(p.id)}" title="Move Up" ${isFirst ? 'disabled style="opacity:0.35;"' : ''}>
+                    <i class="fa-solid fa-chevron-up"></i>
+                  </button>
+                  <button type="button" class="btn-pf-arrow" data-pf-down="${esc(p.id)}" title="Move Down" ${isLast ? 'disabled style="opacity:0.35;"' : ''}>
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="pf-loc-date">
+                <i class="fa-solid fa-location-dot"></i> ${esc(p.location || 'Central Florida')} · 
+                <i class="fa-regular fa-calendar"></i> ${p.date || '2026'}
+              </div>
+
+              <p class="pf-desc">${esc(p.description || '')}</p>
+
+              <!-- Prominent Edit & Delete Buttons -->
+              <div class="pf-actions-bar">
+                <button type="button" class="btn-pf-primary btn-pf-edit" data-pf-edit="${esc(p.id)}">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit
                 </button>
-                <button type="button" class="btn-tbl btn-tbl--sm" title="Move Up" data-pf-up="${esc(p.id)}" ${isFirst ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
-                  <i class="fa-solid fa-arrow-up"></i>
-                </button>
-                <button type="button" class="btn-tbl btn-tbl--sm" title="Move Down" data-pf-down="${esc(p.id)}" ${idx === list.length - 1 ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
-                  <i class="fa-solid fa-arrow-down"></i>
-                </button>
-                <button type="button" class="btn-secondary btn-sm" data-pf-edit="${esc(p.id)}">
-                  <i class="fa-solid fa-pen"></i> Edit
-                </button>
-                <button type="button" class="btn-secondary btn-sm btn-danger" data-pf-del="${esc(p.id)}">
+                <button type="button" class="btn-pf-danger btn-pf-del" data-pf-del="${esc(p.id)}">
                   <i class="fa-solid fa-trash"></i> Delete
+                </button>
+                <button type="button" class="btn-pf-first" data-pf-rank="1" data-pf-id="${esc(p.id)}" title="Set as #1 Show First">
+                  <i class="fa-solid fa-star"></i> Show First
                 </button>
               </div>
             </div>
@@ -1736,13 +1978,23 @@
 
     openAdd() {
       const form = $id('form-portfolio');
-      if (form) form.reset();
-      $id('preview-images').innerHTML = '';
-      $id('preview-video').innerHTML = '';
+      if (form) {
+        form.reset();
+        form.querySelector('[name="id"]').value = '';
+        const imgInput = form.querySelector('[name="imageUrl"]');
+        if (imgInput) imgInput.value = '';
+        const preview = $id('portfolio-main-preview');
+        if (preview) preview.src = resolveAssetUrl('assets/images/landscape-bed-makeover.webp');
+        const filename = $id('portfolio-img-filename');
+        if (filename) filename.textContent = 'landscape-bed-makeover.webp (default)';
+      }
+      const prevWrap = $id('preview-images');
+      if (prevWrap) prevWrap.innerHTML = '';
+      const vidWrap = $id('preview-video');
+      if (vidWrap) vidWrap.innerHTML = '';
       $id('portfolio-modal-title').textContent = 'Add Portfolio Item';
       const submitBtn = $id('portfolio-submit-btn');
       if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Portfolio Item';
-      if (form) form.querySelector('[name="id"]').value = '';
       PortfolioUpload.reset();
       Modals.open('modal-portfolio');
     },
@@ -1762,6 +2014,16 @@
       form.querySelector('[name="location"]').value = p.location || '';
       form.querySelector('[name="date"]').value = p.date || '';
 
+      const mainImg = (p.images && p.images[0]) ? p.images[0] : '';
+      const imgInput = form.querySelector('[name="imageUrl"]');
+      if (imgInput) imgInput.value = mainImg;
+
+      const preview = $id('portfolio-main-preview');
+      if (preview) preview.src = resolveAssetUrl(mainImg || 'assets/images/landscape-bed-makeover.webp');
+
+      const filename = $id('portfolio-img-filename');
+      if (filename) filename.textContent = mainImg ? mainImg.split('/').pop() : 'landscape-bed-makeover.webp (default)';
+
       $id('portfolio-modal-title').textContent = 'Edit Portfolio Item';
       const submitBtn = $id('portfolio-submit-btn');
       if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
@@ -1773,7 +2035,7 @@
       if (prevWrap) {
         prevWrap.innerHTML = PortfolioUpload.existingImages.map((src, i) => `
           <div class="preview-img-item">
-            <img src="${esc(src)}" alt="Thumbnail">
+            <img src="${esc(resolveAssetUrl(src))}" alt="Thumbnail">
             <button type="button" class="preview-img-remove" data-rm-img="${i}">
               <i class="fa-solid fa-xmark"></i>
             </button>
@@ -1804,6 +2066,63 @@
     bind() {
       const addBtn = $id('add-portfolio-btn');
       if (addBtn) addBtn.addEventListener('click', () => this.openAdd());
+
+      // Portfolio Main Image File Upload
+      const mainFileInput = $id('portfolio-main-file');
+      if (mainFileInput) {
+        mainFileInput.addEventListener('change', () => {
+          const file = mainFileInput.files[0];
+          if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+              toast('Image file exceeds 5 MB limit.', 'error');
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+              const dataUrl = reader.result;
+              const urlInput = $id('portfolio-img-url');
+              const preview = $id('portfolio-main-preview');
+              const filename = $id('portfolio-img-filename');
+              if (urlInput) urlInput.value = dataUrl;
+              if (preview) preview.src = dataUrl;
+              if (filename) filename.textContent = file.name;
+              toast('✓ Project cover image loaded', 'success');
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Portfolio Main Image URL Input
+      const mainUrlInput = $id('portfolio-img-url');
+      if (mainUrlInput) {
+        mainUrlInput.addEventListener('input', () => {
+          const val = mainUrlInput.value.trim();
+          const preview = $id('portfolio-main-preview');
+          const filename = $id('portfolio-img-filename');
+          if (val) {
+            if (preview) preview.src = resolveAssetUrl(val);
+            if (filename) filename.textContent = val.split('/').pop() || 'custom image';
+          } else {
+            if (preview) preview.src = resolveAssetUrl('assets/images/landscape-bed-makeover.webp');
+            if (filename) filename.textContent = 'landscape-bed-makeover.webp (default)';
+          }
+        });
+      }
+
+      // Portfolio Main Image Clear Button
+      const clearBtn = $id('portfolio-img-clear-btn');
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          const urlInput = $id('portfolio-img-url');
+          const preview = $id('portfolio-main-preview');
+          const filename = $id('portfolio-img-filename');
+          if (urlInput) urlInput.value = '';
+          if (preview) preview.src = resolveAssetUrl('assets/images/landscape-bed-makeover.webp');
+          if (filename) filename.textContent = 'None (cleared)';
+          toast('Image cleared. Default will be used.', 'info');
+        });
+      }
 
       const grid = $id('portfolio-grid');
       if (grid) {
@@ -1858,6 +2177,8 @@
             const video = await PortfolioUpload.getVideo();
             const fd = new FormData(form);
             const id = fd.get('id');
+            const imgVal = (fd.get('imageUrl') || '').trim();
+            const finalImages = imgVal ? [imgVal] : (images.length ? images : ['assets/images/landscape-bed-makeover.webp']);
 
             const item = {
               id: id || 'port_' + Date.now(),
@@ -1866,7 +2187,7 @@
               description: fd.get('description'),
               location: fd.get('location'),
               date: fd.get('date'),
-              images: images.length ? images : ['assets/images/landscape-bed-makeover.webp'],
+              images: finalImages,
               video: video,
               updatedAt: new Date().toISOString()
             };
