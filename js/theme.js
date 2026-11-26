@@ -94,9 +94,8 @@
       .faq-cta-banner h2, .faq-cta-banner h3, .faq-cta-banner__title,
       [class*="cta-banner"] h2, [class*="cta-banner"] h3,
       .cta-full h2, .cta-full h3,
-      .footer h1, .footer h2, .footer h3, .footer h4, .footer-heading,
-      .site-footer h1, .site-footer h2, .site-footer h3, .site-footer h4, .site-footer .footer-heading,
-      .footer-col h4,
+      .footer:not(.footer-light) h1, .footer:not(.footer-light) h2, .footer:not(.footer-light) h3, .footer:not(.footer-light) h4,
+      .site-footer:not(.footer-light) h1, .site-footer:not(.footer-light) h2, .site-footer:not(.footer-light) h3, .site-footer:not(.footer-light) h4,
       [class*="--dark"] h1, [class*="--dark"] h2, [class*="--dark"] h3,
       .bg-dark h1, .bg-dark h2, .bg-dark h3,
       .bento-card--dark h2, .bento-card--dark h3, .bento-card--dark .bento-card__title {
@@ -106,8 +105,16 @@
       .hero p, .hero .hero__subheading, .hero .hero-subtitle,
       [class*="-hero"] p, [class*="-hero"] .hero-subtitle,
       .cta-section p, .cta-banner p, .bottom-cta-banner p, .faq-cta-banner p, [class*="cta-banner"] p, .craft-cta-card p,
-      .footer p, .footer-blurb, .site-footer p {
+      .footer:not(.footer-light) p, .site-footer:not(.footer-light) p {
         color: rgba(255, 255, 255, 0.90) !important;
+      }
+
+      /* Light Footer (White Background): Dark Black Headings & Description */
+      .footer-light h4, .footer-light .footer-heading, .footer-light .footer-col h4 {
+        color: ${c.heading || '#081c15'} !important;
+      }
+      .footer-light p, .footer-light .footer-blurb, .footer-light .footer-bottom {
+        color: #1b4332 !important;
       }
 
       /* 2. LIGHT BACKGROUND SECTIONS: Carbon Black headings and high-contrast body text */
