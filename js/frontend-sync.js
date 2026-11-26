@@ -114,7 +114,7 @@
         try {
             const rawCustom = localStorage.getItem('fla_customer_reviews');
             if (rawCustom) list = JSON.parse(rawCustom);
-        } catch (e) {}
+        } catch (e) { }
 
         if (!list || !list.length) {
             list = siteReviews || [];
@@ -188,7 +188,7 @@
         try {
             const raw = localStorage.getItem('fla_portfolio');
             if (raw) list = JSON.parse(raw);
-        } catch (e) {}
+        } catch (e) { }
 
         if (!list || !list.length) return;
 
@@ -326,7 +326,7 @@
                 try {
                     const raw = localStorage.getItem('fla_customer_reviews');
                     if (raw) reviewsList = JSON.parse(raw);
-                } catch (e) {}
+                } catch (e) { }
                 reviewsList.unshift(pendingRev);
                 localStorage.setItem('fla_customer_reviews', JSON.stringify(reviewsList));
             }
@@ -375,7 +375,7 @@
             bc.onmessage = () => {
                 runSync();
             };
-        } catch (e) {}
+        } catch (e) { }
     }
 
 })();
