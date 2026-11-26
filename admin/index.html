@@ -286,9 +286,10 @@
                       <span class="chart-headline-tag" id="chart-headline-sub">Total Page Visits in 2026</span>
                     </div>
                     <div class="chart-pill-tabs" id="traffic-chart-tabs">
-                      <button type="button" class="chart-pill-tab active" data-metric="views">Page Views</button>
-                      <button type="button" class="chart-pill-tab" data-metric="unique">Unique Visitors</button>
-                      <button type="button" class="chart-pill-tab" data-metric="quotes">Quote Inquiries</button>
+                      <button type="button" class="chart-pill-tab active" data-metric="monthly"><i class="fa-solid fa-calendar"></i> Monthly Visitors</button>
+                      <button type="button" class="chart-pill-tab" data-metric="days"><i class="fa-solid fa-calendar-week"></i> 7 Days (Mon-Sun)</button>
+                      <button type="button" class="chart-pill-tab" data-metric="pages"><i class="fa-solid fa-file-lines"></i> Per Page Visitors</button>
+                      <button type="button" class="chart-pill-tab" data-metric="quotes"><i class="fa-solid fa-file-invoice"></i> Quote Inquiries</button>
                     </div>
                   </div>
                   <div class="chart-header-right">
@@ -836,16 +837,25 @@
                   </div>
 
                   <div class="field-group">
-                    <label>Images <span class="label-note">Up to 3 images · max 3 MB each · JPG, PNG,
-                        WebP</span></label>
-                    <div class="upload-drop-zone" id="img-drop-zone" data-type="images">
-                      <i class="fa-solid fa-cloud-arrow-up"></i>
-                      <p>Drag & drop images here, or <span class="upload-click-cta">click to browse</span></p>
-                      <span class="upload-note">JPG / PNG / WebP · max 3 MB each · up to 3 images</span>
-                      <input type="file" id="input-portfolio-images" accept="image/jpeg,image/png,image/webp,image/gif"
-                        multiple hidden>
+                    <label>Main Project Image <span class="label-note">Upload image file or enter URL</span></label>
+                    <div style="display:flex;gap:10px;margin-bottom:10px;">
+                      <input type="text" name="imageUrl" id="portfolio-img-url" placeholder="e.g. assets/images/landscape-bed-makeover.webp or https://..." style="flex:1;">
+                      <label for="portfolio-main-file" class="btn-secondary" style="margin:0;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Upload Image
+                      </label>
+                      <input type="file" id="portfolio-main-file" accept="image/*" style="display:none;">
                     </div>
-                    <div id="preview-images" class="preview-images-wrap"></div>
+                    <!-- Live Image Preview Card -->
+                    <div id="portfolio-img-preview-box" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px dashed var(--a-border);border-radius:10px;background:#f8fafc;">
+                      <img id="portfolio-main-preview" src="../assets/images/landscape-bed-makeover.webp" alt="Preview" style="width:72px;height:48px;object-fit:cover;border-radius:6px;border:1px solid #cbd5e1;background:#fff;" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='../assets/images/landscape-bed-makeover.webp';}">
+                      <div style="flex:1;min-width:0;">
+                        <strong id="portfolio-img-filename" style="display:block;font-size:12.5px;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">landscape-bed-makeover.webp</strong>
+                        <span id="portfolio-img-status" style="font-size:11px;color:#16a34a;font-weight:600;">✓ Active project cover image</span>
+                      </div>
+                      <button type="button" class="btn-tbl btn-tbl--danger" id="portfolio-img-clear-btn" title="Remove / Clear Image">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
                   </div>
 
                   <div class="field-group">
