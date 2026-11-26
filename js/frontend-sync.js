@@ -210,22 +210,9 @@
                     data-desc="${esc(item.description)}">
                     <div class="bento-card__img-wrap">
                         <img src="${esc(img)}" alt="${esc(item.title)}" class="bento-card__img" width="800" height="500" loading="lazy">
-                        <div class="bento-card__overlay"></div>
-                    </div>
-                    <div class="bento-card__top">
-                        <span class="bento-badge-city"><i class="fas fa-map-marker-alt"></i> ${esc(loc)}</span>
-                        <span class="bento-badge-cat"><i class="fas fa-star"></i> ${esc(cat)}</span>
                     </div>
                     <div class="bento-card__content">
-                        <div class="bento-card__meta-bar">
-                            <span class="bento-card__meta-item"><i class="fas fa-home"></i> Residential</span>
-                            <span class="bento-card__meta-item"><i class="fas fa-calendar-day"></i> ${esc(item.date || '2026')}</span>
-                        </div>
                         <h3 class="bento-card__title">${esc(item.title)}</h3>
-                        <p class="bento-card__desc">${esc(item.description)}</p>
-                        <span class="bento-card__cta-btn">
-                            Quick View Project <i class="fas fa-arrow-right"></i>
-                        </span>
                     </div>
                 </article>
             `;

@@ -2173,6 +2173,25 @@ textarea {
     visibility: visible !important;
 }
 
+/* Skip Link (hidden until keyboard focus) */
+.skip-link {
+    position: absolute;
+    top: -120px;
+    left: 16px;
+    z-index: 9999;
+    padding: 10px 18px;
+    background: var(--brand-green, #40916c);
+    color: #ffffff;
+    font-weight: 700;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 12px;
+}
+
 /* Subpage Hero Quick-Action Strip */
 .subpage-hero-actions {
     background: #f4f9f6;
