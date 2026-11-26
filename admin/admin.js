@@ -687,11 +687,7 @@
       const list = storage(KEY.PORTFOLIO) || [];
       if (item.id) {
         const idx = list.findIndex(p => String(p.id) === String(item.id));
-        if (idx !== -1) {
-          list[idx] = Object.assign({}, list[idx], item);
-        } else {
-          list.unshift(item);
-        }
+        if (idx !== -1) list[idx] = item;
       } else {
         item.id = 'port_' + Date.now();
         list.unshift(item);
@@ -809,15 +805,6 @@
     if (!name) return 'FL';
     const p = name.trim().split(/\s+/);
     return p.length === 1 ? p[0].substring(0, 2).toUpperCase() : (p[0][0] + p[p.length - 1][0]).toUpperCase();
-  }
-
-  function getAdminImageUrl(url) {
-    if (!url) return '../assets/images/landscape-bed-makeover.webp';
-    url = String(url).trim();
-    if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
-    if (url.startsWith('../')) return url;
-    if (url.startsWith('/')) return '..' + url;
-    return '../' + url;
   }
 
   function toast(msg, type = 'success') {
@@ -1478,55 +1465,44 @@
 
       return `
         <div class="review-admin-card" data-review-id="${esc(r.id)}">
-          <div class="review-admin-header">
-            <div class="review-admin-avatar">${initials(r.name)}</div>
-            <div class="review-admin-user-info">
-              <div class="review-admin-top-row">
-                <span class="review-admin-name" title="${esc(r.name || 'Anonymous')}">${esc(r.name || 'Anonymous')}</span>
-                ${rankBadge}
-              </div>
-              <div class="review-admin-meta">${esc(role)} · ${esc(city)}, FL</div>
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:2px;">
-                <div class="review-admin-stars">${this.starsHtml(r.rating || 5)}</div>
-                <span style="font-size:11px;color:var(--a-text-xs);">${timeAgo(r.createdAt)}</span>
-              </div>
+          <div class="review-admin-avatar">${initials(r.name)}</div>
+          <div class="review-admin-body">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+              ${rankBadge}
+              <span class="review-admin-name">${esc(r.name || 'Anonymous')}</span>
             </div>
+            <div class="review-admin-meta">${esc(role)} · ${esc(city)}, FL · ${timeAgo(r.createdAt)}</div>
+            <div class="review-admin-stars">${this.starsHtml(r.rating || 5)}</div>
+            <div class="review-admin-text">"${esc(r.message || '')}"</div>
           </div>
-          <div class="review-admin-text">&ldquo;${esc(r.message || '')}&rdquo;</div>
           <div class="review-admin-actions">
             ${type === 'approved' ? `
-              <div style="display:flex;align-items:center;gap:4px;">
-                <button type="button" class="btn-move-fast" title="Make this review #1 (Show First on Website)" data-rv-rank="1" data-rv-id="${esc(r.id)}">
-                  <i class="fa-solid fa-star" style="color:#eab308;"></i> #1 First
-                </button>
-                <button type="button" class="btn-move-fast btn-move-fast--second" title="Make this review #2 (Show Second on Website)" data-rv-rank="2" data-rv-id="${esc(r.id)}">
-                  <i class="fa-solid fa-medal" style="color:#2563eb;"></i> #2 Second
-                </button>
-                <button type="button" class="btn-tbl btn-tbl--sm" title="Move 1 position up" data-rv-up="${esc(r.id)}" ${isFirst ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
-                  <i class="fa-solid fa-arrow-up"></i>
-                </button>
-                <button type="button" class="btn-tbl btn-tbl--sm" title="Move 1 position down" data-rv-down="${esc(r.id)}" ${index === total - 1 ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
-                  <i class="fa-solid fa-arrow-down"></i>
-                </button>
-                <button type="button" class="btn-tbl btn-tbl--sm" title="Hide/Unapprove back to pending" data-rv-unapprove="${esc(r.id)}">
-                  <i class="fa-solid fa-eye-slash"></i>
-                </button>
-              </div>
+              <button type="button" class="btn-move-fast" title="Make this review #1 (Show First on Website)" data-rv-rank="1" data-rv-id="${esc(r.id)}">
+                <i class="fa-solid fa-star" style="color:#eab308;"></i> #1 First
+              </button>
+              <button type="button" class="btn-move-fast btn-move-fast--second" title="Make this review #2 (Show Second on Website)" data-rv-rank="2" data-rv-id="${esc(r.id)}">
+                <i class="fa-solid fa-medal" style="color:#2563eb;"></i> #2 Second
+              </button>
+              <button type="button" class="btn-tbl" title="Move 1 position up" data-rv-up="${esc(r.id)}" ${isFirst ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
+                <i class="fa-solid fa-arrow-up"></i>
+              </button>
+              <button type="button" class="btn-tbl" title="Move 1 position down" data-rv-down="${esc(r.id)}" ${index === total - 1 ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
+                <i class="fa-solid fa-arrow-down"></i>
+              </button>
+              <button type="button" class="btn-tbl" title="Move back to pending" data-rv-unapprove="${esc(r.id)}">
+                <i class="fa-solid fa-eye-slash"></i>
+              </button>
             ` : `
-              <div style="display:flex;align-items:center;gap:4px;">
-                <button type="button" class="btn-tbl btn-tbl--sm btn-tbl--success" title="Approve & publish live" data-rv-approve="${esc(r.id)}">
-                  <i class="fa-solid fa-check"></i> Approve
-                </button>
-              </div>
+              <button type="button" class="btn-tbl btn-tbl--success" title="Approve & publish live" data-rv-approve="${esc(r.id)}">
+                <i class="fa-solid fa-check"></i> Approve
+              </button>
             `}
-            <div style="display:flex;align-items:center;gap:4px;">
-              <button type="button" class="btn-tbl btn-tbl--sm" title="Edit review" data-rv-edit="${esc(r.id)}">
-                <i class="fa-solid fa-pen"></i> Edit
-              </button>
-              <button type="button" class="btn-tbl btn-tbl--sm btn-tbl--danger" title="Delete review" data-rv-delete="${esc(r.id)}">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </div>
+            <button type="button" class="btn-tbl" title="Edit review" data-rv-edit="${esc(r.id)}">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
+            <button type="button" class="btn-tbl btn-tbl--danger" title="Delete review" data-rv-delete="${esc(r.id)}">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
           </div>
         </div>
       `;
@@ -1719,45 +1695,38 @@
 
       grid.innerHTML = list.map((p, idx) => {
         const isFirst = idx === 0;
-        const rawImg = (p.images && p.images[0]) || 'assets/images/landscape-bed-makeover.webp';
-        const imgSrc = getAdminImageUrl(rawImg);
-        const thumb = `<img src="${esc(imgSrc)}" alt="${esc(p.title)}" class="portfolio-admin-thumb" onerror="if(!this.dataset.err){this.dataset.err='1';this.src='../assets/images/landscape-bed-makeover.webp';}">`;
+        const thumb = (p.images && p.images[0])
+          ? `<img src="${esc(p.images[0])}" alt="${esc(p.title)}" class="portfolio-admin-thumb">`
+          : `<div class="portfolio-admin-thumb-placeholder"><i class="fa-solid fa-image"></i></div>`;
 
         return `
           <div class="portfolio-admin-card" data-portfolio-id="${esc(p.id)}">
-            <div class="portfolio-admin-thumb-wrap">
-              ${thumb}
-              <span class="portfolio-card-badge-cat">${esc(p.category || 'Maintenance')}</span>
-              <span class="portfolio-card-badge-rank ${isFirst ? 'rank--featured' : ''}">${isFirst ? '⭐ #1 First' : '#' + (idx + 1)}</span>
-            </div>
+            ${thumb}
             <div class="portfolio-admin-info">
-              <div class="portfolio-admin-title" title="${esc(p.title)}">${esc(p.title)}</div>
-              <div class="portfolio-admin-location">
-                <i class="fa-solid fa-location-dot" style="color:var(--a-primary);"></i>
-                <span>${esc(p.location || 'Central Florida, FL')}</span>
-                ${p.date ? `<span style="margin:0 4px;">•</span><i class="fa-regular fa-calendar"></i><span>${esc(p.date)}</span>` : ''}
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+                <span class="portfolio-admin-category">${esc(p.category || 'Maintenance')}</span>
+                <span class="portfolio-rank-badge ${isFirst ? 'rank--featured' : ''}">
+                  ${isFirst ? '⭐ #1 Featured' : '#' + (idx + 1)}
+                </span>
               </div>
+              <div class="portfolio-admin-title">${esc(p.title)}</div>
               <div class="portfolio-admin-desc">${esc(p.description || '')}</div>
-              <div class="portfolio-admin-actions">
-                <div style="display:flex;align-items:center;gap:4px;">
-                  <button type="button" class="btn-move-fast" title="Set this project as #1 (Featured First on Website)" data-pf-rank="1" data-pf-id="${esc(p.id)}">
-                    <i class="fa-solid fa-star" style="color:#eab308;"></i> #1 First
-                  </button>
-                  <button type="button" class="btn-tbl btn-tbl--sm" title="Move 1 Position Up" data-pf-up="${esc(p.id)}" ${isFirst ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
-                    <i class="fa-solid fa-arrow-up"></i>
-                  </button>
-                  <button type="button" class="btn-tbl btn-tbl--sm" title="Move 1 Position Down" data-pf-down="${esc(p.id)}" ${idx === list.length - 1 ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
-                    <i class="fa-solid fa-arrow-down"></i>
-                  </button>
-                </div>
-                <div style="display:flex;align-items:center;gap:4px;">
-                  <button type="button" class="btn-tbl btn-tbl--sm" title="Edit project" data-pf-edit="${esc(p.id)}">
-                    <i class="fa-solid fa-pen"></i> Edit
-                  </button>
-                  <button type="button" class="btn-tbl btn-tbl--sm btn-tbl--danger" title="Delete project" data-pf-del="${esc(p.id)}">
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
-                </div>
+              <div class="portfolio-admin-actions" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;">
+                <button type="button" class="btn-move-fast" title="Set this project as #1 (Featured First)" data-pf-rank="1" data-pf-id="${esc(p.id)}">
+                  <i class="fa-solid fa-star" style="color:#eab308;"></i> Show First
+                </button>
+                <button type="button" class="btn-tbl btn-tbl--sm" title="Move Up" data-pf-up="${esc(p.id)}" ${isFirst ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
+                  <i class="fa-solid fa-arrow-up"></i>
+                </button>
+                <button type="button" class="btn-tbl btn-tbl--sm" title="Move Down" data-pf-down="${esc(p.id)}" ${idx === list.length - 1 ? 'disabled style="opacity:0.3;pointer-events:none;"' : ''}>
+                  <i class="fa-solid fa-arrow-down"></i>
+                </button>
+                <button type="button" class="btn-secondary btn-sm" data-pf-edit="${esc(p.id)}">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </button>
+                <button type="button" class="btn-secondary btn-sm btn-danger" data-pf-del="${esc(p.id)}">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
               </div>
             </div>
           </div>
@@ -1768,27 +1737,8 @@
     openAdd() {
       const form = $id('form-portfolio');
       if (form) form.reset();
-      const prevImg = $id('preview-images');
-      if (prevImg) prevImg.innerHTML = '';
-      const prevVid = $id('preview-video');
-      if (prevVid) prevVid.innerHTML = '';
-
-      // Reset Main Image inputs
-      const urlInput = $id('portfolio-img-url');
-      if (urlInput) urlInput.value = '';
-      const prevEl = $id('portfolio-main-preview');
-      if (prevEl) {
-        prevEl.src = '../assets/images/landscape-bed-makeover.webp';
-        delete prevEl.dataset.fallback;
-      }
-      const fnameEl = $id('portfolio-img-filename');
-      if (fnameEl) fnameEl.textContent = 'landscape-bed-makeover.webp';
-      const statusEl = $id('portfolio-img-status');
-      if (statusEl) {
-        statusEl.textContent = 'Default cover image selected';
-        statusEl.style.color = '#64748b';
-      }
-
+      $id('preview-images').innerHTML = '';
+      $id('preview-video').innerHTML = '';
       $id('portfolio-modal-title').textContent = 'Add Portfolio Item';
       const submitBtn = $id('portfolio-submit-btn');
       if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Portfolio Item';
@@ -1816,26 +1766,6 @@
       const submitBtn = $id('portfolio-submit-btn');
       if (submitBtn) submitBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Changes';
 
-      // Set Main Image inputs
-      const mainImg = (p.images && p.images[0]) || 'assets/images/landscape-bed-makeover.webp';
-      const urlInput = $id('portfolio-img-url');
-      if (urlInput) urlInput.value = mainImg;
-      const prevEl = $id('portfolio-main-preview');
-      if (prevEl) {
-        prevEl.src = getAdminImageUrl(mainImg);
-        delete prevEl.dataset.fallback;
-      }
-      const fnameEl = $id('portfolio-img-filename');
-      if (fnameEl) {
-        const parts = mainImg.split('/');
-        fnameEl.textContent = parts[parts.length - 1] || 'Cover Image';
-      }
-      const statusEl = $id('portfolio-img-status');
-      if (statusEl) {
-        statusEl.textContent = '✓ Active project cover image';
-        statusEl.style.color = '#16a34a';
-      }
-
       PortfolioUpload.reset();
       PortfolioUpload.existingImages = Array.isArray(p.images) ? [...p.images] : [];
 
@@ -1843,7 +1773,7 @@
       if (prevWrap) {
         prevWrap.innerHTML = PortfolioUpload.existingImages.map((src, i) => `
           <div class="preview-img-item">
-            <img src="${esc(getAdminImageUrl(src))}" alt="Thumbnail">
+            <img src="${esc(src)}" alt="Thumbnail">
             <button type="button" class="preview-img-remove" data-rm-img="${i}">
               <i class="fa-solid fa-xmark"></i>
             </button>
@@ -1874,89 +1804,6 @@
     bind() {
       const addBtn = $id('add-portfolio-btn');
       if (addBtn) addBtn.addEventListener('click', () => this.openAdd());
-
-      // Main image file input handler
-      const fileInput = $id('portfolio-main-file');
-      if (fileInput) {
-        fileInput.addEventListener('change', () => {
-          const file = fileInput.files && fileInput.files[0];
-          if (!file) return;
-          if (file.size > 8 * 1024 * 1024) {
-            toast('Image must be under 8 MB.', 'error');
-            return;
-          }
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const dataUrl = e.target.result;
-            const urlInput = $id('portfolio-img-url');
-            if (urlInput) urlInput.value = dataUrl;
-            const prevEl = $id('portfolio-main-preview');
-            if (prevEl) {
-              prevEl.src = dataUrl;
-              delete prevEl.dataset.fallback;
-            }
-            const fnameEl = $id('portfolio-img-filename');
-            if (fnameEl) fnameEl.textContent = file.name;
-            const statusEl = $id('portfolio-img-status');
-            if (statusEl) {
-              statusEl.textContent = '✓ Uploaded from computer (' + (file.size / 1024).toFixed(0) + ' KB)';
-              statusEl.style.color = '#16a34a';
-            }
-            toast('✓ Image ready to save with project!', 'success');
-          };
-          reader.readAsDataURL(file);
-        });
-      }
-
-      // Main image URL input handler
-      const urlInput = $id('portfolio-img-url');
-      if (urlInput) {
-        urlInput.addEventListener('input', () => {
-          const val = urlInput.value.trim();
-          const prevEl = $id('portfolio-main-preview');
-          const fnameEl = $id('portfolio-img-filename');
-          const statusEl = $id('portfolio-img-status');
-          if (val) {
-            if (prevEl) {
-              prevEl.src = getAdminImageUrl(val);
-              delete prevEl.dataset.fallback;
-            }
-            if (fnameEl) {
-              const parts = val.split('/');
-              fnameEl.textContent = parts[parts.length - 1] || 'Web Image';
-            }
-            if (statusEl) {
-              statusEl.textContent = '✓ URL linked image';
-              statusEl.style.color = '#2563eb';
-            }
-          } else {
-            if (prevEl) prevEl.src = '../assets/images/landscape-bed-makeover.webp';
-            if (fnameEl) fnameEl.textContent = 'Default placeholder';
-            if (statusEl) {
-              statusEl.textContent = 'Default image selected';
-              statusEl.style.color = '#64748b';
-            }
-          }
-        });
-      }
-
-      // Main image clear button
-      const clearBtn = $id('portfolio-img-clear-btn');
-      if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-          if (urlInput) urlInput.value = '';
-          if (fileInput) fileInput.value = '';
-          const prevEl = $id('portfolio-main-preview');
-          if (prevEl) prevEl.src = '../assets/images/landscape-bed-makeover.webp';
-          const fnameEl = $id('portfolio-img-filename');
-          if (fnameEl) fnameEl.textContent = 'Default placeholder';
-          const statusEl = $id('portfolio-img-status');
-          if (statusEl) {
-            statusEl.textContent = 'Cover image cleared';
-            statusEl.style.color = '#64748b';
-          }
-        });
-      }
 
       const grid = $id('portfolio-grid');
       if (grid) {
@@ -2007,31 +1854,19 @@
           if (btn) btn.disabled = true;
 
           try {
-            const mainImgVal = (form.querySelector('[name="imageUrl"]') && form.querySelector('[name="imageUrl"]').value.trim()) || '';
-            const dropImages = await PortfolioUpload.getImages();
+            const images = await PortfolioUpload.getImages();
             const video = await PortfolioUpload.getVideo();
             const fd = new FormData(form);
             const id = fd.get('id');
-
-            let finalImages = [];
-            if (mainImgVal) {
-              finalImages.push(mainImgVal);
-            }
-            dropImages.forEach(img => {
-              if (img && !finalImages.includes(img)) finalImages.push(img);
-            });
-            if (!finalImages.length) {
-              finalImages = ['assets/images/landscape-bed-makeover.webp'];
-            }
 
             const item = {
               id: id || 'port_' + Date.now(),
               title: fd.get('title'),
               category: fd.get('category'),
               description: fd.get('description'),
-              location: fd.get('location') || 'Central Florida, FL',
+              location: fd.get('location'),
               date: fd.get('date'),
-              images: finalImages,
+              images: images.length ? images : ['assets/images/landscape-bed-makeover.webp'],
               video: video,
               updatedAt: new Date().toISOString()
             };
@@ -2040,7 +1875,7 @@
             Modals.close('modal-portfolio');
             await this.render();
             Dashboard.refresh();
-            toast(id ? '✓ Portfolio project updated! Live across all pages.' : '✓ New portfolio project added! Live on website.', 'success');
+            toast(id ? '✓ Portfolio project updated!' : '✓ New portfolio project added!', 'success');
           } catch (err) {
             toast('Failed to save portfolio project: ' + err.message, 'error');
           } finally {
@@ -2603,10 +2438,10 @@
       const stats = this.getStats();
       if (!stats) return;
 
-      // Realtime Online Users: genuine live active sessions (strictly 0 when admin alone)
+      // Realtime Online Users: genuine live active sessions (strictly 0 if no outside visitors)
       const onlineEl = $id('live-online-users');
       if (onlineEl) {
-        onlineEl.textContent = stats.onlineNow !== undefined ? stats.onlineNow : 0;
+        onlineEl.textContent = stats.onlineNow || 0;
       }
 
       // This Week & Nov 2026 Visits
@@ -2616,11 +2451,11 @@
       const monthEl = $id('stat-monthly-visits');
       if (monthEl) monthEl.textContent = Number(stats.monthlyVisits || 0).toLocaleString();
 
-      // Which Pages Are Being Visited Right Now / Authentic Page Tracking
+      // Which Pages Are Being Visited Right Now
       const pagesList = $id('active-pages-list');
       const countBadge = $id('active-pages-count');
       if (pagesList && stats.pages) {
-        const topPages = stats.pages;
+        const topPages = stats.pages.slice(0, 8);
         const activeCount = topPages.filter(p => p.activeNow > 0).length;
         if (countBadge) {
           countBadge.textContent = activeCount > 0 ? `${activeCount} Live Active` : 'All Pages Tracked';
@@ -2650,106 +2485,89 @@
       if (!stats) stats = this.getStats();
       if (!stats) return;
 
-      const metric = this.currentMetric || 'monthly';
+      const metric = this.currentMetric;
+      const history = stats.monthlyHistory || [];
       const headlineEl = $id('chart-traffic-headline');
       const subEl = $id('chart-headline-sub');
-      const tfLabel = $id('traffic-timeframe-label');
       const container = $id('traffic-bars-container');
+      const tfLabel = $id('traffic-timeframe-label');
+
       if (!container) return;
 
-      if (tfLabel) tfLabel.textContent = '2026';
-
-      let items = [];
-      let totalCount = 0;
-      let subtitleText = '';
-
       if (metric === 'monthly') {
-        const history = stats.monthlyHistory || [];
-        totalCount = stats.totalVisits2026 || 0;
-        subtitleText = 'Total Monthly Visitors in 2026';
+        if (tfLabel) tfLabel.textContent = '2026';
+        if (headlineEl) headlineEl.textContent = Number(stats.totalVisits2026 || 0).toLocaleString();
+        if (subEl) subEl.textContent = 'Total Monthly Visitors in 2026';
 
         const max = Math.max(...history.map(h => h.views), 1);
-        items = history.map(h => {
-          const isHighlight = h.isCurrent;
-          const pct = Math.max(12, Math.round((h.views / max) * 88));
+        container.innerHTML = history.map((m, idx) => {
+          const pct = Math.max(12, Math.round((m.views / max) * 88));
+          const isHi = m.isCurrent;
           return `
-            <div class="bar-col ${isHighlight ? 'bar-col--highlight' : ''}" data-month="${h.monthIdx}" title="${h.views} Visitors in ${h.month}">
-              ${isHighlight ? `
-                <div class="bar-tooltip-pill">
-                  <span>${h.views} Nov Visitors</span>
-                </div>` : ''}
-              <div class="bar-fill ${isHighlight ? 'bar-fill--highlight' : ''}" style="height: ${pct}%;"></div>
-              <span class="bar-label">${h.month}</span>
+            <div class="bar-col ${isHi ? 'bar-col--highlight' : ''}" data-idx="${idx}" title="${m.month} 2026: ${m.views} Visitors">
+              ${isHi ? `<div class="bar-tooltip-pill" id="peak-bar-tooltip"><span>${m.views} Visitors in ${m.month}</span></div>` : ''}
+              <div class="bar-fill ${isHi ? 'bar-fill--highlight' : ''}" style="height:${pct}%;"></div>
+              <span class="bar-label">${m.month}</span>
             </div>
           `;
-        });
+        }).join('');
+
       } else if (metric === 'days') {
-        const days = stats.daysHistory || [];
-        totalCount = stats.weeklyVisits || 0;
-        subtitleText = 'Authentic Visitors Across 7 Days (Mon-Sun)';
+        const days = stats.last7Days || [];
+        if (tfLabel) tfLabel.textContent = '7 Days';
+        if (headlineEl) headlineEl.textContent = Number(stats.weeklyVisits || 0).toLocaleString();
+        if (subEl) subEl.textContent = 'Authentic Daily Visitors (Last 7 Days)';
 
         const max = Math.max(...days.map(d => d.count), 1);
-        items = days.map(d => {
-          const isHighlight = d.isToday;
-          const pct = Math.max(14, Math.round((d.count / max) * 88));
+        container.innerHTML = days.map((d, idx) => {
+          const pct = Math.max(12, Math.round((d.count / max) * 88));
+          const isHi = d.isToday;
           return `
-            <div class="bar-col ${isHighlight ? 'bar-col--highlight' : ''}" title="${d.count} Visitors on ${d.label}">
-              ${isHighlight ? `
-                <div class="bar-tooltip-pill">
-                  <span>${d.count} Today (${d.label})</span>
-                </div>` : ''}
-              <div class="bar-fill ${isHighlight ? 'bar-fill--highlight' : ''}" style="height: ${pct}%;"></div>
-              <span class="bar-label" style="font-weight:700;">${d.label}</span>
+            <div class="bar-col ${isHi ? 'bar-col--highlight' : ''}" data-idx="${idx}" title="${d.dayName} (${d.dateStr}): ${d.count} Visitors">
+              ${isHi ? `<div class="bar-tooltip-pill" id="peak-bar-tooltip"><span>${d.count} Today (${d.dayName})</span></div>` : ''}
+              <div class="bar-fill ${isHi ? 'bar-fill--highlight' : ''}" style="height:${pct}%;"></div>
+              <span class="bar-label">${d.dayName}</span>
             </div>
           `;
-        });
-      } else if (metric === 'pages') {
-        const pages = stats.pages || [];
-        totalCount = stats.totalVisits2026 || 0;
-        subtitleText = 'Authentic Visitors Per Page (All Tracked Pages)';
+        }).join('');
 
-        const max = Math.max(...pages.map(p => p.views), 1);
-        items = pages.map((p, idx) => {
-          const isHighlight = idx === 0; // Top visited page
-          const pct = Math.max(14, Math.round((p.views / max) * 88));
-          const label = p.shortName.length > 8 ? p.shortName.slice(0, 7) + '…' : p.shortName;
+      } else if (metric === 'pages') {
+        const topPages = (stats.pages || []).slice(0, 10);
+        if (tfLabel) tfLabel.textContent = 'All Pages';
+        if (headlineEl) headlineEl.textContent = Number(stats.totalVisits2026 || 0).toLocaleString();
+        if (subEl) subEl.textContent = 'Per Page Visitors Breakdown';
+
+        const max = Math.max(...topPages.map(p => p.views), 1);
+        container.innerHTML = topPages.map((p, idx) => {
+          const pct = Math.max(12, Math.round((p.views / max) * 88));
+          const isHi = idx === 0;
           return `
-            <div class="bar-col ${isHighlight ? 'bar-col--highlight' : ''}" title="${p.name}: ${p.views} views">
-              ${isHighlight ? `
-                <div class="bar-tooltip-pill">
-                  <span>Top: ${p.views} Views</span>
-                </div>` : ''}
-              <div class="bar-fill ${isHighlight ? 'bar-fill--highlight' : ''}" style="height: ${pct}%;"></div>
-              <span class="bar-label" style="font-size:10.5px;">${esc(label)}</span>
+            <div class="bar-col ${isHi ? 'bar-col--highlight' : ''}" data-idx="${idx}" title="${esc(p.name)}: ${p.views} views">
+              ${isHi ? `<div class="bar-tooltip-pill" id="peak-bar-tooltip"><span>${p.views} views</span></div>` : ''}
+              <div class="bar-fill ${isHi ? 'bar-fill--highlight' : ''}" style="height:${pct}%;"></div>
+              <span class="bar-label" style="font-size:10.5px;">${esc(p.short || p.name.split(' ')[0])}</span>
             </div>
           `;
-        });
+        }).join('');
+
       } else if (metric === 'quotes') {
-        const history = stats.monthlyHistory || [];
-        totalCount = stats.totalQuotes2026 || 0;
-        subtitleText = 'Authentic Quote Inquiries in 2026';
+        if (tfLabel) tfLabel.textContent = '2026';
+        if (headlineEl) headlineEl.textContent = Number(stats.totalQuotes2026 || 0).toLocaleString();
+        if (subEl) subEl.textContent = 'Quote Inquiries in 2026';
 
         const max = Math.max(...history.map(h => h.quotes), 1);
-        items = history.map(h => {
-          const isHighlight = h.isCurrent;
-          const pct = Math.max(12, Math.round((h.quotes / max) * 88));
+        container.innerHTML = history.map((m, idx) => {
+          const pct = Math.max(12, Math.round((m.quotes / max) * 88));
+          const isHi = m.isCurrent;
           return `
-            <div class="bar-col ${isHighlight ? 'bar-col--highlight' : ''}" title="${h.quotes} Quotes in ${h.month}">
-              ${isHighlight ? `
-                <div class="bar-tooltip-pill">
-                  <span>${h.quotes} Inquiries</span>
-                </div>` : ''}
-              <div class="bar-fill ${isHighlight ? 'bar-fill--highlight' : ''}" style="height: ${pct}%;"></div>
-              <span class="bar-label">${h.month}</span>
+            <div class="bar-col ${isHi ? 'bar-col--highlight' : ''}" data-idx="${idx}" title="${m.month} 2026: ${m.quotes} Inquiries">
+              ${isHi ? `<div class="bar-tooltip-pill" id="peak-bar-tooltip"><span>${m.quotes} Inquiries</span></div>` : ''}
+              <div class="bar-fill ${isHi ? 'bar-fill--highlight' : ''}" style="height:${pct}%;"></div>
+              <span class="bar-label">${m.month}</span>
             </div>
           `;
-        });
+        }).join('');
       }
-
-      if (headlineEl) headlineEl.textContent = Number(totalCount).toLocaleString();
-      if (subEl) subEl.textContent = subtitleText;
-
-      container.innerHTML = items.join('');
     },
 
     bind() {
@@ -2763,6 +2581,27 @@
           btn.classList.add('active');
           this.currentMetric = btn.dataset.metric || 'monthly';
           this.updateChart();
+        });
+      }
+
+      // Dynamic hover tooltip on any bar
+      const container = $id('traffic-bars-container');
+      if (container) {
+        container.addEventListener('mouseover', (e) => {
+          const col = e.target.closest('.bar-col');
+          if (!col) return;
+          const tipText = col.getAttribute('title');
+          if (tipText) {
+            let tipEl = col.querySelector('.bar-tooltip-pill');
+            if (!tipEl) {
+              const oldTips = container.querySelectorAll('.bar-tooltip-pill');
+              oldTips.forEach(t => t.remove());
+              tipEl = document.createElement('div');
+              tipEl.className = 'bar-tooltip-pill';
+              tipEl.innerHTML = `<span>${esc(tipText)}</span>`;
+              col.appendChild(tipEl);
+            }
+          }
         });
       }
 
@@ -2782,12 +2621,12 @@
         }
       });
 
-      // Periodic poller (every 2.5 seconds for continuous live visitors pulse)
+      // Periodic poller (every 2 seconds for continuous live visitors pulse)
       setInterval(() => {
         if (Nav.current === 'dashboard') {
           this.render();
         }
-      }, 2500);
+      }, 2000);
     }
   };
 

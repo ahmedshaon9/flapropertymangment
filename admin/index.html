@@ -286,10 +286,14 @@
                       <span class="chart-headline-tag" id="chart-headline-sub">Total Page Visits in 2026</span>
                     </div>
                     <div class="chart-pill-tabs" id="traffic-chart-tabs">
-                      <button type="button" class="chart-pill-tab active" data-metric="monthly"><i class="fa-solid fa-calendar"></i> Monthly Visitors</button>
-                      <button type="button" class="chart-pill-tab" data-metric="days"><i class="fa-solid fa-calendar-week"></i> 7 Days (Mon-Sun)</button>
-                      <button type="button" class="chart-pill-tab" data-metric="pages"><i class="fa-solid fa-file-lines"></i> Per Page Visitors</button>
-                      <button type="button" class="chart-pill-tab" data-metric="quotes"><i class="fa-solid fa-file-invoice"></i> Quote Inquiries</button>
+                      <button type="button" class="chart-pill-tab active" data-metric="monthly"><i
+                          class="fa-solid fa-calendar"></i> Monthly Visitors</button>
+                      <button type="button" class="chart-pill-tab" data-metric="days"><i
+                          class="fa-solid fa-calendar-week"></i> 7 Days (Mon-Sun)</button>
+                      <button type="button" class="chart-pill-tab" data-metric="pages"><i
+                          class="fa-solid fa-file-lines"></i> Per Page Visitors</button>
+                      <button type="button" class="chart-pill-tab" data-metric="quotes"><i
+                          class="fa-solid fa-file-invoice"></i> Quote Inquiries</button>
                     </div>
                   </div>
                   <div class="chart-header-right">
@@ -403,7 +407,7 @@
                 <!-- Big Realtime Online Visitors Counter -->
                 <div class="analytics-online-box">
                   <div class="online-number-wrap">
-                    <span class="online-huge-num" id="live-online-users">3</span>
+                    <span class="online-huge-num" id="live-online-users">0</span>
                     <div class="online-label-wrap">
                       <span class="online-main-label">Users Online Now</span>
                       <span class="online-sub-label">Browsing site in real time</span>
@@ -435,43 +439,43 @@
                 <div class="active-pages-block">
                   <div class="active-pages-title">
                     <span>Pages Visited Right Now</span>
-                    <span class="active-pages-badge" id="active-pages-count">5 Active</span>
+                    <span class="active-pages-badge" id="active-pages-count">All Pages Tracked</span>
                   </div>
                   <div class="active-pages-list" id="active-pages-list">
                     <div class="active-page-item">
                       <div class="page-item-info">
                         <span class="page-dot"></span>
-                        <span class="page-name">Homepage (/)</span>
+                        <span class="page-name">Home Page</span>
                       </div>
-                      <span class="page-viewers-badge">🟢 2 online</span>
+                      <span class="page-viewers-badge">6 views</span>
                     </div>
                     <div class="active-page-item">
                       <div class="page-item-info">
                         <span class="page-dot"></span>
                         <span class="page-name">Lawn Mowing & Care</span>
                       </div>
-                      <span class="page-viewers-badge">🟢 1 online</span>
+                      <span class="page-viewers-badge">4 views</span>
                     </div>
                     <div class="active-page-item">
                       <div class="page-item-info">
                         <span class="page-dot"></span>
                         <span class="page-name">Landscape Makeovers</span>
                       </div>
-                      <span class="page-viewers-badge">1,890 views</span>
+                      <span class="page-viewers-badge">3 views</span>
                     </div>
                     <div class="active-page-item">
                       <div class="page-item-info">
                         <span class="page-dot"></span>
-                        <span class="page-name">Free Quote Calculator</span>
+                        <span class="page-name">About Us</span>
                       </div>
-                      <span class="page-viewers-badge">1,420 views</span>
+                      <span class="page-viewers-badge">2 views</span>
                     </div>
                     <div class="active-page-item">
                       <div class="page-item-info">
                         <span class="page-dot"></span>
                         <span class="page-name">Customer Reviews</span>
                       </div>
-                      <span class="page-viewers-badge">980 views</span>
+                      <span class="page-viewers-badge">2 views</span>
                     </div>
                   </div>
                 </div>
@@ -839,20 +843,28 @@
                   <div class="field-group">
                     <label>Main Project Image <span class="label-note">Upload image file or enter URL</span></label>
                     <div style="display:flex;gap:10px;margin-bottom:10px;">
-                      <input type="text" name="imageUrl" id="portfolio-img-url" placeholder="e.g. assets/images/landscape-bed-makeover.webp or https://..." style="flex:1;">
-                      <label for="portfolio-main-file" class="btn-secondary" style="margin:0;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;">
+                      <input type="text" name="imageUrl" id="portfolio-img-url"
+                        placeholder="e.g. assets/images/landscape-bed-makeover.webp or https://..." style="flex:1;">
+                      <label for="portfolio-main-file" class="btn-secondary"
+                        style="margin:0;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;">
                         <i class="fa-solid fa-cloud-arrow-up"></i> Upload Image
                       </label>
                       <input type="file" id="portfolio-main-file" accept="image/*" style="display:none;">
                     </div>
                     <!-- Live Image Preview Card -->
-                    <div id="portfolio-img-preview-box" style="display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px dashed var(--a-border);border-radius:10px;background:#f8fafc;">
-                      <img id="portfolio-main-preview" src="../assets/images/landscape-bed-makeover.webp" alt="Preview" style="width:72px;height:48px;object-fit:cover;border-radius:6px;border:1px solid #cbd5e1;background:#fff;" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='../assets/images/landscape-bed-makeover.webp';}">
+                    <div id="portfolio-img-preview-box"
+                      style="display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px dashed var(--a-border);border-radius:10px;background:#f8fafc;">
+                      <img id="portfolio-main-preview" src="../assets/images/landscape-bed-makeover.webp" alt="Preview"
+                        style="width:72px;height:48px;object-fit:cover;border-radius:6px;border:1px solid #cbd5e1;background:#fff;"
+                        onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='../assets/images/landscape-bed-makeover.webp';}">
                       <div style="flex:1;min-width:0;">
-                        <strong id="portfolio-img-filename" style="display:block;font-size:12.5px;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">landscape-bed-makeover.webp</strong>
-                        <span id="portfolio-img-status" style="font-size:11px;color:#16a34a;font-weight:600;">✓ Active project cover image</span>
+                        <strong id="portfolio-img-filename"
+                          style="display:block;font-size:12.5px;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">landscape-bed-makeover.webp</strong>
+                        <span id="portfolio-img-status" style="font-size:11px;color:#16a34a;font-weight:600;">✓ Active
+                          project cover image</span>
                       </div>
-                      <button type="button" class="btn-tbl btn-tbl--danger" id="portfolio-img-clear-btn" title="Remove / Clear Image">
+                      <button type="button" class="btn-tbl btn-tbl--danger" id="portfolio-img-clear-btn"
+                        title="Remove / Clear Image">
                         <i class="fa-solid fa-trash"></i>
                       </button>
                     </div>
@@ -1012,17 +1024,21 @@
         <section id="section-colors" class="admin-section" hidden>
           <div class="section-header">
             <h2>Theme & Colors</h2>
-            <p>9-Shade Botanical Color System &mdash; strictly high-contrast web design with instant realtime synchronization across all website pages.</p>
+            <p>9-Shade Botanical Color System &mdash; strictly high-contrast web design with instant realtime
+              synchronization across all website pages.</p>
           </div>
 
           <!-- Official 9-Shade Botanical Color System -->
           <div class="card" style="margin-bottom:24px;">
             <div class="card-head">
-              <h3><i class="fa-solid fa-leaf" style="color:var(--a-primary);"></i> Official 9-Shade Botanical Color System</h3>
-              <p class="card-subtitle">Exact botanical harmony from nature &mdash; click "Use as Primary" or "Use as Accent" to apply instantly</p>
+              <h3><i class="fa-solid fa-leaf" style="color:var(--a-primary);"></i> Official 9-Shade Botanical Color
+                System</h3>
+              <p class="card-subtitle">Exact botanical harmony from nature &mdash; click "Use as Primary" or "Use as
+                Accent" to apply instantly</p>
             </div>
             <div class="card-body">
-              <div id="botanical-palette-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:16px;"></div>
+              <div id="botanical-palette-grid"
+                style="display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:16px;"></div>
             </div>
           </div>
 

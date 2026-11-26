@@ -177,9 +177,13 @@
     }
 
     // ─────────────────────────────────────────────────────────────────
-    // 4. SYNC PORTFOLIO GALLERY ONTO PORTFOLIO PAGE & HOMEPAGE
+    // 4. INTERCEPT QUOTE FORM SUBMISSIONS -> SYNC TO /admin LEADS
+    // 4. SYNC PORTFOLIO GALLERY ONTO PORTFOLIO PAGE
     // ─────────────────────────────────────────────────────────────────
     function syncPortfolio() {
+        const bentoGallery = document.getElementById('bentoGallery');
+        if (!bentoGallery) return;
+
         let list = [];
         try {
             const raw = localStorage.getItem('fla_portfolio');
@@ -188,67 +192,44 @@
 
         if (!list || !list.length) return;
 
-        // 1. Sync Bento Gallery on portfolio.html / our-work.html
-        const bentoGallery = document.getElementById('bentoGallery');
-        if (bentoGallery) {
-            bentoGallery.innerHTML = list.map((item, idx) => {
-                const isFeatured = idx === 0;
-                const spanClass = isFeatured ? 'bento-card--span-8' : 'bento-card--span-4';
-                const img = (item.images && item.images[0]) || 'assets/images/landscape-bed-makeover.webp';
-                const cat = item.category || 'Landscape';
-                const loc = item.location || 'Central Florida';
+        bentoGallery.innerHTML = list.map((item, idx) => {
+            const isFeatured = idx === 0;
+            const spanClass = isFeatured ? 'bento-card--span-8' : 'bento-card--span-4';
+            const img = (item.images && item.images[0]) || 'assets/images/landscape-bed-makeover.webp';
+            const cat = item.category || 'Landscape';
+            const loc = item.location || 'Central Florida';
 
-                return `
-                    <article class="bento-card ${spanClass}" data-category="${esc(cat.toLowerCase())}" 
-                        data-title="${esc(item.title)}" 
-                        data-location="${esc(loc)}" 
-                        data-service="${esc(cat)}" 
-                        data-type="Residential" 
-                        data-turnaround="1 Day"
-                        data-image="${esc(img)}"
-                        data-desc="${esc(item.description)}">
-                        <div class="bento-card__img-wrap">
-                            <img src="${esc(img)}" alt="${esc(item.title)}" class="bento-card__img" width="800" height="500" loading="lazy" onerror="if(!this.dataset.erred){this.dataset.erred='1';this.src='assets/images/landscape-bed-makeover.webp';}">
-                            <div class="bento-card__overlay"></div>
-                        </div>
-                        <div class="bento-card__top">
-                            <span class="bento-badge-city"><i class="fas fa-map-marker-alt"></i> ${esc(loc)}</span>
-                            <span class="bento-badge-cat"><i class="fas fa-star"></i> ${esc(cat)}</span>
-                        </div>
-                        <div class="bento-card__content">
-                            <div class="bento-card__meta-bar">
-                                <span class="bento-card__meta-item"><i class="fas fa-home"></i> Residential</span>
-                                <span class="bento-card__meta-item"><i class="fas fa-calendar-day"></i> ${esc(item.date || '2026')}</span>
-                            </div>
-                            <h3 class="bento-card__title">${esc(item.title)}</h3>
-                            <p class="bento-card__desc">${esc(item.description)}</p>
-                            <span class="bento-card__cta-btn">
-                                Quick View Project <i class="fas fa-arrow-right"></i>
-                            </span>
-                        </div>
-                    </article>
-                `;
-            }).join('');
-        }
-
-        // 2. Sync Portfolio Grid on index.html (Homepage)
-        const homePortfolioGrid = document.querySelector('#portfolio .portfolio-grid');
-        if (homePortfolioGrid) {
-            homePortfolioGrid.innerHTML = list.slice(0, 6).map(item => {
-                const img = (item.images && item.images[0]) || 'assets/images/landscape-bed-makeover.webp';
-                const loc = item.location || 'Central Florida';
-                const title = item.title || 'FLA Property Maintenance';
-                return `
-                    <div class="portfolio-item">
-                        <img src="${esc(img)}" alt="${esc(title)} in ${esc(loc)}" width="600" height="400" loading="lazy" onerror="if(!this.dataset.erred){this.dataset.erred='1';this.src='assets/images/landscape-bed-makeover.webp';}">
-                        <div class="portfolio-item__overlay">
-                            <span class="portfolio-item__badge">${esc(loc).toUpperCase()}</span>
-                            <h4 class="portfolio-item__caption">${esc(title)}</h4>
-                        </div>
+            return `
+                <article class="bento-card ${spanClass}" data-category="${esc(cat.toLowerCase())}" 
+                    data-title="${esc(item.title)}" 
+                    data-location="${esc(loc)}" 
+                    data-service="${esc(cat)}" 
+                    data-type="Residential" 
+                    data-turnaround="1 Day"
+                    data-image="${esc(img)}"
+                    data-desc="${esc(item.description)}">
+                    <div class="bento-card__img-wrap">
+                        <img src="${esc(img)}" alt="${esc(item.title)}" class="bento-card__img" width="800" height="500" loading="lazy">
+                        <div class="bento-card__overlay"></div>
                     </div>
-                `;
-            }).join('');
-        }
+                    <div class="bento-card__top">
+                        <span class="bento-badge-city"><i class="fas fa-map-marker-alt"></i> ${esc(loc)}</span>
+                        <span class="bento-badge-cat"><i class="fas fa-star"></i> ${esc(cat)}</span>
+                    </div>
+                    <div class="bento-card__content">
+                        <div class="bento-card__meta-bar">
+                            <span class="bento-card__meta-item"><i class="fas fa-home"></i> Residential</span>
+                            <span class="bento-card__meta-item"><i class="fas fa-calendar-day"></i> ${esc(item.date || '2026')}</span>
+                        </div>
+                        <h3 class="bento-card__title">${esc(item.title)}</h3>
+                        <p class="bento-card__desc">${esc(item.description)}</p>
+                        <span class="bento-card__cta-btn">
+                            Quick View Project <i class="fas fa-arrow-right"></i>
+                        </span>
+                    </div>
+                </article>
+            `;
+        }).join('');
     }
 
     // ─────────────────────────────────────────────────────────────────
